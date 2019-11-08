@@ -27,8 +27,13 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="28"
-                   Text="Hi world!" />
+                   Text="WPF SUPER DEMO!" Grid.ColumnSpan="3" />
         <TextBlock Grid.Column="1" Grid.Row="2" FontWeight="Bold"
                    Text="First Name" />
+        <TextBox x:Name="firstNameText" Grid.Column="2" Grid.Row="2" 
+                   Width="150" Margin="5,0,5,0" />
+        <Button x:Name="submitButton" Content="Run me"  Grid.Column="3"
+                Grid.Row="2" />
+
     </Grid>
 </Window>
