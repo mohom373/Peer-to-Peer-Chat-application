@@ -4,36 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P2PChatProj"
+        xmlns:views="clr-namespace:P2PChatProj.Views"
         mc:Ignorable="d"
         Title="Peer 2 Peer CHAT" Height="450" Width="600" FontFamily="Segoe UI Light" FontSize="18">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="28"
-                   Text="WPF SUPER DEMO!" Grid.ColumnSpan="3" />
-        <TextBlock Grid.Column="1" Grid.Row="2" FontWeight="Bold"
-                   Text="First Name" />
-        <TextBox x:Name="firstNameText" Grid.Column="2" Grid.Row="2" 
-                   Width="150" Margin="5,0,5,0" />
-        <Button x:Name="submitButton" Content="Run me"  Grid.Column="3"
-                Grid.Row="2" />
-
+        <views:UserConnectView x:Name="UserConnectView"/>
     </Grid>
 </Window>
