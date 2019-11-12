@@ -8,28 +8,25 @@
              d:DesignHeight="450" d:DesignWidth="600">
 
 
-    <Grid>
+    <Grid Background="AliceBlue">
+        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+            
+        </StackPanel>
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="28"
-                   Text="Peer 2 peer chat" Grid.ColumnSpan="3" />
+                   Text="Peer" Grid.ColumnSpan="3" />
         <TextBlock Grid.Column="1" Grid.Row="2" FontWeight="Bold"
                    Text="User Name" />
         <TextBox x:Name="UserNameInput" Grid.Column="2" Grid.Row="2" 
@@ -40,18 +37,8 @@
         <TextBox x:Name="PortNumberInput" Grid.Column="2" Grid.Row="3" 
                  Width="150" Margin="5,0,5,0" 
                  Text="{Binding Path= User.PortNumber, Mode=TwoWay}"/>
-
-        <TextBlock Grid.Column="3" Grid.Row="2"
-                   Text="{Binding Path= User.UserName, Mode=OneWay}"/>
-
-        <TextBlock Grid.Column="3" Grid.Row="3"
-                   Text="{Binding Path= User.PortNumber, Mode=OneWay}"/>
-
-        <TextBlock Grid.Column="2" Grid.Row="4"
-                   Text="{Binding Path= User.InfoString, Mode=OneWay}"/>
-
         <Button x:Name="submitButton" Content="Connect"  Grid.Column="3"
-                Grid.Row="4" />
+                Grid.Row="4" Command="{Binding ConnectCommand}"/>
 
     </Grid>
 </UserControl>

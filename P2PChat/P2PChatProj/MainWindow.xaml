@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P2PChatProj"
         xmlns:views="clr-namespace:P2PChatProj.Views"
         mc:Ignorable="d"
-        Title="Peer 2 Peer CHAT" Height="450" Width="600" FontFamily="Segoe UI Light" FontSize="18">
+        Title="Peer 2 Peer CHAT" Height="720" Width="1280" FontFamily="Segoe UI Light" FontSize="18">
     <Grid>
         <views:UserConnectView x:Name="UserConnectView"/>
     </Grid>
