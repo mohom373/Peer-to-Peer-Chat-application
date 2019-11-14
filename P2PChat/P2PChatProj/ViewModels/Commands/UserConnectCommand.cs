@@ -17,16 +17,20 @@ namespace P2PChatProj.ViewModels.Commands
             this.viewModel = viewModel;
         }
         
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return viewModel.CanConnect;
         }
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            viewModel.SaveChanges();
         }
     }
 }
