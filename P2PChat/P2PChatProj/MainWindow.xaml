@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Peer 2 Peer CHAT" Height="720" Width="1280" FontFamily="Segoe UI Light" FontSize="18">
     <Grid>
-        <views:UserOnlineView x:Name="UserOnlineView" />
-        <!--<views:UserConnectView x:Name="UserConnectView"/> -->
+        <!--<views:UserOnlineView x:Name="UserOnlineView" />-->
+        <views:UserConnectView x:Name="UserConnectView"/> 
     </Grid>
 </Window>
