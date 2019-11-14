@@ -13,8 +13,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:MenuView  Grid.Column="0" />
-        <local:ChatView Grid.Column="1" />
+        <local:MenuView DataContext="{Binding Menu}"  Grid.Column="0" />
+        <local:ChatView DataContext="{Binding Chat}" Grid.Column="1" />
 
     </Grid>
 </UserControl>

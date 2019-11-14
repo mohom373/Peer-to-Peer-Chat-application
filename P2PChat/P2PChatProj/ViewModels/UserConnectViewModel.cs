@@ -15,7 +15,6 @@ namespace P2PChatProj.ViewModels
     public class UserConnectViewModel
     {
         private User user;
-        private UserOnlineViewModel userOnlineViewModel;
         private MainWindow mainWindow;
 
         public UserConnectViewModel(MainWindow mainWindow)
@@ -24,7 +23,7 @@ namespace P2PChatProj.ViewModels
             ConnectCommand = new UserConnectCommand(this);
 
             this.mainWindow = mainWindow;
-            userOnlineViewModel = new UserOnlineViewModel();
+            
 
         }
 
@@ -46,6 +45,7 @@ namespace P2PChatProj.ViewModels
 
         public void SaveChanges()
         {
+            UserOnlineViewModel userOnlineViewModel = new UserOnlineViewModel(user);
             mainWindow.DataContext = userOnlineViewModel;
         }
     }

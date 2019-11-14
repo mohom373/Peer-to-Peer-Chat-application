@@ -17,7 +17,7 @@
         </DockPanel>
         
         <DockPanel Background="Blue" Grid.Row="1">
-            <Button Height="20" Margin="20"></Button>
+            <Button Content="{Binding User.PortNumber, FallbackValue='SendButton'}" Margin="20"></Button>
         </DockPanel>
     </Grid>
 </UserControl>

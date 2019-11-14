@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2PChatProj.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,14 @@ using System.Windows.Shapes;
 namespace P2PChatProj.Views
 {
     /// <summary>
-    /// Interaction logic for UserOnlineView.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class UserOnlineView : UserControl
+    public partial class MainWindow : Window
     {
-        public UserOnlineView()
+        public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new UserConnectViewModel(this);
         }
     }
 }

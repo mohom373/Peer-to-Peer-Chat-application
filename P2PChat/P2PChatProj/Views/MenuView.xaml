@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:P2PChatProj.Views"
              mc:Ignorable="d">
+    
     <Grid Background="Gray">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="20" />
-
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <!-- Show Username -->
-        <TextBlock Text="Username" Grid.Column="1" Grid.Row="1" FontSize="20" />
+        <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" Grid.Column="1" Grid.Row="1" FontSize="20" />
 
         <!-- Send chat requests panel -->
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">

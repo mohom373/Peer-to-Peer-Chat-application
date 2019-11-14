@@ -12,11 +12,6 @@ namespace P2PChatProj.Model
         
         private string userName;
         private int portNumber;
-        public User()
-        {
-            userName = "Kimmo SID";
-            portNumber = 1337;
-        }
 
         public string UserName 
         {
