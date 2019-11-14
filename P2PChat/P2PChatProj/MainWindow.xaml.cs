@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2PChatProj.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace P2PChatProj
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new UserConnectViewModel(this);
         }
     }
 }

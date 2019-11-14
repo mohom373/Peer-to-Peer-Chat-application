@@ -5,10 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P2PChatProj"
         xmlns:views="clr-namespace:P2PChatProj.Views"
+        xmlns:viewmodels="clr-namespace:P2PChatProj.ViewModels"
         mc:Ignorable="d"
-        Title="Peer 2 Peer CHAT" Height="720" Width="1280" FontFamily="Segoe UI Light" FontSize="18">
+        Title="Peer 2 Peer CHAT" Height="700" Width="1000" FontFamily="Segoe UI Light" FontSize="18">
+
+    <Window.Resources>
+        
+        <DataTemplate x:Name="userConnectTemplate" DataType="{x:Type viewmodels:UserConnectViewModel}">
+            <views:UserConnectView DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Name="userOnlineTemplate" DataType="{x:Type viewmodels:UserOnlineViewModel}">
+            <views:UserOnlineView DataContext="{Binding}" />
+        </DataTemplate>
+
+    </Window.Resources>
+    
     <Grid>
+        <ContentControl Content="{Binding}"></ContentControl>
         <!--<views:UserOnlineView x:Name="UserOnlineView" />-->
-        <views:UserConnectView x:Name="UserConnectView"/> 
+        <!--<views:UserConnectView x:Name="UserConnectView"/>-->
     </Grid>
 </Window>

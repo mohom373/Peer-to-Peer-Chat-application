@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\Commands\UserConnectCommand.cs" />
     <Compile Include="ViewModels\UserConnectViewModel.cs" />
+    <Compile Include="ViewModels\UserOnlineViewModel.cs" />
     <Compile Include="Views\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>

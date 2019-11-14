@@ -23,7 +23,6 @@ namespace P2PChatProj.Views
         public UserConnectView()
         {
             InitializeComponent();
-            this.DataContext = new P2PChatProj.ViewModels.UserConnectViewModel();
         }
     }
 }

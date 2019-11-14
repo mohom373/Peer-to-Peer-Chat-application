@@ -7,6 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            <Grid.RowDefinitions
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Background="Beige" Grid.Row="0">
+                
+        </DockPanel>
+        
+        <DockPanel Background="Blue" Grid.Row="1">
+            <Button Height="20" Margin="20"></Button>
+        </DockPanel>
     </Grid>
 </UserControl>

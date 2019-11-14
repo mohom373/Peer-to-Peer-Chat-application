@@ -6,8 +6,65 @@
              xmlns:local="clr-namespace:P2PChatProj.Views"
              mc:Ignorable="d">
     <Grid Background="Gray">
-        <StackPanel>
-            <TextBlock Text="Hej" FontSize="30" />
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="20" />
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <!-- Show Username -->
+        <TextBlock Text="Username" Grid.Column="1" Grid.Row="1" FontSize="20" />
+
+        <!-- Send chat requests panel -->
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">
+
+            <Label Content="IP-address" FontSize="16" />
+            <TextBox Width="200" Height="30" Margin="5,0,5,0" />
+
+            <Label Content="Port Number" FontSize="16" />
+            <TextBox Width="200" Height="30" Margin="5,0,5,0" />
+
+            <Button Content="Send Request" Height="30" Margin="5,10,5,10" />
+
         </StackPanel>
+
+        <!--Active chats panel-->
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+            <TextBlock Background="Blue" Margin="5" Text="Active chat 1" />
+            <Button Content="Exit" />
+        </StackPanel>
+
+        <!-- Receive chat requests panel-->
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Background="Green" Margin="5" Text="Chat request 1" />
+                <Button Content="Accept" />
+                <Button Content="Decline" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Background="Green" Margin="5" Text="Chat request 2" />
+                <Button Content="Accept" />
+                <Button Content="Decline" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Chat history panel-->
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="5">
+            <TextBlock Background="Pink" Margin="5" Text="Chat history 1" />
+            <TextBlock Background="Pink" Margin="5" Text="Chat history 2" />
+        </StackPanel>
+
     </Grid>
 </UserControl>

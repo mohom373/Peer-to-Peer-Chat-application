@@ -11,7 +11,10 @@ namespace P2PChatProj.ViewModels.Commands
     public class UserConnectCommand : ICommand
     {
         private UserConnectViewModel viewModel;
-
+        
+        /// <summary>
+        /// Initializes a new instance of UserConnectCommand class.
+        /// </summary>
         public UserConnectCommand(UserConnectViewModel viewModel)
         {
             this.viewModel = viewModel;
@@ -25,7 +28,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return viewModel.CanConnect;
+            return String.IsNullOrWhiteSpace(viewModel.User.Error);
         }
 
         public void Execute(object parameter)
