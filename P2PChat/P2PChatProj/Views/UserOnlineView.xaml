@@ -9,12 +9,15 @@
     
     <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ContentControl x:Name="MenuView" Content="{Binding Path=Menu}" Grid.Column="0" />
-        <ContentControl x:Name="ChatView" Content="{Binding Path=Chat}" Grid.Column="1" />
+        <local:MenuView  Grid.Column="0" />
+        <local:ChatView Grid.Column="1" />
+
+        <!--<ContentControl x:Name="MenuView" Content="{Binding Path=Menu}" Grid.Column="0" />
+        <ContentControl x:Name="ChatView" Content="{Binding Path=Chat}" Grid.Column="1" />-->
         
     </Grid>
 </UserControl>

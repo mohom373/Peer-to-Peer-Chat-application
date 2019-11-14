@@ -23,20 +23,7 @@ namespace P2PChatProj.Views
         public UserOnlineView()
         {
             InitializeComponent();
-            Menu = new MenuView();
-            Chat = new ChatView();
-        }
 
-        public MenuView Menu 
-        {
-            get;
-            set;
-        }
-
-        public ChatView Chat 
-        { 
-            get; 
-            set; 
         }
     }
 }
