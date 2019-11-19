@@ -15,13 +15,14 @@ namespace SocketTest
             // LISTEN
             int port = 8080;
             IPHostEntry hostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ip = hostInfo.AddressList[0];
+            IPAddress ip = hostInfo.AddressList[3];
             IPEndPoint localEndPoint = new IPEndPoint(ip, port);
 
             Socket listener = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(100);
 
+            Console.WriteLine("IP: " + ip.ToString());
             Console.WriteLine("Listening to port " + port.ToString());
 
             Socket handler = listener.Accept();
