@@ -1,31 +1,189 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace SocketTest
 {
     class Program
     {
+        private static string userName;
+        private static int localPort;
+        private static IPAddress localIp;
+        private static IPEndPoint localEndPoint;
+        private static Socket listener;
+        private static Socket connector;
+        private static List<string> receivedRequests;
 
         static void Main(string[] args)
         {
-            ///////////////////////// SETUP //////////////////////////
-            string userName;
-            int localPort;
+            ////////////////////////// SETUP ///////////////////////////
             
+            // Welcome message
             Console.WriteLine("Welcome to Socket Chat!\n");
             
+            // Setup local end point
+            SetupLocalEndPoint();
+
+            // Create a listener socket and start listening
+            SetupListener();
+            Task.Run(() => StartListening());
+
+            // Starting information message
+            Console.WriteLine("\nWelcome " + userName + "!");
+            Console.WriteLine("IP: " + localIp);
+            Console.WriteLine("Listening to port: " + localPort.ToString() + "\n");
+            
+            //////////////////////// SETUP END //////////////////////////
+
+
+
+            /////////////////////////// MENU ////////////////////////////
+            
+            int selection;
+            bool isRunning = true;
+
+            while (isRunning) 
+            {
+                PrintMenu();
+                selection = GetSelection();
+
+                switch (selection)
+                {
+                    case 0:
+                        SendRequest();
+                        break;
+                    case 1:
+                        AcceptRequests();
+                        break;
+                    case 2:
+                        isRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("ERROR: Wrong input");
+                        break;
+                } 
+            }
+            ///////////////////////// MENU END //////////////////////////
+
+
+
+            ///////////////////////// TEARDOWN //////////////////////////
+
+            // Cancel listening
+            listener.Close();
+            connector.Close();
+
+            /////////////////////// TEARDOWN END ////////////////////////
+        }
+
+        private static void SendRequest()
+        {
+            IPAddress sendIp;
+            int sendPort;
+            IPEndPoint sendEndPoint;
+            Console.WriteLine("\n===============");
+            Console.WriteLine(" Send Requests ");
+            Console.WriteLine("===============\n");
+            
+            Console.Write("Enter ip:");
+            sendIp = IPAddress.Parse(Console.ReadLine());
+
+            Console.Write("Enter a port: ");
+            sendPort = Convert.ToInt32(Console.ReadLine());
+
+            connector = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            sendEndPoint = new IPEndPoint(sendIp, sendPort);
+
+            connector.Connect(sendEndPoint);
+
+            if (connector.Connected)
+            {
+                runChat();
+            }
+            else 
+            {
+                Console.WriteLine("ERROR: Connection failed");
+            }
+        }
+
+        private static void runChat(Socket handler = null)
+        {
+            byte[] bytes = new byte[1024];
+            int bytesRec;
+            Socket chatSocket;
+
+            Console.WriteLine("\n===============");
+            Console.WriteLine("      Chat     ");
+            Console.WriteLine("===============\n");
+
+            if (handler == null) 
+            {
+                chatSocket = connector;
+                Console.WriteLine("Waiting for request to accepted...\n");
+                
+                bytesRec = connector.Receive(bytes);
+
+                Console.Write("Received: ");
+                Console.WriteLine(Encoding.UTF8.GetString(bytes, 0, bytesRec));
+            }
+            else 
+            {
+                chatSocket = handler;
+            }
+
+
+
+            
+
+            //bool running = true;
+            //string message;
+
+            //while (running) 
+            //{
+            //    Console.Write("Message: ");
+            //    message = Console.ReadLine();
+
+            //    if (message == "q")
+            //    {
+            //        running = false;
+            //        continue;
+            //    }
+            //}
+        }
+
+        private static void AcceptRequests()
+        {
+            Console.WriteLine("\n===============");
+            Console.WriteLine("Accept Requests");
+            Console.WriteLine("===============\n");
+
+            for ( int i = 0; i < receivedRequests.Count; i++ )
+            {
+                Console.Write(i.ToString() + ": ");
+                Console.WriteLine(receivedRequests[i]);
+            }
+
+            Console.Write("\nEnter request to accept: ");
+            int selection = Convert.ToInt32(Console.ReadLine());
+
+            runChat();
+        }
+
+        static void SetupLocalEndPoint()
+        {
             Console.Write("Enter a name: ");
             userName = Console.ReadLine();
 
             Console.Write("Enter a port: ");
             localPort = Convert.ToInt32(Console.ReadLine());
 
-
             IPHostEntry hostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress localIp = hostInfo.AddressList[0];
 
-            foreach (IPAddress address in hostInfo.AddressList) 
+            foreach (IPAddress address in hostInfo.AddressList)
             {
                 if (address.AddressFamily == AddressFamily.InterNetwork)
                 {
@@ -33,100 +191,43 @@ namespace SocketTest
                     break;
                 }
             }
-          
-            IPEndPoint localEndPoint = new IPEndPoint(localIp, localPort);
 
-            Socket listener = new Socket(localIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            localEndPoint = new IPEndPoint(localIp, localPort);
+        }
+
+        static void SetupListener()
+        {
+            receivedRequests = new List<string>();
+            listener = new Socket(localIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(100);
-
-            Console.WriteLine("\nWelcome " + userName + "!");
-            Console.WriteLine("IP: " + localIp);
-            Console.WriteLine("Listening to port: " + localPort.ToString() + "\n");
-            ///////////////////////// SETUP END //////////////////////////
-
-            
-            
-            /////////////////////////// MENU ////////////////////////////
-            int selection;
-            bool isRunning = true;
-
-            while (isRunning) 
-            {
-                Console.WriteLine("====== Menu ======");
-                Console.WriteLine("0 - Send Request");
-                Console.WriteLine("1 - Accept Request");
-                Console.WriteLine("2 - Quit");
-                Console.WriteLine("====== Menu ======");
-
-                Console.Write("\nEnter menu selection: ");
-                selection = Convert.ToInt32(Console.ReadLine());
-
-                if (selection == 0)
-                {
-                    Console.WriteLine("Send Request Mode...");
-                } 
-                else if (selection == 1) 
-                {
-                    Console.WriteLine("Accept Request Mode...");
-                }
-                else if (selection == 2)
-                {
-                    isRunning = false;
-                }
-                else
-                {
-                    Console.WriteLine("ERROR: Wrong input!");
-                }
-            }
-            ///////////////////////// MENU END //////////////////////////
-
-
-            // LISTEN
-            //int port = 8080;
-            //IPHostEntry hostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            //IPAddress ip = hostInfo.AddressList[1];
-            //IPEndPoint localEndPoint = new IPEndPoint(ip, port);
-
-            //Socket listener = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            //listener.Bind(localEndPoint);
-            //listener.Listen(100);
-
-            //Console.WriteLine("IP: " + ip.ToString());
-            //Console.WriteLine("Listening to port " + port.ToString());
-
-            //Socket handler = listener.Accept();
-
-            //Console.WriteLine("Have gotten connection with " + handler.RemoteEndPoint.ToString());
-
-
-            // CONNECT
-            //Socket connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //string ipString = "10.253.244.1";
-            //IPAddress ip = IPAddress.Parse(ipString);
-            //IPEndPoint ipep = new IPEndPoint(ip, 8080);
-
-            //try
-            //{
-            //    connectSocket.Connect(ipep);
-            //}
-            //catch (ArgumentNullException ae)
-            //{
-            //    Console.WriteLine("ArgumentNullException : {0}", ae.ToString());
-            //}
-            //catch (SocketException se)
-            //{
-            //    Console.WriteLine("SocketException : {0}", se.ToString());
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("Unexpected exception : {0}", e.ToString());
-            //}
-
-            //if (connectSocket.Connected)
-            //{
-            //    Console.WriteLine("We are connected");
-            //}
         }
+
+        static void StartListening()
+        {
+            bool listening = true;
+
+            while (listening)
+            {
+                Socket handler = listener.Accept();
+                receivedRequests.Add(handler.RemoteEndPoint.ToString());
+            }
+        }
+
+        static void PrintMenu()
+        {
+            Console.WriteLine("====== Menu ======");
+            Console.WriteLine("0 - Send Request");
+            Console.WriteLine("1 - Accept Request");
+            Console.WriteLine("2 - Quit");
+            Console.WriteLine("====== Menu ======");
+        }
+
+        static int GetSelection()
+        {
+            Console.Write("\nEnter menu selection: ");
+            return Convert.ToInt32(Console.ReadLine());
+        }
+
     }
 }
