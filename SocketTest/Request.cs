@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,21 +10,21 @@ namespace SocketTest
 {
     class Request
     {
-        private IPAddress ip;
-        private int port;
+        private Socket socket;
         private string name;
 
-        public IPAddress Ip 
-        { 
-            get { return ip; } 
-            set { ip = value; } 
+        public Request(Socket s, string n)
+        {
+            socket = s;
+            name = n;
         }
 
-        public int Port
-        {
-            get { return port; }
-            set { port = value; }
+        public Socket Socket 
+        { 
+            get { return socket; } 
+            set { socket = value; } 
         }
+
 
         public string Name
         {

@@ -16,7 +16,8 @@ namespace SocketTest
         private static IPEndPoint localEndPoint;
         private static Socket listener;
         private static Socket connector;
-        private static List<string> receivedRequests;
+        private static List<Request> receivedRequests;
+        private static List<string> messageHistory;
 
         static void Main(string[] args)
         {
@@ -102,6 +103,7 @@ namespace SocketTest
 
             if (connector.Connected)
             {
+                connector.Send(Encoding.UTF8.GetBytes(userName));
                 runChat();
             }
             else 
@@ -110,49 +112,72 @@ namespace SocketTest
             }
         }
 
-        private static void runChat(Socket handler = null)
+        private static void runChat(Request accRequest = null)
         {
-            byte[] bytes = new byte[1024];
-            int bytesRec;
+            string recName = "";
             Socket chatSocket;
 
             Console.WriteLine("\n===============");
             Console.WriteLine("      Chat     ");
             Console.WriteLine("===============\n");
 
-            if (handler == null) 
+            if (accRequest == null) 
             {
                 chatSocket = connector;
                 Console.WriteLine("Waiting for request to accepted...\n");
                 
-                bytesRec = connector.Receive(bytes);
+                byte[] bytes = new byte[1024];
+                int bytesRec = connector.Receive(bytes);
 
-                Console.Write("Received: ");
-                Console.WriteLine(Encoding.UTF8.GetString(bytes, 0, bytesRec));
+                Console.WriteLine(Encoding.UTF8.GetString(bytes, 0, bytesRec) + " accepted your request");
             }
             else 
             {
-                chatSocket = handler;
+                chatSocket = accRequest.Socket;
+                recName = accRequest.Name;
+                chatSocket.Send(Encoding.UTF8.GetBytes(userName));
+
             }
 
+            bool running = true;
+            string message;
+            messageHistory = new List<string>();
 
+            Task.Run(() => ListenForMessages());
 
+            while (running)
+            {
+                Console.Write("\nMessage: ");
+                message = Console.ReadLine();
+
+                if (message == "q")
+                {
+                    running = false;
+                    continue;
+                }
+                else
+                {
+                    message = userName + ": " + message;
+                    chatSocket.Send(Encoding.UTF8.GetBytes(message));
+                    messageHistory.Add(message);
+                    PrintMessages();
+                }
+            }
+        }
+
+        private static void PrintMessages()
+        {
+            Console.WriteLine();
+
+            foreach (string message in messageHistory)
+            {
+                Console.WriteLine(message);
+            }
+        }
+
+        private static void ListenForMessages();
+        {
             
-
-            //bool running = true;
-            //string message;
-
-            //while (running) 
-            //{
-            //    Console.Write("Message: ");
-            //    message = Console.ReadLine();
-
-            //    if (message == "q")
-            //    {
-            //        running = false;
-            //        continue;
-            //    }
-            //}
         }
 
         private static void AcceptRequests()
@@ -164,13 +189,13 @@ namespace SocketTest
             for ( int i = 0; i < receivedRequests.Count; i++ )
             {
                 Console.Write(i.ToString() + ": ");
-                Console.WriteLine(receivedRequests[i]);
+                Console.WriteLine(receivedRequests[i].Name);
             }
 
             Console.Write("\nEnter request to accept: ");
             int selection = Convert.ToInt32(Console.ReadLine());
 
-            runChat();
+            runChat(receivedRequests[selection]);
         }
 
         static void SetupLocalEndPoint()
@@ -197,7 +222,7 @@ namespace SocketTest
 
         static void SetupListener()
         {
-            receivedRequests = new List<string>();
+            receivedRequests = new List<Request>();
             listener = new Socket(localIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(100);
@@ -210,7 +235,10 @@ namespace SocketTest
             while (listening)
             {
                 Socket handler = listener.Accept();
-                receivedRequests.Add(handler.RemoteEndPoint.ToString());
+                byte[] bytes = new byte[1024];
+                int bytesRec = handler.Receive(bytes);
+                string reqName = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                receivedRequests.Add(new Request(handler, reqName));
             }
         }
 
