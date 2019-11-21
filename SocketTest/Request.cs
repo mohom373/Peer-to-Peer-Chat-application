@@ -12,11 +12,13 @@ namespace SocketTest
     {
         private Socket socket;
         private string name;
+        private int chatPort;
 
-        public Request(Socket s, string n)
+        public Request(Socket s, string n, int cp)
         {
             socket = s;
             name = n;
+            chatPort = cp;
         }
 
         public Socket Socket 
@@ -32,5 +34,10 @@ namespace SocketTest
             set { name = value; }
         }
 
+        public int ChatPort
+        {
+            get { return chatPort; }
+            set { chatPort = value; }
+        }
     }
 }
