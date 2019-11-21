@@ -85,9 +85,7 @@ namespace SocketTest
             ///////////////////////// TEARDOWN //////////////////////////
 
             // Cancel listening
-            requestListener.Shutdown(SocketShutdown.Both);
             requestListener.Close();
-            chatListener.Shutdown(SocketShutdown.Both);
             chatListener.Close();
             messageReceiver.Close();
             connectorSender.Close();
