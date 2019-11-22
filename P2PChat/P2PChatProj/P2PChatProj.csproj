@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Services\RequestListener.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\UserConnectCommand.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />

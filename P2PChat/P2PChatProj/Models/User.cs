@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P2PChatProj.Model
+namespace P2PChatProj.Models
 {
     public class User : INotifyPropertyChanged, IDataErrorInfo
     {
@@ -84,9 +84,9 @@ namespace P2PChatProj.Model
                     }
                 }
 
-                //else if (columnName == "PortNumber")
+                //if (columnName == "PortNumber")
                 //{
-                //    if (portNumber < 1024 && portNumber > 64000)
+                //    if (PortNumber < 1024 && PortNumber > 64000)
                 //    {
 
                 //        Error = "Portnumber can't be less than 1024 or exceed 65000";

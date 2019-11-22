@@ -1,4 +1,4 @@
-﻿using P2PChatProj.Model;
+﻿using P2PChatProj.Models;
 using P2PChatProj.ViewModels.Commands;
 using P2PChatProj.Views;
 using System;

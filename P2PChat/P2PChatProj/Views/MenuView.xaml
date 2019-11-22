@@ -48,21 +48,22 @@
 
         <!-- Receive chat requests panel-->
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Background="Green" Margin="5" Text="Chat request 1" />
-                <Button Content="Accept" />
-                <Button Content="Decline" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Background="Green" Margin="5" Text="Chat request 2" />
-                <Button Content="Accept" />
-                <Button Content="Decline" />
-            </StackPanel>
+            <ItemsControl ItemsSource="{Binding ReceivedRequestsList}" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Background="Green" Margin="5" Text="{Binding}" />
+                            <Button Content="Accept" />
+                            <Button Content="Decline" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
 
         <!-- Chat history panel-->
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="5">
-            <TextBlock Background="Pink" Margin="5" Text="Chat history 1" />
+            <TextBlock Background="Pink" Margin="5" Text="{Binding IpAddress}" />
             <TextBlock Background="Pink" Margin="5" Text="Chat history 2" />
         </StackPanel>
 

@@ -1,4 +1,4 @@
-﻿using P2PChatProj.Model;
+﻿using P2PChatProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
