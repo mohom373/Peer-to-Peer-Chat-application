@@ -13,9 +13,9 @@ namespace P2PChatProj.Services
     class RequestListener
     {
         private static Socket requestListener ;
-        public static void ListenForRequests(ObservableCollection<string> receivedRequestsList, int portNumber)
+        public static void ListenForRequests(IPAddress localIp, int portNumber, IProgress<Request> addRequest)
         {
-            SetupListener(portNumber);
+            SetupListener(localIp, portNumber);
             
             bool listening = true;
             byte[] bytes = new byte[1024];
@@ -33,35 +33,15 @@ namespace P2PChatProj.Services
 
                 bytesRec = handler.Receive(bytes);
                 string reqMessage = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                receivedRequestsList.Add(reqMessage);
+                addRequest.Report(new Request(null, 0, reqMessage));
             }
         }
 
-        public static void SetupListener(int portNumber)
+        public static void SetupListener(IPAddress localIp, int portNumber)
         {
             requestListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPAddress localIpAddress = IPAddress.Parse("10.253.242.214"); //getLocalIp();
-
-            //Console.WriteLine(localIpAddress.ToString());
-            Console.WriteLine(portNumber);
-
-            requestListener.Bind(new IPEndPoint(localIpAddress, portNumber));
+            requestListener.Bind(new IPEndPoint(localIp, portNumber));
             requestListener.Listen(100);
-        }
-
-        public static IPAddress getLocalIp()
-        {
-            IPHostEntry hostInfo = Dns.GetHostEntry(Dns.GetHostName());
-
-            foreach (IPAddress address in hostInfo.AddressList)
-            {
-                if (address.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    Console.WriteLine(address);
-                        
-                }
-            }
-            return null;
         }
     }
 }

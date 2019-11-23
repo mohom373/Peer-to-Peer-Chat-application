@@ -52,7 +52,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Background="Green" Margin="5" Text="{Binding}" />
+                            <TextBlock Background="Green" Margin="5" Text="{Binding UserName}" />
                             <Button Content="Accept" />
                             <Button Content="Decline" />
                         </StackPanel>

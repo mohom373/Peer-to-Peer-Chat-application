@@ -11,11 +11,13 @@ namespace P2PChatProj.Models
     {
         private IPAddress ipAddress;
         private int portNumber;
+        private string userName;
 
-        public Request(IPAddress ipAddress = null, int portNumber = 0)
+        public Request(IPAddress ipAddress = null, int portNumber = 0, string userName = "")
         {
             this.ipAddress = ipAddress;
             this.portNumber = portNumber;
+            this.userName = userName;
         }
 
         public IPAddress IpAddress 
@@ -28,6 +30,12 @@ namespace P2PChatProj.Models
         {
             get { return portNumber; }
             set { portNumber = value; } 
+        }
+
+        public string UserName
+        {
+            get { return userName; }
+            set { userName = value; }
         }
 
     }
