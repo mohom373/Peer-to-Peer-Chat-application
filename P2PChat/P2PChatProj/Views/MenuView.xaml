@@ -31,12 +31,13 @@
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">
 
             <Label Content="IP-address" FontSize="16" />
-            <TextBox Width="200" Height="30" Margin="5,0,5,0" />
+            <TextBox Text="{Binding InputIp}" Width="200" Height="30" Margin="5,0,5,0" />
 
             <Label Content="Port Number" FontSize="16" />
-            <TextBox Width="200" Height="30" Margin="5,0,5,0" />
+            <TextBox Text="{Binding InputPort}" Width="200" Height="30" Margin="5,0,5,0" />
 
-            <Button Content="Send Request" Height="30" Margin="5,10,5,10" />
+            <Button Content="Send Request" Height="30" Margin="5,10,5,10"
+                    Command="{Binding RequestCommand}" />
 
         </StackPanel>
 

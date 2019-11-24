@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.Models
 {
-    public class User : INotifyPropertyChanged, IDataErrorInfo
+    public class User : INotifyPropertyChanged
     {
         
         private string userName;
@@ -60,45 +60,5 @@ namespace P2PChatProj.Models
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
         }
-
-        #region IDataErrorInfo members
-        public string Error
-        {
-            get;
-            private set;
-        }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                if (columnName == "UserName")
-                {
-                    if (String.IsNullOrWhiteSpace(UserName))
-                    {
-                        Error = "Username can't be null or empty. ";
-                    }
-                    else
-                    {
-                        Error = null;
-                    }
-                }
-
-                //if (columnName == "PortNumber")
-                //{
-                //    if (PortNumber < 1024 && PortNumber > 64000)
-                //    {
-
-                //        Error = "Portnumber can't be less than 1024 or exceed 65000";
-                //    }
-                //    else
-                //    {
-                //        Error = null;
-                //    }
-                //}
-                return Error;
-            }
-        }
-        #endregion
     }
 }

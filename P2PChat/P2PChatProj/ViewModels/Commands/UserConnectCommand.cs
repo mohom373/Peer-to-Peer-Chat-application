@@ -28,7 +28,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return String.IsNullOrWhiteSpace(viewModel.User.Error) && (viewModel.User.PortNumber > 1023 && viewModel.User.PortNumber < 65000);
+            return !String.IsNullOrWhiteSpace(viewModel.User.UserName) && (viewModel.User.PortNumber > 1023 && viewModel.User.PortNumber < 65000);
         }
 
         public void Execute(object parameter)

@@ -23,7 +23,6 @@ namespace P2PChatProj.Services
 
             while (listening)
             {
-                Console.WriteLine("IM INSIDE THE WHILE LOOP");
                 Socket handler = requestListener.Accept();
 
                 if (handler.Connected)

@@ -12,6 +12,7 @@ namespace P2PChatProj.ViewModels
     public class UserOnlineViewModel
     {
         private User user;
+        
 
         public UserOnlineViewModel(User user)
         {
@@ -21,10 +22,10 @@ namespace P2PChatProj.ViewModels
             Chat = new ChatViewModel(user);
         }
 
-        public User User 
-        { 
+        public User User
+        {
             get { return user; }
-            set { user = value; } 
+            set { user = value; }
         }
 
         public IPAddress LocalIp { get; set; }
@@ -41,16 +42,6 @@ namespace P2PChatProj.ViewModels
                 IPEndPoint endPoint = (IPEndPoint) socket.LocalEndPoint;
                 LocalIp = endPoint.Address;
             }
-            //IPHostEntry hostInfo = Dns.GetHostEntry(Dns.GetHostName());
-
-            //foreach (IPAddress address in hostInfo.AddressList)
-            //{
-            //    if (address.AddressFamily == AddressFamily.InterNetwork)
-            //    {
-            //        return address;
-            //    }
-            //}
-            //return null;
         }
     }
 }
