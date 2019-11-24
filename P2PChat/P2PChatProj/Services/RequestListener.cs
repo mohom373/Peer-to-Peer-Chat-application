@@ -28,12 +28,10 @@ namespace P2PChatProj.Services
 
                 if (handler.Connected)
                 {
-                    Console.WriteLine("VI ÄR CONNECTED");
+                    bytesRec = handler.Receive(bytes);
+                    string reqMessage = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                    addRequest.Report(new Request(null, 0, reqMessage));
                 }
-
-                bytesRec = handler.Receive(bytes);
-                string reqMessage = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                addRequest.Report(new Request(null, 0, reqMessage));
             }
         }
 
