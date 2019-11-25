@@ -1,0 +1,30 @@
+﻿
+   ToDo
+----------
+
+Ordning:
+
+
+
+
+Uppgifter:
+	- (Lab1) Meddelande om ingen lyssnar på ip + port som man skickat request till
+	- (Lab1) Respons om en skickad request blir accepterad eller nekad
+	- (Lab1) Meddelande om anslutning har avbrutits av någon anledning
+	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
+	- (Lab2) Panel och ObservableCollection ska användas för konversation
+	- (Lab2) Arv ska användas för att skapa meddelande-klass
+	- (Allmänt) Implementera JSON funktionalitet
+	- (Allmänt) Bestämma hur aktiv chat ska fungera
+	- (Allmänt) Popup fönster för att säkerställa byte av aktiv chat
+	- (Allmänt) Lösa validering av input
+	- (Allmänt) Fundera på felhantering
+
+Aktiv chat beteende:
+	- Vi ska inte ha flera invites samtidigt
+	- När man skickar en request ska aktiv chat hamna i waiting state (exit knapp)
+	- Om den andra personen accepterar hamnar aktiv chat i chat state (exit knapp)
+	- Om den andra personen skickar en request till dig hamnar akiv chat i accept state (accept och decline knapp)
+
+
+

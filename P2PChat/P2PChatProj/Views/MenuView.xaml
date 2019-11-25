@@ -25,47 +25,59 @@
         </Grid.RowDefinitions>
 
         <!-- Show Username -->
-        <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" Grid.Column="1" Grid.Row="1" FontSize="20" />
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+            <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" 
+                       FontSize="36" FontWeight="Bold" />
+            <TextBlock Text="{Binding IpAddress, FallbackValue='13.37.4.20'}" FontSize="16"
+                       Margin="0,5,0,5"/>
+        </StackPanel>
 
         <!-- Send chat requests panel -->
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">
 
-            <Label Content="IP-address" FontSize="16" />
-            <TextBox Text="{Binding InputIp}" Width="200" Height="30" Margin="5,0,5,0" />
+            <Label Content="IP-address" FontSize="20" />
+            <TextBox Text="{Binding InputIp, UpdateSourceTrigger=PropertyChanged}" Width="300" Height="30" />
 
-            <Label Content="Port Number" FontSize="16" />
-            <TextBox Text="{Binding InputPort}" Width="200" Height="30" Margin="5,0,5,0" />
+            <Label Content="Port Number" FontSize="20" />
+            <TextBox Text="{Binding InputPort, UpdateSourceTrigger=PropertyChanged}" Width="300" Height="30" />
 
-            <Button Content="Send Request" Height="30" Margin="5,10,5,10"
+            <Button Content="Send Request" Width="300" Height="30" Margin="0,10,0,10"
                     Command="{Binding RequestCommand}" />
 
         </StackPanel>
 
         <!--Active chats panel-->
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
-            <TextBlock Background="Blue" Margin="5" Text="Active chat 1" />
-            <Button Content="Exit" />
-        </StackPanel>
-
-        <!-- Receive chat requests panel-->
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
-            <ItemsControl ItemsSource="{Binding ReceivedRequestsList}" >
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Background="Green" Margin="5" Text="{Binding UserName}" />
-                            <Button Content="Accept" />
-                            <Button Content="Decline" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="3">
+            
+            <Label Content="Chat" FontSize="20" />
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Background="Blue" Margin="5" Text="{Binding ActiveChatName, FallbackValue=No Active Chat}" />
+                <Button Content="Exit" Visibility="{Binding ExitVisibility}"/>
+                <Button Content="Accept" Visibility="{Binding AcceptVisibility}" />
+                <Button Content="Decline" Visibility="{Binding DeclineVisibility}" />
+            </StackPanel>
+        
         </StackPanel>
 
         <!-- Chat history panel-->
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="5">
-            <TextBlock Background="Pink" Margin="5" Text="{Binding IpAddress}" />
-            <TextBlock Background="Pink" Margin="5" Text="Chat history 2" />
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
+            <Label Content="History" FontSize="20" />
+
+            <ItemsControl ItemsSource="{Binding ChatHistoryList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5">
+                            <TextBlock Background="Pink" Margin="5" Text="History" />
+                            <Button Content="View" />
+                        </StackPanel>
+                        
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+
         </StackPanel>
 
     </Grid>

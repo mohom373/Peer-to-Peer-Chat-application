@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace P2PChatProj.ViewModels
@@ -18,16 +19,17 @@ namespace P2PChatProj.ViewModels
         private User user;
         private string inputIp;
         private int inputPort;
+        private string activeChatName;
         public MenuViewModel(User user, IPAddress localIp)
         { 
             this.user = user;
+            activeChatName = "No Active Chat";
             IpAddress = localIp.ToString();
-            ReceivedRequestsList = new ObservableCollection<Request>();
+            ChatHistoryList = new ObservableCollection<Request>();
 
             // Setting up listener for chat requests
-            Progress<Request> requestAdder = new Progress<Request>();
-            requestAdder.ProgressChanged += addRequestToList;
-            Task.Run(() => RequestListener.ListenForRequests(localIp, user.PortNumber, requestAdder));
+
+            Task.Run(() => ListenForRequest(localIp, user.PortNumber));
 
             RequestCommand = new SendRequestCommand(this);
         }
@@ -36,6 +38,23 @@ namespace P2PChatProj.ViewModels
         {
             get;
             private set;
+        }
+
+        public void ListenForRequest(IPAddress localIp, int localPort)
+        {
+            RequestListener.SetupListener(localIp, localPort);
+            Request receivedRequest = RequestListener.StartListening();
+
+            //Har vi redan en aktiv chat
+            if (receivedRequest == null)
+            {
+                Console.WriteLine("Shit went wrong");
+            }
+            else
+            {
+                ExitVisibility = Visibility.Visible;
+                activeChatName = receivedRequest.UserName;
+            }
         }
 
         public void SendRequestClick()
@@ -55,10 +74,20 @@ namespace P2PChatProj.ViewModels
             set { inputPort = value; }
         }
 
-        public void addRequestToList(object sender, Request request)
+        public string ActiveChatName
         {
-            ReceivedRequestsList.Add(request);
+            get { return activeChatName; }
+            set { activeChatName = value; }
         }
+
+        public Visibility ExitVisibility { get; set; } = Visibility.Hidden;
+        public Visibility AcceptVisibility { get; set; } = Visibility.Hidden;
+        public Visibility DeclineVisibility { get; set; } = Visibility.Hidden;
+
+        //public void addRequestToList(object sender, Request request)
+        //{
+        //    ReceivedRequestsList.Add(request);
+        //}
 
 
         public string IpAddress { get; set; }
@@ -69,7 +98,7 @@ namespace P2PChatProj.ViewModels
             set { user = value; }
         }
 
-        public ObservableCollection<Request> ReceivedRequestsList
+        public ObservableCollection<Request> ChatHistoryList
         {
             get;
             set;
