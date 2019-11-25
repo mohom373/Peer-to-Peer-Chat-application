@@ -17,43 +17,26 @@ namespace P2PChatProj.ViewModels
 {
     public class MenuViewModel : INotifyPropertyChanged
     {
-        private User user;
-        private string inputIp;
-        private int inputPort;
+        // Private backup variables
         private string activeChatName;
         private Visibility exitVisibility = Visibility.Collapsed;
         private Visibility acceptVisibility = Visibility.Collapsed;
         private Visibility declineVisibility = Visibility.Collapsed;
             
-
+        // Events
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MenuViewModel(User user, IPAddress localIp)
         { 
-            this.user = user;
+            User = user;
             activeChatName = "No Active Chat";
             IpAddress = localIp.ToString();
             ChatHistoryList = new ObservableCollection<Request>();
-
-            // Setting up listener for chat requests
 
             Task.Run(() => ListenForRequest(localIp, user.PortNumber));
 
             RequestCommand = new SendRequestCommand(this);
             ExitActiveChatCommand = new ExitActiveChatCommand(this);
-        }
-
-
-        public ICommand RequestCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand ExitActiveChatCommand
-        {
-            get;
-            private set;
         }
 
         public void ListenForRequest(IPAddress localIp, int localPort)
@@ -69,48 +52,73 @@ namespace P2PChatProj.ViewModels
             {
                 AcceptVisibility = Visibility.Visible;
                 DeclineVisibility = Visibility.Visible;
-                
+
                 ActiveChatName = receivedRequest.UserName;
                 Console.WriteLine(ActiveChatName);
             }
         }
 
-        public void PauseListenerClick()
+        public void PauseListener()
         {
             RequestListener.StopListening();
         }
 
-        public void SendRequestClick()
+        public async Task SendRequestAsync()
         {
-            PauseListenerClick();
-            RequestSender.SendRequest(new Request(IPAddress.Parse(InputIp), InputPort, User.UserName));
+            PauseListener();
+            Connecting = true;
+            ActiveChatName = "Connecting...";
+            // lägg in bool om det gick bar eller inte
+            await Task.Run(() => RequestSender.SendRequest(new Request(IPAddress.Parse(InputIp), InputPort, User.UserName)));
+            Waiting = true;
+            Connecting = false;
+            ActiveChatName = "Waiting...";
         }
 
-        public string InputIp
+
+        #region Properties
+        // Commands
+        public ICommand RequestCommand
         {
-            get { return inputIp; }
-            set { inputIp = value; }
+            get;
+            private set;
         }
 
-        public int InputPort
+        public ICommand ExitActiveChatCommand
         {
-            get { return inputPort; }
-            set { inputPort = value; }
+            get;
+            private set;
         }
+
+        // Input properties
+        public string InputIp { get; set; }
+
+        public int InputPort { get; set; }
+
+        // Info
+        public string IpAddress { get; set; }
+
+        public User User { get; set; }
 
         public string ActiveChatName
         {
             get
-            { 
-                return activeChatName; 
+            {
+                return activeChatName;
             }
-            set 
-            { 
+            set
+            {
                 activeChatName = value;
                 RaisePropertyChanged("ActiveChatName");
             }
         }
 
+        // Validation booleans
+        public bool Connecting { get; set; } = false;
+
+        public bool Waiting { get; set; } = false;
+
+        // Visibility values for controls
         public Visibility ExitVisibility
         {
             get { return exitVisibility; }
@@ -141,20 +149,9 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-
-        public string IpAddress { get; set; }
-
-        public User User
-        {
-            get { return user; }
-            set { user = value; }
-        }
-
-        public ObservableCollection<Request> ChatHistoryList
-        {
-            get;
-            set;
-        }
+        public ObservableCollection<Request> ChatHistoryList { get; set; }
+        
+        #endregion
 
         private void RaisePropertyChanged(string property)
         {

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace P2PChatProj.Services
 {
@@ -23,7 +24,8 @@ namespace P2PChatProj.Services
             }
             catch(SocketException)
             {
-                Console.WriteLine("Could not connect");
+                MessageBox.Show($"Could not connect to user!",
+                    "Connection failed", MessageBoxButton.OK);
             }
             
         }

@@ -23,12 +23,14 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return !String.IsNullOrEmpty(viewModel.InputIp) && (viewModel.InputPort > 1023 && viewModel.InputPort < 65000);
+            return !viewModel.Connecting && !viewModel.Waiting 
+                && !String.IsNullOrEmpty(viewModel.InputIp) 
+                && (viewModel.InputPort > 1023 && viewModel.InputPort < 65000);
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-           viewModel.SendRequestClick();
+           await viewModel.SendRequestAsync();
         }
     }
 }
