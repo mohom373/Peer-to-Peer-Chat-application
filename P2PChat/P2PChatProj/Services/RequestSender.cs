@@ -16,8 +16,16 @@ namespace P2PChatProj.Services
             IPEndPoint remoteEndPoint = new IPEndPoint(request.IpAddress, request.PortNumber);
             Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            sender.Connect(remoteEndPoint);
-            sender.Send(Encoding.UTF8.GetBytes(request.UserName));
+            try
+            {
+                sender.Connect(remoteEndPoint);
+                sender.Send(Encoding.UTF8.GetBytes(request.UserName));
+            }
+            catch(SocketException)
+            {
+                Console.WriteLine("Could not connect");
+            }
+            
         }
     }
 }

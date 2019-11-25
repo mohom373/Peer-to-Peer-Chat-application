@@ -13,19 +13,14 @@ namespace P2PChatProj.Services
     class RequestListener
     {
         private static Socket requestListener;
+        private static Socket handler;
 
-        public static void SetupListener(IPAddress localIp, int portNumber)
+        public static Request StartListening(IPAddress localIp, int portNumber)
         {
-            requestListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            requestListener.Bind(new IPEndPoint(localIp, portNumber));
-            requestListener.Listen(100);
-        }
+            SetupListener(localIp, portNumber);
 
-        public static Request StartListening()
-        {   
             byte[] bytes = new byte[1024];
             int bytesRec;
-            Socket handler;
 
             try
             {
@@ -59,14 +54,27 @@ namespace P2PChatProj.Services
             }
         }
 
-        public static void PauseListener()
+        public static void SetupListener(IPAddress localIp, int portNumber)
         {
-            requestListener.Shutdown(SocketShutdown.Both);
+            handler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            requestListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            requestListener.Bind(new IPEndPoint(localIp, portNumber));
+            requestListener.Listen(100);
         }
 
-        public static void CloseListener()
+        public static void StopListening()
         {
             requestListener.Close();
+            
+            try
+            {
+                handler.Shutdown(SocketShutdown.Both);
+            }
+            catch(SocketException)
+            {
+                Console.WriteLine("handler never got a connection");
+                handler.Close();
+            }
         }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Services\RequestListener.cs" />
     <Compile Include="Services\RequestSender.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Compile Include="ViewModels\Commands\ExitActiveChatCommand.cs" />
     <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
     <Compile Include="ViewModels\Commands\UserConnectCommand.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
