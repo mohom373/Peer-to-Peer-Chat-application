@@ -30,7 +30,7 @@ namespace P2PChatProj.ViewModels
         { 
             User = user;
             activeChatName = "No Active Chat";
-            IpAddress = localIp.ToString();
+            IpAddress = localIp;
             ChatHistoryList = new ObservableCollection<Request>();
 
             Task.Run(() => ListenForRequest(localIp, user.PortNumber));
@@ -68,11 +68,23 @@ namespace P2PChatProj.ViewModels
             PauseListener();
             Connecting = true;
             ActiveChatName = "Connecting...";
-            // lägg in bool om det gick bar eller inte
-            await Task.Run(() => RequestSender.SendRequest(new Request(IPAddress.Parse(InputIp), InputPort, User.UserName)));
-            Waiting = true;
-            Connecting = false;
-            ActiveChatName = "Waiting...";
+            
+            bool sendSuccessful = await Task.Run(() => RequestSender.SendRequest(new Request(InputIp, InputPort, User.UserName)));
+            
+            if (sendSuccessful)
+            {
+                Waiting = true;
+                Connecting = false;
+                ExitVisibility = Visibility.Visible;
+                ActiveChatName = "Waiting...";
+            }
+            else
+            {
+                Connecting = false;
+                Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
+                ActiveChatName = "No Active Chat";
+            }
+            
         }
 
 
@@ -96,7 +108,7 @@ namespace P2PChatProj.ViewModels
         public int InputPort { get; set; }
 
         // Info
-        public string IpAddress { get; set; }
+        public IPAddress IpAddress { get; set; }
 
         public User User { get; set; }
 

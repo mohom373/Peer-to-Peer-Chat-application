@@ -1,4 +1,5 @@
-﻿using P2PChatProj.Models;
+﻿using Newtonsoft.Json;
+using P2PChatProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace P2PChatProj.Services
 {
     public class RequestSender
     {
-        public static void SendRequest(Request request)
+        public static bool SendRequest(Request request)
         {
-            IPEndPoint remoteEndPoint = new IPEndPoint(request.IpAddress, request.PortNumber);
+            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(request.IpAddress), request.PortNumber);
             Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            string jsonRequest = JsonConvert.SerializeObject(request);
+            Console.WriteLine(jsonRequest);
+
+            Request fromJsonRequest = JsonConvert.DeserializeObject<Request>(jsonRequest);
+            Console.WriteLine(fromJsonRequest.IpAddress);
+            Console.WriteLine(fromJsonRequest.PortNumber.ToString());
+            Console.WriteLine(fromJsonRequest.UserName);
 
             try
             {
@@ -26,8 +36,9 @@ namespace P2PChatProj.Services
             {
                 MessageBox.Show($"Could not connect to user!",
                     "Connection failed", MessageBoxButton.OK);
+                return false;
             }
-            
+            return true;
         }
     }
 }

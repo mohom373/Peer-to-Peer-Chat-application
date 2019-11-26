@@ -9,18 +9,18 @@ namespace P2PChatProj.Models
 {
     public class Request
     {
-        private IPAddress ipAddress;
+        private string ipAddress;
         private int portNumber;
         private string userName;
 
-        public Request(IPAddress ipAddress = null, int portNumber = 0, string userName = "")
+        public Request(string ipAddress = "", int portNumber = 0, string userName = "")
         {
             this.ipAddress = ipAddress;
             this.portNumber = portNumber;
             this.userName = userName;
         }
 
-        public IPAddress IpAddress 
+        public string IpAddress 
         {
             get { return ipAddress; } 
             set { ipAddress = value; } 
