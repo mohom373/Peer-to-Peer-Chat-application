@@ -7,11 +7,11 @@ using System.Windows.Input;
 
 namespace P2PChatProj.ViewModels.Commands
 {
-    public class ExitActiveChatCommand : ICommand
+    class DeclineChatCommand : ICommand
     {
         private MenuViewModel menuViewModel;
 
-        public ExitActiveChatCommand(MenuViewModel menuViewModel)
+        public DeclineChatCommand(MenuViewModel menuViewModel)
         {
             this.menuViewModel = menuViewModel;
         }
@@ -29,7 +29,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            menuViewModel.ExitActiveChat();
+            menuViewModel.DeclineChatRequest();
         }
     }
 }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels
 {
-    public class UserOnlineViewModel
+    public class OnlineViewModel
     {
         private User user;
         
 
-        public UserOnlineViewModel(User user)
+        public OnlineViewModel(User user)
         {
             this.user = user;
             setLocalIp();

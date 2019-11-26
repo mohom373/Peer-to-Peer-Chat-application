@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace P2PChatProj.Services
 {
-    public class RequestSender
+    public class ChatService
     {
         public static bool SendRequest(Request request)
         {

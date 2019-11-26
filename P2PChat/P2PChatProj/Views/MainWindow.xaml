@@ -11,11 +11,11 @@
 
     <Window.Resources>
         
-        <DataTemplate x:Name="userConnectTemplate" DataType="{x:Type viewmodels:UserConnectViewModel}">
+        <DataTemplate x:Name="userConnectTemplate" DataType="{x:Type viewmodels:OfflineViewModel}">
             <views:UserConnectView DataContext="{Binding}" />
         </DataTemplate>
 
-        <DataTemplate x:Name="userOnlineTemplate" DataType="{x:Type viewmodels:UserOnlineViewModel}">
+        <DataTemplate x:Name="userOnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
             <views:UserOnlineView DataContext="{Binding}" />
         </DataTemplate>
 

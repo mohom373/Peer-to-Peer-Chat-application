@@ -59,26 +59,28 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Request.cs" />
-    <Compile Include="Services\RequestListener.cs" />
-    <Compile Include="Services\RequestSender.cs" />
+    <Compile Include="Services\RequestService.cs" />
+    <Compile Include="Services\ChatService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Compile Include="ViewModels\Commands\AcceptChatCommand.cs" />
+    <Compile Include="ViewModels\Commands\DeclineChatCommand.cs" />
     <Compile Include="ViewModels\Commands\ExitActiveChatCommand.cs" />
     <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
-    <Compile Include="ViewModels\Commands\UserConnectCommand.cs" />
+    <Compile Include="ViewModels\Commands\GoOnlineCommand.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
-    <Compile Include="ViewModels\UserConnectViewModel.cs" />
-    <Compile Include="ViewModels\UserOnlineViewModel.cs" />
+    <Compile Include="ViewModels\OfflineViewModel.cs" />
+    <Compile Include="ViewModels\OnlineViewModel.cs" />
     <Compile Include="Views\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserConnectView.xaml.cs">
-      <DependentUpon>UserConnectView.xaml</DependentUpon>
+    <Compile Include="Views\OfflineView.xaml.cs">
+      <DependentUpon>OfflineView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserOnlineView.xaml.cs">
-      <DependentUpon>UserOnlineView.xaml</DependentUpon>
+    <Compile Include="Views\OnlineView.xaml.cs">
+      <DependentUpon>OnlineView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -100,11 +102,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserConnectView.xaml">
+    <Page Include="Views\OfflineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserOnlineView.xaml">
+    <Page Include="Views\OnlineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

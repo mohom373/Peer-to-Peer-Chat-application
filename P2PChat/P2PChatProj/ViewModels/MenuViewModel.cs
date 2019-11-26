@@ -35,32 +35,31 @@ namespace P2PChatProj.ViewModels
 
             Task.Run(() => ListenForRequest(localIp, user.PortNumber));
 
-            RequestCommand = new SendRequestCommand(this);
-            ExitActiveChatCommand = new ExitActiveChatCommand(this);
+            RequestButtonCommand = new SendRequestCommand(this);
+            ExitButtonCommand = new ExitActiveChatCommand(this);
+            AcceptButtonCommand = new AcceptChatCommand(this);
+            DeclineButtonCommand = new DeclineChatCommand(this);
         }
 
         public void ListenForRequest(IPAddress localIp, int localPort)
         {
-            Request receivedRequest = RequestListener.StartListening(localIp, localPort);
+            Request receivedRequest = RequestService.StartListening(localIp, localPort);
 
             //Har vi redan en aktiv chat
-            if (receivedRequest == null)
+            if (receivedRequest != null)
             {
-                Console.WriteLine("Shit went wrong");
-            }
-            else
-            {
+                PauseListener();
+
                 AcceptVisibility = Visibility.Visible;
                 DeclineVisibility = Visibility.Visible;
 
                 ActiveChatName = receivedRequest.UserName;
-                Console.WriteLine(ActiveChatName);
             }
         }
 
         public void PauseListener()
         {
-            RequestListener.StopListening();
+            RequestService.StopListening();
         }
 
         public async Task SendRequestAsync()
@@ -69,7 +68,7 @@ namespace P2PChatProj.ViewModels
             Connecting = true;
             ActiveChatName = "Connecting...";
             
-            bool sendSuccessful = await Task.Run(() => RequestSender.SendRequest(new Request(InputIp, InputPort, User.UserName)));
+            bool sendSuccessful = await Task.Run(() => ChatService.SendRequest(new Request(InputIp, InputPort, User.UserName)));
             
             if (sendSuccessful)
             {
@@ -87,16 +86,66 @@ namespace P2PChatProj.ViewModels
             
         }
 
+        public void ExitActiveChat()
+        {
+            Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
+            ActiveChatName = "No Active Chat";
+            ExitVisibility = Visibility.Collapsed;
+            Waiting = false;
+
+            /*
+            if (Waiting)
+            {
+                ActiveChatName = "No Active Chat";
+                ExitVisibility = Visibility.Collapsed;
+            } 
+            else if (Chatting)
+            {
+                ActiveChatName = "No Active Chat";
+                ExitVisibility = Visibility.Collapsed;
+            }
+            */
+        }
+
+        public void AcceptChatRequest()
+        {
+            // setup chat view
+
+            // Meddela andra part om accept
+
+        }
+
+        public void DeclineChatRequest()
+        {  
+            Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
+            ActiveChatName = "No Active Chat";
+            AcceptVisibility = Visibility.Collapsed;
+            DeclineVisibility = Visibility.Collapsed;
+
+            // Meddela andra part om decline
+        }
 
         #region Properties
         // Commands
-        public ICommand RequestCommand
+        public ICommand RequestButtonCommand
         {
             get;
             private set;
         }
 
-        public ICommand ExitActiveChatCommand
+        public ICommand ExitButtonCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand AcceptButtonCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand DeclineButtonCommand
         {
             get;
             private set;
@@ -129,6 +178,8 @@ namespace P2PChatProj.ViewModels
         public bool Connecting { get; set; } = false;
 
         public bool Waiting { get; set; } = false;
+
+        public bool Chatting { get; set; } = false;
 
         // Visibility values for controls
         public Visibility ExitVisibility

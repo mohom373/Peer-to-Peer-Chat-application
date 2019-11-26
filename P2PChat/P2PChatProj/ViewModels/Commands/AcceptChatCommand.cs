@@ -7,17 +7,18 @@ using System.Windows.Input;
 
 namespace P2PChatProj.ViewModels.Commands
 {
-    public class ExitActiveChatCommand : ICommand
+    public class AcceptChatCommand : ICommand
     {
         private MenuViewModel menuViewModel;
 
-        public ExitActiveChatCommand(MenuViewModel menuViewModel)
+        public AcceptChatCommand(MenuViewModel menuViewModel)
         {
             this.menuViewModel = menuViewModel;
         }
 
         public event EventHandler CanExecuteChanged
         {
+
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
@@ -29,7 +30,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            menuViewModel.ExitActiveChat();
+            menuViewModel.AcceptChatRequest();
         }
     }
 }

@@ -9,10 +9,10 @@ namespace P2PChatProj.ViewModels.Commands
 {
     class SendRequestCommand : ICommand
     {
-        private MenuViewModel viewModel;
-        public SendRequestCommand(MenuViewModel viewModel)
+        private MenuViewModel menuViewModel;
+        public SendRequestCommand(MenuViewModel menuViewModel)
         {
-            this.viewModel = viewModel;
+            this.menuViewModel = menuViewModel;
         }
 
         public event EventHandler CanExecuteChanged
@@ -23,14 +23,14 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return !viewModel.Connecting && !viewModel.Waiting 
-                && !String.IsNullOrEmpty(viewModel.InputIp) 
-                && (viewModel.InputPort > 1023 && viewModel.InputPort < 65000);
+            return !menuViewModel.Connecting && !menuViewModel.Waiting 
+                && !String.IsNullOrEmpty(menuViewModel.InputIp) 
+                && (menuViewModel.InputPort > 1023 && menuViewModel.InputPort < 65000);
         }
 
         public async void Execute(object parameter)
         {
-           await viewModel.SendRequestAsync();
+           await menuViewModel.SendRequestAsync();
         }
     }
 }

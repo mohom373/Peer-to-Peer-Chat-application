@@ -2,6 +2,11 @@
    ToDo
 ----------
 
+Nästa gång:
+	- Flytta SendRequest från chatservice till requestservice
+	- Fortsätt med decline och accept responser
+
+
 Ordning:
 
 
