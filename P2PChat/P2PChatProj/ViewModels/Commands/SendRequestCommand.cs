@@ -30,7 +30,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public async void Execute(object parameter)
         {
-           await menuViewModel.SendRequestAsync();
+           await menuViewModel.SendRequest();
         }
     }
 }

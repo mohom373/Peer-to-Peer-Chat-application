@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Sockets;
 using P2PChatProj.Models;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using System.Windows;
+using P2PChatProj.ViewModels;
 
 namespace P2PChatProj.Services
 {
@@ -14,6 +17,15 @@ namespace P2PChatProj.Services
     {
         private static Socket requestListener;
         private static Socket requestHandler;
+
+
+        public static void SetupSockets(IPAddress localIp, int portNumber)
+        {
+            requestHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            requestListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            requestListener.Bind(new IPEndPoint(localIp, portNumber));
+            requestListener.Listen(100);
+        }
 
         public static Request StartListening(IPAddress localIp, int portNumber)
         {
@@ -32,34 +44,29 @@ namespace P2PChatProj.Services
                 return null;
             }
 
-            string reqMessage = "";
+            string messageReceived = "";
 
             if (requestHandler.Connected)
             {
                 try
                 {
                     bytesRec = requestHandler.Receive(bytes);
-                    reqMessage = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                    
                 }
                 catch(SocketException)
                 {
                     Console.WriteLine("Receive canceled");
                     return null;
                 }
-                return new Request(null, 0, reqMessage);
+                messageReceived = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                Request requestReceived  = JsonConvert.DeserializeObject<Request>(messageReceived);
+
+                return requestReceived;
             }
             else
             {
                 return null;
             }
-        }
-
-        public static void SetupSockets(IPAddress localIp, int portNumber)
-        {
-            requestHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            requestListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            requestListener.Bind(new IPEndPoint(localIp, portNumber));
-            requestListener.Listen(100);
         }
 
         public static void StopListening()
@@ -75,6 +82,46 @@ namespace P2PChatProj.Services
                 Console.WriteLine("handler never got a connection");
                 requestHandler.Close();
             }
+        }
+
+        public static async Task<bool> SendRequestAsync(Request request, IProgress<MenuViewModel.State> updateState)
+        {
+            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(request.IpAddress), request.PortNumber);
+            requestHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            string jsonRequest = JsonConvert.SerializeObject(request);
+
+            //Request fromJsonRequest = JsonConvert.DeserializeObject<Request>(jsonRequest);
+            //Console.WriteLine(fromJsonRequest.IpAddress);
+            //Console.WriteLine(fromJsonRequest.PortNumber.ToString());
+            //Console.WriteLine(fromJsonRequest.UserName);
+
+            bool sendFailed = await Task.Run(() =>
+            {
+                try
+                {
+                    requestHandler.Connect(remoteEndPoint);
+                    requestHandler.Send(Encoding.UTF8.GetBytes(jsonRequest));
+                }
+                catch (SocketException)
+                {
+                    MessageBox.Show($"Could not connect to user!",
+                    "Connection failed", MessageBoxButton.OK);
+                    StopListening();
+                    updateState.Report(MenuViewModel.State.Listening);
+                    return true;
+                }
+                return false;
+            });
+    
+            if (sendFailed)
+            {
+                return false;
+            }
+            
+            updateState.Report(MenuViewModel.State.Waiting);
+            StopListening();
+            return true;
         }
     }
 }
