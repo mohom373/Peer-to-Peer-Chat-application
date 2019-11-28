@@ -63,7 +63,7 @@ namespace P2PChatProj.ViewModels
 
                 if (ReceivedRequest != null)
                 {
-                    activeChatState = State.Responding;
+                    ActiveChatState = State.Responding;
                     listening = false;
                 }
                 else if (ReceivedRequest == null && ActiveChatState != State.Listening)
@@ -188,7 +188,7 @@ namespace P2PChatProj.ViewModels
             set
             {
                 activeChatInfo = value;
-                RaisePropertyChanged("ActiveChatName");
+                RaisePropertyChanged("ActiveChatInfo");
             }
         }
 

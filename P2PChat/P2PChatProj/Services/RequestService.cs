@@ -113,6 +113,7 @@ namespace P2PChatProj.Services
             {
                 try
                 {
+                    Console.WriteLine("WAITING TO RECEIVE RESPONSE");
                     bytesRec = requestHandler.Receive(bytes);
 
                 }
@@ -124,9 +125,14 @@ namespace P2PChatProj.Services
                 return true;
             });
 
+            Console.WriteLine("RECEIVE IS DONE");
+            Console.WriteLine("RESULT: " + responseReceived.ToString());
+
             if (responseReceived)
             {
                 dataReceived = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                Console.WriteLine("=======================");
+                Console.WriteLine(dataReceived);
                 RequestResponse response = JsonConvert.DeserializeObject<RequestResponse>(dataReceived);
                 return response;
             }
@@ -137,7 +143,7 @@ namespace P2PChatProj.Services
 
         }
 
-        public static async Task<bool> SendRequestAsync(Request request)//, IProgress<MenuViewModel.State> updateState)
+        public static async Task<bool> SendRequestAsync(Request request)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(request.IpAddress), request.PortNumber);
             requestHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -153,7 +159,6 @@ namespace P2PChatProj.Services
                 }
                 catch (SocketException)
                 {
-                    //updateState.Report(MenuViewModel.State.Listening);
                     return false;
                 }
                 return true;
@@ -165,8 +170,25 @@ namespace P2PChatProj.Services
         public static async Task<bool> SendResponse(RequestResponse res)
         {
             string jsonResponse = JsonConvert.SerializeObject(res);
-            Console.WriteLine(jsonResponse);
-            return true;
+
+            bool sendSuccess = await Task.Run(() =>
+            {
+                try
+                {
+                    Console.WriteLine("WAITING TO SEND RESPONSE");
+                    requestHandler.Send(Encoding.UTF8.GetBytes(jsonResponse));
+                }
+                catch (SocketException)
+                {
+                    return false;
+                }
+                return true;
+            });
+
+            Console.WriteLine("SEND IS DONE");
+            Console.WriteLine("RESULT: " + sendSuccess.ToString());
+
+            return sendSuccess;
         }
     }
 }
