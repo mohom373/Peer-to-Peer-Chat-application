@@ -4,8 +4,8 @@
 
 Nästa gång:
 	
-	- Fortsätt med decline och accept responser
-
+	- Börja med accept respons och aktivera chat
+	- Lös saker om användaren stänger av programmet
 
 Ordning:
 
@@ -13,8 +13,8 @@ Ordning:
 
 
 Uppgifter:
-	- (Lab1) Meddelande om ingen lyssnar på ip + port som man skickat request till
-	- (Lab1) Respons om en skickad request blir accepterad eller nekad
+	
+	
 	- (Lab1) Meddelande om anslutning har avbrutits av någon anledning
 	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
 	- (Lab2) Panel och ObservableCollection ska användas för konversation
@@ -34,4 +34,6 @@ Aktiv chat beteende:
 
 Klart:
 	- Flytta SendRequest från chatservice till requestservice
+	- (Lab1) Meddelande om ingen lyssnar på ip + port som man skickat request till
+	- (Lab1) Respons om en skickad request blir accepterad eller nekad
 

@@ -28,8 +28,8 @@ namespace P2PChatProj.ViewModels
         }
 
         // Private backup variables
-        private string activeChatInfo;
-        private State activeChatState;
+        private string activeChatInfo = "No Active Chat";
+        private State activeChatState = State.Listening;
         private Visibility exitVisibility = Visibility.Collapsed;
         private Visibility acceptVisibility = Visibility.Collapsed;
         private Visibility declineVisibility = Visibility.Collapsed;
@@ -48,7 +48,7 @@ namespace P2PChatProj.ViewModels
             AcceptButtonCommand = new AcceptChatCommand(this);
             DeclineButtonCommand = new DeclineChatCommand(this);
 
-            ActiveChatState = State.Listening;
+            Task.Run(() => StartListeningForRequest(IpAddress, User.PortNumber));
         }
 
         #region Request Listening
@@ -86,11 +86,32 @@ namespace P2PChatProj.ViewModels
         {
             RequestResponse response = await RequestService.ListenForResponseAsync();
 
+            if (response != null)
+            {
+                switch(response.ResponseValue)
+                {
+                    case Response.Accept:
+                        break;
+                    case Response.Decline:
+                        ActiveChatState = State.Listening;
+                        MessageBox.Show("User declined your request");
+                        
+                        break;
+                    case Response.Exit:
+                        ActiveChatState = State.Listening;
+                        MessageBox.Show("User canceled their request");
+                        
+                        break;
+                    default:
+                        break;
+                }
+            }
+
         }
 
         public void CancelListeningForResponse()
         {
-
+            RequestService.CancelRequestListener();
         }
         #endregion
 
@@ -192,17 +213,17 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        public State ActiveChatState 
+        public State ActiveChatState
         {
-            get 
-            { 
-                return activeChatState; 
+            get
+            {
+                return activeChatState;
             }
             set
             {
                 activeChatState = value;
                 UpdateActiveChatState();
-            } 
+            }
         }
 
         public Request ReceivedRequest { get; set; }
@@ -253,6 +274,7 @@ namespace P2PChatProj.ViewModels
             switch (ActiveChatState)
             {
                 case State.Listening:
+                    CancelListeningForResponse();
                     Task.Run(() => StartListeningForRequest(IpAddress, User.PortNumber));
                     ExitVisibility = Visibility.Collapsed;
                     AcceptVisibility = Visibility.Collapsed;
@@ -279,6 +301,7 @@ namespace P2PChatProj.ViewModels
                     break;
 
                 case State.Chatting:
+                    CancelListeningForResponse();
                     AcceptVisibility = Visibility.Collapsed;
                     DeclineVisibility = Visibility.Collapsed;
                     ExitVisibility = Visibility.Visible;
