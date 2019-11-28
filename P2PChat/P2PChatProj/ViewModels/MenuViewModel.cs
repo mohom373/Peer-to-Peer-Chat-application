@@ -1,6 +1,7 @@
 ﻿using P2PChatProj.Models;
 using P2PChatProj.Services;
 using P2PChatProj.ViewModels.Commands;
+using P2PChatProj.ViewModels.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +28,8 @@ namespace P2PChatProj.ViewModels
         }
 
         // Private backup variables
-        private string activeChatName;
+        private string activeChatInfo;
+        private State activeChatState;
         private Visibility exitVisibility = Visibility.Collapsed;
         private Visibility acceptVisibility = Visibility.Collapsed;
         private Visibility declineVisibility = Visibility.Collapsed;
@@ -38,86 +40,97 @@ namespace P2PChatProj.ViewModels
         public MenuViewModel(User user, IPAddress localIp)
         { 
             User = user;
-            activeChatName = "No Active Chat";
             IpAddress = localIp;
             ChatHistoryList = new ObservableCollection<Request>();
-
-            Task.Run(() => ListenForRequest(localIp, user.PortNumber));
 
             RequestButtonCommand = new SendRequestCommand(this);
             ExitButtonCommand = new ExitActiveChatCommand(this);
             AcceptButtonCommand = new AcceptChatCommand(this);
             DeclineButtonCommand = new DeclineChatCommand(this);
+
+            ActiveChatState = State.Listening;
         }
 
-        public void ListenForRequest(IPAddress localIp, int localPort)
+        #region Request Listening
+
+        public async Task StartListeningForRequest(IPAddress localIp, int localPort)
         {
-            Request requestReceived = RequestService.StartListening(localIp, localPort);
-
-            //Har vi redan en aktiv chat
-            if (requestReceived != null)
+            bool listening = true;
+            
+            while (listening)
             {
-                PauseListener();
+                ReceivedRequest = await RequestService.ListenForRequestAsync(localIp, localPort);
 
-                AcceptVisibility = Visibility.Visible;
-                DeclineVisibility = Visibility.Visible;
-
-                ActiveChatName = requestReceived.UserName + requestReceived.IpAddress;
+                if (ReceivedRequest != null)
+                {
+                    activeChatState = State.Responding;
+                    listening = false;
+                }
+                else if (ReceivedRequest == null && ActiveChatState != State.Listening)
+                {
+                    listening = false;
+                }
             }
         }
 
-        public void PauseListener()
+        public void CancelListeningForRequest()
         {
-            RequestService.StopListening();
+            RequestService.CancelRequestListener();
         }
+
+        #endregion
+
+        #region Response Listening
+
+        public async Task StartListeningForResponse()
+        {
+            RequestResponse response = await RequestService.ListenForResponseAsync();
+
+        }
+
+        public void CancelListeningForResponse()
+        {
+
+        }
+        #endregion
+
+        #region Request Sending
 
         public async Task SendRequest()
         {
-            PauseListener();
-            Connecting = true;
-            ActiveChatName = "Connecting...";
-            Progress<State> updateState = new Progress<State>();
-            updateState.ProgressChanged += UpdateState;
-            await RequestService.SendRequestAsync(new Request(InputIp, InputPort, User.UserName), updateState);
-        }
+            ActiveChatState = State.Connecting;
+            //Progress<State> updateState = new Progress<State>();
+            //updateState.ProgressChanged += SenderReport;
+            bool requestSent = await RequestService.SendRequestAsync(new Request(InputIp, InputPort, User.UserName));//, updateState);
 
-        private void UpdateState(object sender, State s)
-        {
-            switch(s)
+            if (requestSent)
             {
-                case State.Waiting:
-                    Waiting = true;
-                    Connecting = false;
-                    ExitVisibility = Visibility.Visible;
-                    ActiveChatName = "Waiting...";
-                    break;
-                case State.Listening:
-                    Connecting = false;
-                    Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
-                    ActiveChatName = "No Active Chat";
-                    break;
+                ActiveChatState = State.Waiting;
+            }
+            else
+            {
+                MessageBox.Show($"Could not connect to user!",
+                    "Connection failed", MessageBoxButton.OK);
+                ActiveChatState = State.Listening;
             }
         }
 
-        public void ExitActiveChat()
-        {
-            Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
-            ActiveChatName = "No Active Chat";
-            ExitVisibility = Visibility.Collapsed;
-            Waiting = false;
+        #endregion
 
-            /*
-            if (Waiting)
-            {
-                ActiveChatName = "No Active Chat";
-                ExitVisibility = Visibility.Collapsed;
-            } 
-            else if (Chatting)
-            {
-                ActiveChatName = "No Active Chat";
-                ExitVisibility = Visibility.Collapsed;
-            }
-            */
+        #region Response Sending
+
+        public async void ExitActiveChat()
+        {
+            RequestResponse exitResponse = new RequestResponse(Response.Exit);
+            bool responseSent = await RequestService.SendResponse(exitResponse);
+            ActiveChatState = State.Listening;
+        }
+
+        public async void DeclineChatRequest()
+        {
+            RequestResponse declineResponse = new RequestResponse(Response.Decline); 
+            bool responseSent = await RequestService.SendResponse(declineResponse);
+            ActiveChatState = State.Listening;
         }
 
         public void AcceptChatRequest()
@@ -128,15 +141,7 @@ namespace P2PChatProj.ViewModels
 
         }
 
-        public void DeclineChatRequest()
-        {  
-            Task.Run(() => ListenForRequest(IpAddress, User.PortNumber));
-            ActiveChatName = "No Active Chat";
-            AcceptVisibility = Visibility.Collapsed;
-            DeclineVisibility = Visibility.Collapsed;
-
-            // Meddela andra part om decline
-        }
+        #endregion
 
         #region Properties
         // Commands
@@ -174,19 +179,33 @@ namespace P2PChatProj.ViewModels
 
         public User User { get; set; }
 
-        public string ActiveChatName
+        public string ActiveChatInfo
         {
             get
             {
-                return activeChatName;
+                return activeChatInfo;
             }
             set
             {
-                activeChatName = value;
+                activeChatInfo = value;
                 RaisePropertyChanged("ActiveChatName");
             }
         }
 
+        public State ActiveChatState 
+        {
+            get 
+            { 
+                return activeChatState; 
+            }
+            set
+            {
+                activeChatState = value;
+                UpdateActiveChatState();
+            } 
+        }
+
+        public Request ReceivedRequest { get; set; }
         // Validation booleans
         public bool Connecting { get; set; } = false;
 
@@ -226,8 +245,51 @@ namespace P2PChatProj.ViewModels
         }
 
         public ObservableCollection<Request> ChatHistoryList { get; set; }
-        
+
         #endregion
+
+        private void UpdateActiveChatState()
+        {
+            switch (ActiveChatState)
+            {
+                case State.Listening:
+                    Task.Run(() => StartListeningForRequest(IpAddress, User.PortNumber));
+                    ExitVisibility = Visibility.Collapsed;
+                    AcceptVisibility = Visibility.Collapsed;
+                    DeclineVisibility = Visibility.Collapsed;
+                    ActiveChatInfo = "No Active Chat";
+                    break;
+
+                case State.Connecting:
+                    CancelListeningForRequest();
+                    ActiveChatInfo = "Connecting...";
+                    break;
+
+                case State.Waiting:
+                    Task.Run(() => StartListeningForResponse());
+                    ExitVisibility = Visibility.Visible;
+                    ActiveChatInfo = "Waiting...";
+                    break;
+
+                case State.Responding:
+                    Task.Run(() => StartListeningForResponse());
+                    AcceptVisibility = Visibility.Visible;
+                    DeclineVisibility = Visibility.Visible;
+                    ActiveChatInfo = ReceivedRequest.UserName;
+                    break;
+
+                case State.Chatting:
+                    AcceptVisibility = Visibility.Collapsed;
+                    DeclineVisibility = Visibility.Collapsed;
+                    ExitVisibility = Visibility.Visible;
+                    ActiveChatInfo = ReceivedRequest.UserName;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
 
         private void RaisePropertyChanged(string property)
         {

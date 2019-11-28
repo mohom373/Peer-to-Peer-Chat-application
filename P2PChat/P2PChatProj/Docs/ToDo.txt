@@ -3,7 +3,7 @@
 ----------
 
 Nästa gång:
-	- Flytta SendRequest från chatservice till requestservice
+	
 	- Fortsätt med decline och accept responser
 
 
@@ -32,4 +32,6 @@ Aktiv chat beteende:
 	- Om den andra personen skickar en request till dig hamnar akiv chat i accept state (accept och decline knapp)
 
 
+Klart:
+	- Flytta SendRequest från chatservice till requestservice
 

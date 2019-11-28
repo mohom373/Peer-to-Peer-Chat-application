@@ -52,7 +52,7 @@
             <Label Content="Chat" FontSize="20" />
             
             <StackPanel Orientation="Horizontal">
-                <TextBlock Background="Blue" Margin="5" Text="{Binding ActiveChatName, FallbackValue=No Active Chat}" />
+                <TextBlock Background="Blue" Margin="5" Text="{Binding ActiveChatInfo, FallbackValue=No Active Chat}" />
                 <Button Content="Exit" Visibility="{Binding ExitVisibility}" 
                         Command="{Binding ExitButtonCommand}" />
                 <Button Content="Accept" Visibility="{Binding AcceptVisibility}"

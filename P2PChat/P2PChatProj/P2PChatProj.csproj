@@ -59,6 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\RequestResponse.cs" />
     <Compile Include="Services\RequestService.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="ViewModels\Commands\ExitActiveChatCommand.cs" />
     <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
     <Compile Include="ViewModels\Commands\GoOnlineCommand.cs" />
+    <Compile Include="ViewModels\Enums\Response.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\OfflineViewModel.cs" />
     <Compile Include="ViewModels\OnlineViewModel.cs" />

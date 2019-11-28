@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using System.Windows;
 using P2PChatProj.ViewModels;
+using P2PChatProj.ViewModels.Enums;
 
 namespace P2PChatProj.Services
 {
@@ -17,7 +18,6 @@ namespace P2PChatProj.Services
     {
         private static Socket requestListener;
         private static Socket requestHandler;
-
 
         public static void SetupSockets(IPAddress localIp, int portNumber)
         {
@@ -27,40 +27,59 @@ namespace P2PChatProj.Services
             requestListener.Listen(100);
         }
 
-        public static Request StartListening(IPAddress localIp, int portNumber)
+        public static async Task<Request> ListenForRequestAsync(IPAddress localIp, 
+            int portNumber)
         {
             SetupSockets(localIp, portNumber);
 
             byte[] bytes = new byte[1024];
-            int bytesRec;
+            int bytesRec = 0;
 
-            try
-            {
-                requestHandler = requestListener.Accept();
-            }
-            catch(SocketException)
-            {
-                Console.WriteLine("Accept canceled");
-                return null;
-            }
-
-            string messageReceived = "";
-
-            if (requestHandler.Connected)
+            bool cancelListening = await Task.Run(() =>
             {
                 try
                 {
-                    bytesRec = requestHandler.Receive(bytes);
-                    
+                    requestHandler = requestListener.Accept();
                 }
-                catch(SocketException)
+                catch (SocketException)
                 {
-                    Console.WriteLine("Receive canceled");
+                    Console.WriteLine("Accept canceled");
+                    return true;
+                }
+                return false;
+            });
+
+            if (cancelListening)
+            {
+                return null;
+            }
+
+            string dataReceived = "";
+
+            if (requestHandler.Connected)
+            {
+                cancelListening = await Task.Run(() =>
+                {
+                    try
+                    {
+                        bytesRec = requestHandler.Receive(bytes);
+
+                    }
+                    catch (SocketException)
+                    {
+                        Console.WriteLine("Receive canceled");
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (cancelListening)
+                {
                     return null;
                 }
-                messageReceived = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                Request requestReceived  = JsonConvert.DeserializeObject<Request>(messageReceived);
 
+                dataReceived = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                Request requestReceived = JsonConvert.DeserializeObject<Request>(dataReceived);
                 return requestReceived;
             }
             else
@@ -69,7 +88,7 @@ namespace P2PChatProj.Services
             }
         }
 
-        public static void StopListening()
+        public static void CancelRequestListener()
         {
             requestListener.Close();
             
@@ -84,19 +103,48 @@ namespace P2PChatProj.Services
             }
         }
 
-        public static async Task<bool> SendRequestAsync(Request request, IProgress<MenuViewModel.State> updateState)
+        public static async Task<RequestResponse> ListenForResponseAsync()
+        {
+            byte[] bytes = new byte[1024];
+            int bytesRec = 0;
+            string dataReceived;
+
+            bool responseReceived = await Task.Run(() =>
+            {
+                try
+                {
+                    bytesRec = requestHandler.Receive(bytes);
+
+                }
+                catch (SocketException)
+                {
+                    Console.WriteLine("response receive cancel");
+                    return false;
+                }
+                return true;
+            });
+
+            if (responseReceived)
+            {
+                dataReceived = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                RequestResponse response = JsonConvert.DeserializeObject<RequestResponse>(dataReceived);
+                return response;
+            }
+            else 
+            {
+                return null;
+            }
+
+        }
+
+        public static async Task<bool> SendRequestAsync(Request request)//, IProgress<MenuViewModel.State> updateState)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(request.IpAddress), request.PortNumber);
             requestHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             string jsonRequest = JsonConvert.SerializeObject(request);
 
-            //Request fromJsonRequest = JsonConvert.DeserializeObject<Request>(jsonRequest);
-            //Console.WriteLine(fromJsonRequest.IpAddress);
-            //Console.WriteLine(fromJsonRequest.PortNumber.ToString());
-            //Console.WriteLine(fromJsonRequest.UserName);
-
-            bool sendFailed = await Task.Run(() =>
+            bool sendSuccess = await Task.Run(() =>
             {
                 try
                 {
@@ -105,22 +153,19 @@ namespace P2PChatProj.Services
                 }
                 catch (SocketException)
                 {
-                    MessageBox.Show($"Could not connect to user!",
-                    "Connection failed", MessageBoxButton.OK);
-                    StopListening();
-                    updateState.Report(MenuViewModel.State.Listening);
-                    return true;
+                    //updateState.Report(MenuViewModel.State.Listening);
+                    return false;
                 }
-                return false;
+                return true;
             });
     
-            if (sendFailed)
-            {
-                return false;
-            }
-            
-            updateState.Report(MenuViewModel.State.Waiting);
-            StopListening();
+            return sendSuccess;
+        }
+
+        public static async Task<bool> SendResponse(RequestResponse res)
+        {
+            string jsonResponse = JsonConvert.SerializeObject(res);
+            Console.WriteLine(jsonResponse);
             return true;
         }
     }
