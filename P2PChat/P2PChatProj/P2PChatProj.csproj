@@ -62,6 +62,7 @@
     <Compile Include="Models\RequestResponse.cs" />
     <Compile Include="Services\RequestService.cs" />
     <Compile Include="Services\ChatService.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\AcceptChatCommand.cs" />
     <Compile Include="ViewModels\Commands\DeclineChatCommand.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
     <Compile Include="ViewModels\Commands\GoOnlineCommand.cs" />
     <Compile Include="ViewModels\Enums\Response.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\OfflineViewModel.cs" />
     <Compile Include="ViewModels\OnlineViewModel.cs" />

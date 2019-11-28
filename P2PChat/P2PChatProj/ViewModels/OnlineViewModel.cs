@@ -1,6 +1,7 @@
 ﻿using P2PChatProj.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,11 +13,11 @@ namespace P2PChatProj.ViewModels
     public class OnlineViewModel
     {
         private User user;
-        
 
-        public OnlineViewModel(User user)
+        public OnlineViewModel(User user, MainWindowViewModel mainWindowViewModel)
         {
             this.user = user;
+            MainWindowViewModel = mainWindowViewModel;
             setLocalIp();
             Menu = new MenuViewModel(user, LocalIp);
             Chat = new ChatViewModel(user);
@@ -28,9 +29,16 @@ namespace P2PChatProj.ViewModels
             set { user = value; }
         }
 
+        public MainWindowViewModel MainWindowViewModel { get; set; }
+
         public IPAddress LocalIp { get; set; }
 
         public MenuViewModel Menu { get; set; }
+
+        internal void AppClosing(object sender, CancelEventArgs e)
+        {
+            Console.WriteLine("OnlineView Closing");
+        }
 
         public ChatViewModel Chat { get; set; }
 

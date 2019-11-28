@@ -4,6 +4,7 @@ using P2PChatProj.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -12,19 +13,15 @@ using System.Windows.Input;
 
 namespace P2PChatProj.ViewModels
 {
-    public class OfflineViewModel
+    public class OfflineViewModel : BaseViewModel
     {
         private User user;
-        private MainWindow mainWindow;
 
-        public OfflineViewModel(MainWindow mainWindow)
+        public OfflineViewModel(MainWindowViewModel mainWindowViewModel)
         {
             user = new User();
+            MainWindowViewModel = mainWindowViewModel;
             GoOnlineButtonCommand = new GoOnlineCommand(this);
-
-            this.mainWindow = mainWindow;
-            
-
         }
 
         /// <summary>
@@ -33,20 +30,20 @@ namespace P2PChatProj.ViewModels
         public User User
         {
             get { return user; }
-
             set { user = value; }
         }
 
-        public ICommand GoOnlineButtonCommand
+        public ICommand GoOnlineButtonCommand { get; private set; }
+        public MainWindowViewModel MainWindowViewModel { get; set; }
+
+        internal void AppClosing(object sender, CancelEventArgs e)
         {
-            get;
-            private set;
+            Console.WriteLine("OfflineViewClosing");
         }
 
         public void GoOnline()
         {
-            OnlineViewModel userOnlineViewModel = new OnlineViewModel(user);
-            mainWindow.DataContext = userOnlineViewModel;
+            MainWindowViewModel.ChangeToOnlineView(User);
         }
     }
 }

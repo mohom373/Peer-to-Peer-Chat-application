@@ -24,7 +24,7 @@ namespace P2PChatProj.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new OfflineViewModel(this);
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(this);
         }
     }
 }

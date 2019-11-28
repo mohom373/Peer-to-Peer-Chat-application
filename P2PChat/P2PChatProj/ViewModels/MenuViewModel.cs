@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace P2PChatProj.ViewModels
 {
-    public class MenuViewModel : INotifyPropertyChanged
+    public class MenuViewModel : BaseViewModel
     {
         public enum State
         {
@@ -35,7 +35,6 @@ namespace P2PChatProj.ViewModels
         private Visibility declineVisibility = Visibility.Collapsed;
             
         // Events
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MenuViewModel(User user, IPAddress localIp)
         { 
@@ -120,9 +119,7 @@ namespace P2PChatProj.ViewModels
         public async Task SendRequest()
         {
             ActiveChatState = State.Connecting;
-            //Progress<State> updateState = new Progress<State>();
-            //updateState.ProgressChanged += SenderReport;
-            bool requestSent = await RequestService.SendRequestAsync(new Request(InputIp, InputPort, User.UserName));//, updateState);
+            bool requestSent = await RequestService.SendRequestAsync(new Request(InputIp, InputPort, User.UserName));
 
             if (requestSent)
             {
@@ -166,29 +163,14 @@ namespace P2PChatProj.ViewModels
 
         #region Properties
         // Commands
-        public ICommand RequestButtonCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand RequestButtonCommand { get; private set; }
 
-        public ICommand ExitButtonCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand ExitButtonCommand { get; private set; }
 
-        public ICommand AcceptButtonCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand AcceptButtonCommand { get; private set; }
 
-        public ICommand DeclineButtonCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand DeclineButtonCommand { get; private set; }
+
 
         // Input properties
         public string InputIp { get; set; }
@@ -266,6 +248,7 @@ namespace P2PChatProj.ViewModels
         }
 
         public ObservableCollection<Request> ChatHistoryList { get; set; }
+        
 
         #endregion
 
@@ -313,13 +296,9 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-
-        private void RaisePropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
+        //public override void AppClosing()
+        //{
+        //    Console.WriteLine("Menu Closing");
+        //}
     }
 }
