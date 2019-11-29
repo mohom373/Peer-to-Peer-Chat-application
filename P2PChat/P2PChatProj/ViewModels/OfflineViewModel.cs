@@ -24,9 +24,6 @@ namespace P2PChatProj.ViewModels
             GoOnlineButtonCommand = new GoOnlineCommand(this);
         }
 
-        /// <summary>
-        /// Gets the user instance
-        /// </summary>
         public User User
         {
             get { return user; }
@@ -38,7 +35,7 @@ namespace P2PChatProj.ViewModels
 
         internal void AppClosing(object sender, CancelEventArgs e)
         {
-            Console.WriteLine("OfflineViewClosing");
+            Console.WriteLine("OfflineView Closing");
         }
 
         public void GoOnline()

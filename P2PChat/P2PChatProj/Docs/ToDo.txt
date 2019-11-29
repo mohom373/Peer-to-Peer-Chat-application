@@ -4,10 +4,9 @@
 
 Nästa gång:
 	
-	- Börja med accept respons och aktivera chat
 	- Lös saker om användaren stänger av programmet
 	- Validering av input
-
+	- Börja med accept respons och "aktivera chat"
 Ordning:
 
 

@@ -24,7 +24,6 @@ namespace P2PChatProj.Models
             {
                 userName = value;
                 RaisePropertyChanged("UserName");
-                RaisePropertyChanged("InfoString");
             } 
         }
 
@@ -39,17 +38,9 @@ namespace P2PChatProj.Models
             {
                 portNumber = value;
                 RaisePropertyChanged("PortNumber");
-                RaisePropertyChanged("InfoString");
             }
         }
 
-        public string InfoString 
-        { 
-            get
-            {
-                return "User: " + userName + "  | Port: " + portNumber.ToString();
-            }
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

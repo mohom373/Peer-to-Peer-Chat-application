@@ -28,9 +28,9 @@ namespace P2PChatProj.ViewModels.Commands
             return true;
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            menuViewModel.AcceptChatRequest();
+            await menuViewModel.AcceptChatRequest();
         }
     }
 }

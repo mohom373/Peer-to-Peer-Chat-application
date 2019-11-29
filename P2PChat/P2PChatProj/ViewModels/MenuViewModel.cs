@@ -84,23 +84,37 @@ namespace P2PChatProj.ViewModels
         public async Task StartListeningForResponse()
         {
             RequestResponse response = await RequestService.ListenForResponseAsync();
-
+            Console.WriteLine($"IS RESPONSE NULL???       {response == null}");
             if (response != null)
             {
+                System.Console.WriteLine($"WE got a response: {response.UserName}");
                 switch(response.ResponseValue)
                 {
                     case Response.Accept:
+                        ReceivedRequest = new Request("", 0, response.UserName);
+                        ActiveChatState = State.Chatting;
+                        MessageBox.Show("User has accepted your chat request");
                         break;
+
                     case Response.Decline:
                         ActiveChatState = State.Listening;
-                        MessageBox.Show("User declined your request");
-                        
+                        MessageBox.Show("User declined your chat request");
                         break;
+
                     case Response.Exit:
+                        State tempState = ActiveChatState;
+                        Console.WriteLine($"WHat is the state now? {tempState}");
                         ActiveChatState = State.Listening;
-                        MessageBox.Show("User canceled their request");
-                        
+                        if (tempState == State.Chatting)
+                        {
+                            MessageBox.Show($"{ReceivedRequest.UserName} left the chat");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"{ReceivedRequest.UserName} canceled their chat request");
+                        }
                         break;
+
                     default:
                         break;
                 }
@@ -137,25 +151,28 @@ namespace P2PChatProj.ViewModels
 
         #region Response Sending
 
-        public async void ExitActiveChat()
+        public async Task ExitActiveChat()
         {
             RequestResponse exitResponse = new RequestResponse(Response.Exit);
             bool responseSent = await RequestService.SendResponse(exitResponse);
             ActiveChatState = State.Listening;
         }
 
-        public async void DeclineChatRequest()
+        public async Task DeclineChatRequest()
         {
             RequestResponse declineResponse = new RequestResponse(Response.Decline); 
             bool responseSent = await RequestService.SendResponse(declineResponse);
             ActiveChatState = State.Listening;
         }
 
-        public void AcceptChatRequest()
+        public async Task AcceptChatRequest()
         {
             // setup chat view
-
+            RequestResponse acceptResponse = new RequestResponse(Response.Accept, User.UserName);
+            bool responseSent = await RequestService.SendResponse(acceptResponse);
+            ActiveChatState = State.Chatting;
             // Meddela andra part om accept
+
 
         }
 
@@ -209,6 +226,7 @@ namespace P2PChatProj.ViewModels
         }
 
         public Request ReceivedRequest { get; set; }
+        
         // Validation booleans
         public bool Connecting { get; set; } = false;
 
@@ -289,6 +307,7 @@ namespace P2PChatProj.ViewModels
                     DeclineVisibility = Visibility.Collapsed;
                     ExitVisibility = Visibility.Visible;
                     ActiveChatInfo = ReceivedRequest.UserName;
+                    Task.Run(() => StartListeningForResponse());
                     break;
 
                 default:

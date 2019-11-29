@@ -91,9 +91,10 @@ namespace P2PChatProj.Services
         public static void CancelRequestListener()
         {
             requestListener.Close();
-            
+           
             try
             {
+                Console.WriteLine("NU stänger vi av connection");
                 requestHandler.Shutdown(SocketShutdown.Both);
             }
             catch(SocketException)
