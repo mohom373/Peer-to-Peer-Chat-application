@@ -10,6 +10,7 @@ namespace P2PChatProj.ViewModels.Enums
     {
         Exit,
         Accept,
-        Decline
+        Decline,
+        Disconnect
     }
 }

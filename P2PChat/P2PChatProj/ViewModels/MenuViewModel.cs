@@ -33,7 +33,7 @@ namespace P2PChatProj.ViewModels
         private Visibility exitVisibility = Visibility.Collapsed;
         private Visibility acceptVisibility = Visibility.Collapsed;
         private Visibility declineVisibility = Visibility.Collapsed;
-            
+
         // Events
 
         public MenuViewModel(User user, IPAddress localIp)
@@ -93,6 +93,7 @@ namespace P2PChatProj.ViewModels
                     case Response.Accept:
                         ReceivedRequest = new Request("", 0, response.UserName);
                         ActiveChatState = State.Chatting;
+                        Task.Run(() => StartListeningForResponse());
                         MessageBox.Show("User has accepted your chat request");
                         break;
 
@@ -113,6 +114,11 @@ namespace P2PChatProj.ViewModels
                         {
                             MessageBox.Show($"{ReceivedRequest.UserName} canceled their chat request");
                         }
+                        break;
+
+                    case Response.Disconnect:
+                        ActiveChatState = State.Listening;
+                        MessageBox.Show("User disconnected from application");
                         break;
 
                     default:
@@ -266,9 +272,21 @@ namespace P2PChatProj.ViewModels
         }
 
         public ObservableCollection<Request> ChatHistoryList { get; set; }
-        
+
 
         #endregion
+
+        public async Task AppClosing()
+        {
+            if(!(ActiveChatState == State.Listening || ActiveChatState == State.Listening))
+            {
+                RequestResponse disconnectResponse = new RequestResponse(Response.Disconnect);
+                bool responseSent = await RequestService.SendResponse(disconnectResponse);
+            } 
+
+            RequestService.CancelRequestListener();
+        }
+
 
         private void UpdateActiveChatState()
         {
@@ -302,22 +320,15 @@ namespace P2PChatProj.ViewModels
                     break;
 
                 case State.Chatting:
-                    CancelListeningForResponse();
                     AcceptVisibility = Visibility.Collapsed;
                     DeclineVisibility = Visibility.Collapsed;
                     ExitVisibility = Visibility.Visible;
                     ActiveChatInfo = ReceivedRequest.UserName;
-                    Task.Run(() => StartListeningForResponse());
                     break;
 
                 default:
                     break;
             }
         }
-
-        //public override void AppClosing()
-        //{
-        //    Console.WriteLine("Menu Closing");
-        //}
     }
 }

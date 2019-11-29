@@ -19,8 +19,8 @@ namespace P2PChatProj.ViewModels
             this.user = user;
             MainWindowViewModel = mainWindowViewModel;
             setLocalIp();
-            Menu = new MenuViewModel(user, LocalIp);
-            Chat = new ChatViewModel(user);
+            MenuViewModel = new MenuViewModel(user, LocalIp);
+            ChatViewModel = new ChatViewModel(user);
         }
 
         public User User
@@ -33,14 +33,16 @@ namespace P2PChatProj.ViewModels
 
         public IPAddress LocalIp { get; set; }
 
-        public MenuViewModel Menu { get; set; }
+        public MenuViewModel MenuViewModel { get; set; }
 
-        internal void AppClosing(object sender, CancelEventArgs e)
+        public ChatViewModel ChatViewModel { get; set; }
+        
+        public async void AppClosing(object sender, CancelEventArgs e)
         {
             Console.WriteLine("OnlineView Closing");
+            await MenuViewModel.AppClosing();
+            //await ChatViewModel.AppClosing();
         }
-
-        public ChatViewModel Chat { get; set; }
 
         public void setLocalIp()
         {

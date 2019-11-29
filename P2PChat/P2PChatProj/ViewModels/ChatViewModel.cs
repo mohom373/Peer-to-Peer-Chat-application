@@ -21,5 +21,10 @@ namespace P2PChatProj.ViewModels
             get { return user; } 
             set { user = value; }
         }
+
+        internal static void AppClosing()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
