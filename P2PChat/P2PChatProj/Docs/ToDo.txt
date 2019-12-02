@@ -4,9 +4,10 @@
 
 Nästa gång:
 	
-	- Lös saker om användaren stänger av programmet
+	
 	- Validering av input
-	- Börja med accept respons och "aktivera chat"
+	- Aktivera chat
+
 Ordning:
 
 
@@ -35,4 +36,6 @@ Klart:
 	- (Lab1) Respons om en skickad request blir accepterad eller nekad
 	- (Allmänt) Implementera JSON funktionalitet
 	- (Allmänt) Bestämma hur aktiv chat ska fungera
+	- Lös saker om användaren stänger av programmet
+	- Fixa accept respons
 
