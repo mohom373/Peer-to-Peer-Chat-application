@@ -2,11 +2,16 @@
    ToDo
 ----------
 
+Fråga:
+
+	- Hur får man till messageboxes i mitten av fönster istället för 
+
+
 Nästa gång:
 	
-	
-	- Validering av input
 	- Aktivera chat
+	
+
 
 Ordning:
 
@@ -16,12 +21,13 @@ Ordning:
 Uppgifter:
 	
 	
-	- (Lab1) Meddelande om anslutning har avbrutits av någon anledning
+	
 	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
 	- (Lab2) Panel och ObservableCollection ska användas för konversation
 	- (Lab2) Arv ska användas för att skapa meddelande-klass
 	- (Allmänt) Lösa validering av input
 	- (Allmänt) Fundera på felhantering
+	- (Allmänt) Behöver vi både Request och Requestresponse (Kanske ha en modell för all nätverks data)
 
 Aktiv chat beteende:
 	- Vi ska inte ha flera invites samtidigt
@@ -38,4 +44,5 @@ Klart:
 	- (Allmänt) Bestämma hur aktiv chat ska fungera
 	- Lös saker om användaren stänger av programmet
 	- Fixa accept respons
+	- (Lab1) Meddelande om anslutning har avbrutits av någon anledning
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels
 {
-    public class OnlineViewModel
+    public class OnlineViewModel : BaseViewModel
     {
         private User user;
 
@@ -19,8 +19,8 @@ namespace P2PChatProj.ViewModels
             this.user = user;
             MainWindowViewModel = mainWindowViewModel;
             setLocalIp();
-            MenuViewModel = new MenuViewModel(user, LocalIp);
-            ChatViewModel = new ChatViewModel(user);
+            MenuViewModel = new MenuViewModel(this, user, LocalIp);
+            ChatViewModel = new ChatViewModel(this, user);
         }
 
         public User User
@@ -39,9 +39,9 @@ namespace P2PChatProj.ViewModels
         
         public async void AppClosing(object sender, CancelEventArgs e)
         {
-            Console.WriteLine("OnlineView Closing");
             await MenuViewModel.AppClosing();
-            //await ChatViewModel.AppClosing();
+            await ChatViewModel.AppClosing();
+            Console.WriteLine("OnlineView Closing");
         }
 
         public void setLocalIp()
@@ -52,6 +52,16 @@ namespace P2PChatProj.ViewModels
                 IPEndPoint endPoint = (IPEndPoint) socket.LocalEndPoint;
                 LocalIp = endPoint.Address;
             }
+        }
+
+        internal void StartChat()
+        {
+            ChatViewModel.SetupChat();
+        }
+
+        internal void ExitChat()
+        {
+            ChatViewModel.CloseChat();
         }
     }
 }

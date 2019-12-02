@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2PChatProj.ViewModels.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return menuViewModel.ActiveChatState == MenuViewModel.State.Listening 
+            return menuViewModel.ActiveChatState == MenuState.Listening 
                 && !String.IsNullOrEmpty(menuViewModel.InputIp) 
                 && (menuViewModel.InputPort > 1023 && menuViewModel.InputPort < 65000);
         }

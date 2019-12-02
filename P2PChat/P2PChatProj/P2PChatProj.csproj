@@ -65,10 +65,15 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\AcceptChatCommand.cs" />
+    <Compile Include="ViewModels\Commands\BuzzCommand.cs" />
     <Compile Include="ViewModels\Commands\DeclineChatCommand.cs" />
     <Compile Include="ViewModels\Commands\ExitActiveChatCommand.cs" />
+    <Compile Include="ViewModels\Commands\SendPictureCommand.cs" />
     <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
     <Compile Include="ViewModels\Commands\GoOnlineCommand.cs" />
+    <Compile Include="ViewModels\Commands\SendTextCommand.cs" />
+    <Compile Include="ViewModels\Enums\ChatState.cs" />
+    <Compile Include="ViewModels\Enums\MenuState.cs" />
     <Compile Include="ViewModels\Enums\Response.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
