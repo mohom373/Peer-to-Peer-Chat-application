@@ -22,14 +22,28 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!--Remote messages-->
         <StackPanel Background="#F5F3F5" Grid.Row="1" Grid.Column="1">
-            <TextBlock Background="#FFFFFF" Text="Hej detta är ett meddelande" Margin="10" Padding="10" />
-            <TextBlock Background="#FFFFFF" Text="Hej detta är ett annat meddelande" Margin="10" Padding="10" Visibility="Hidden" />
+            <ItemsControl ItemsSource="{Binding RemoteMessages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Background="#FFFFFF" Text="{Binding Message}" Height="Auto" 
+                                   Margin="10" Padding="10" TextWrapping="Wrap" Visibility="{Binding Visibility}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
-
+        
+        <!--User messages-->
         <StackPanel Background="#F5F3F5" Grid.Row="1" Grid.Column="2">
-            <TextBlock Background="#5998B0" Text="Hej detta är ett meddelande" Margin="10" Padding="10" Visibility="Hidden" />
-            <TextBlock Background="#5998B0" Text="Hej detta är ett annat meddelande" Margin="10" Padding="10" />
+            <ItemsControl ItemsSource="{Binding UserMessages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Background="#5998B0" Text="{Binding Message}" Height="Auto" 
+                                   Margin="10" Padding="10" TextWrapping="Wrap" Visibility="{Binding Visibility}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
 
         <Grid Background="#1C7293" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="1">
@@ -49,8 +63,8 @@
                 <RowDefinition Height="10" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="Skriv nått här..." Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10" Padding="10" Height="110" />
-            <Button Content="{Binding User.PortNumber, FallbackValue='Send Text'}"
+            <TextBox Text="{Binding InputMessage}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10" Padding="10" Height="110" />
+            <Button Content="Send Text"
                     Command="{Binding SendTextButtonCommand}"
                     Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Padding="10" />
             <Button Content="Send Picture" Grid.Column="2" Grid.Row="2" Margin="10" Padding="10"

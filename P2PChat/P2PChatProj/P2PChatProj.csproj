@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestResponse.cs" />
     <Compile Include="Services\RequestService.cs" />
