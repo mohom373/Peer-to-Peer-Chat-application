@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:P2PChatProj.Views"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1100">
-    
-    <Grid Background="AliceBlue">
+
+    <Grid Background="#F5F3F5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
