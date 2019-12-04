@@ -20,7 +20,7 @@ namespace P2PChatProj.ViewModels
             MainWindowViewModel = mainWindowViewModel;
             setLocalIp();
             MenuViewModel = new MenuViewModel(this, user, LocalIp);
-            ChatViewModel = new ChatViewModel(this, user);
+            ChatViewModel = new ChatViewModel(this, user, LocalIp);
         }
 
         public User User
@@ -54,12 +54,13 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        internal void StartChat(Request remoteUser)
+        public void StartChat(User remoteUser)
         {
+            Console.WriteLine("INNE I START CHAT");
             ChatViewModel.SetupChat(remoteUser);
         }
 
-        internal void ExitChat()
+        public void ExitChat()
         {
             ChatViewModel.CloseChat();
         }

@@ -19,7 +19,7 @@ namespace P2PChatProj.ViewModels
 
         public OfflineViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            user = new User();
+            user = new User("","",0);
             MainWindowViewModel = mainWindowViewModel;
             GoOnlineButtonCommand = new GoOnlineCommand(this);
         }

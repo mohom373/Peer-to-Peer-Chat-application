@@ -11,7 +11,15 @@ namespace P2PChatProj.Models
     {
         
         private string userName;
+        private string ipAddress;
         private int portNumber;
+
+        public User(string userName, string ipAddress, int portNumber)
+        {
+            this.userName = userName;
+            this.ipAddress = ipAddress;
+            this.portNumber = portNumber;
+        }
 
         public string UserName 
         {
@@ -25,6 +33,20 @@ namespace P2PChatProj.Models
                 userName = value;
                 RaisePropertyChanged("UserName");
             } 
+        }
+
+        public string IpAddress
+        {
+            get
+            {
+                return ipAddress;
+            }
+
+            set
+            {
+                ipAddress = value;
+                RaisePropertyChanged("IpAddress");
+            }
         }
 
         public int PortNumber 

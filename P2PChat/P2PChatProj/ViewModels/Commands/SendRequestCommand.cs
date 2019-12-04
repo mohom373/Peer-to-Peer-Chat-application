@@ -24,7 +24,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return menuViewModel.ActiveChatState == MenuState.Listening 
+            return menuViewModel.MenuState == MenuState.Listening 
                 && !String.IsNullOrEmpty(menuViewModel.InputIp) 
                 && (menuViewModel.InputPort > 1023 && menuViewModel.InputPort < 65000);
         }

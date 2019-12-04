@@ -1,9 +1,12 @@
 ﻿using P2PChatProj.Models;
+using P2PChatProj.Services;
 using P2PChatProj.ViewModels.Commands;
+using P2PChatProj.ViewModels.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,15 +17,20 @@ namespace P2PChatProj.ViewModels
     public class ChatViewModel : BaseViewModel
     {
         private User user;
+        private ChatState chatState = ChatState.Offline;
 
-        public ChatViewModel(OnlineViewModel onlineViewModel, User user)
+        public ChatViewModel(OnlineViewModel onlineViewModel, User user, IPAddress localIp)
         {
             this.user = user;
+            LocalIp = localIp;
             OnlineViewModel = onlineViewModel;
 
             SendTextButtonCommand = new SendTextCommand(this);
             SendPictureButtonCommand = new SendPictureCommand(this);
             BuzzButtonCommand = new BuzzCommand(this);
+
+            RemoteMessages = new ObservableCollection<ChatMessage>();
+            UserMessages = new ObservableCollection<ChatMessage>();
         }
 
         #region Properties
@@ -33,7 +41,9 @@ namespace P2PChatProj.ViewModels
             set { user = value; }
         }
 
-        public Request RemoteUser { get; set; }
+        public User RemoteUser { get; set; }
+
+        public IPAddress LocalIp { get; set; }
 
         public string InputMessage { get; set; } = "";
 
@@ -43,11 +53,22 @@ namespace P2PChatProj.ViewModels
         
         public ICommand BuzzButtonCommand { get; private set; }
 
-        public bool ChatRunning { get; set; } = false;
+        public ChatState ChatState 
+        { 
+            get 
+            { 
+                return chatState; 
+            } 
+            set 
+            {
+                chatState = value;
+                UpdateChatState();
+            } 
+        }
 
-        public ObservableCollection<ChatMessage> RemoteMessages { get; set; } = new ObservableCollection<ChatMessage>();
+        public ObservableCollection<ChatMessage> RemoteMessages { get; set; }
 
-        public ObservableCollection<ChatMessage> UserMessages { get; set; } = new ObservableCollection<ChatMessage>();
+        public ObservableCollection<ChatMessage> UserMessages { get; set; }
 
         public OnlineViewModel OnlineViewModel { get; set; }
 
@@ -58,41 +79,124 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("ChatView closing");
         }
 
-        public void SetupChat(Request remoteUser)
+        public void SetupChat(User remoteUser)
         {
-            ChatRunning = true;
             RemoteUser = remoteUser;
-            FillMessages();
-            Console.WriteLine("Setting up chat...");
+            ChatState = ChatState.Connecting;
         }
 
         public void CloseChat()
         {
-            ChatRunning = false;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ChatState = ChatState.Offline;
+            });
             Console.WriteLine("Closing chat...");
         }
 
         public void FillMessages()
         {
             string message = "Hejhej!";
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible, RemoteUser.UserName));
+            Console.WriteLine(message);
+            ChatMessage cm = new ChatMessage(message, Visibility.Visible, RemoteUser.UserName);
+            Console.WriteLine(message);
+            RemoteMessages.Add(cm);
+            Console.WriteLine(message);
             UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
+            Console.WriteLine(message);
 
             message = "Tjena!";
+            Console.WriteLine(message);
             UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
             RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
 
             message = "Fin app va?";
+            Console.WriteLine(message);
             UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
             RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
 
             message = "Mycket fin må jag säga";
+            Console.WriteLine(message);
             RemoteMessages.Add(new ChatMessage(message, Visibility.Visible, RemoteUser.UserName));
             UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
 
             message = "Utomordentligt finfin skulle jag vilja påstå";
+            Console.WriteLine(message);
             UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
             RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
+        }
+
+        private void UpdateChatState()
+        {
+            switch (ChatState)
+            {
+                case ChatState.Offline:
+                    RemoteMessages.Clear();
+                    UserMessages.Clear();
+                    ChatService.CloseSockets();
+                    break;
+
+                case ChatState.Connecting:
+                    StartChatConnection();
+                    break;
+
+                case ChatState.Online:
+                    FillMessages();
+                    FillMessages();
+                    break;
+
+                case ChatState.History:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private async void StartChatConnection()
+        {
+            await Task.Run(() => ChatService.SetupSockets(LocalIp, (User.PortNumber + 1)));
+
+            Progress<ChatMessage> messageReport = new Progress<ChatMessage>();
+            messageReport.ProgressChanged += AddMessage;
+
+            Task<bool> receiverConnecting = ChatService.ConnectToSender();
+
+            bool senderConnected = await ChatService.ConnectToReceiver(RemoteUser);
+
+            if (senderConnected)
+            {
+                Console.WriteLine("Sender Connected");
+            }
+            else
+            {
+                Console.WriteLine("Sender Connection FAILED");
+            }
+
+            bool receiverConnected = await receiverConnecting;
+
+            if (receiverConnected)
+            {
+                Console.WriteLine("Receiver Connected");
+            }
+            else
+            {
+                Console.WriteLine("Receiver Connection FAILED");
+            }
+
+            if (senderConnected && receiverConnected)
+            {
+                ChatState = ChatState.Online;
+            }
+            else
+            {
+                ChatState = ChatState.Offline;
+            }
+        }
+
+        private void AddMessage(object sender, ChatMessage message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

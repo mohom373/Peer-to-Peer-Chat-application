@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:P2PChatProj.Views"
              mc:Ignorable="d" >
-
+    
+    
     <Grid Background="#F5F3F5">
 
         <Grid.ColumnDefinitions>
@@ -21,70 +22,86 @@
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <!--Remote messages-->
-        <StackPanel Background="#F5F3F5" Grid.Row="1" Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding RemoteMessages}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-
-                        <Grid Background="#FFFFFF" Visibility="{Binding Visibility}">
-                            
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                            </Grid.ColumnDefinitions>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="10" />
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,10"
-                                       Padding="10" Grid.Column="1" Grid.Row="1"/>
-                            <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,10"
-                                       Padding="10" Grid.Column="2" Grid.Row="1"/>
-                            <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                       Height="Auto" Margin="10" Padding="10" TextWrapping="Wrap"  />
-                        </Grid>
-                    </DataTemplate>     
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
         
-        <!--User messages-->
-        <StackPanel Background="#F5F3F5" Grid.Row="1" Grid.Column="2">
-            <ItemsControl ItemsSource="{Binding UserMessages}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Background="#5998B0" Visibility="{Binding Visibility}">
+        <!--Remote messages-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                      Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Background="#F5F3F5" Grid.Column="0">
+                    <ItemsControl ItemsSource="{Binding RemoteMessages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                                <Grid Background="#FFFFFF" Visibility="{Binding Visibility}" Margin="10">
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,10"
-                                       Grid.Column="0" Grid.Row="0"/>
-                            <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,10"
-                                       Grid.Column="1" Grid.Row="0"/>
-                            <TextBlock Text="{Binding Message}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
-                                       Height="Auto" Margin="10" Padding="10" TextWrapping="Wrap"  />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="10" />
+                                    </Grid.RowDefinitions>
 
+                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,5"
+                                       Grid.Column="1" Grid.Row="1"/>
+                                    <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,5"
+                                       Grid.Column="2" Grid.Row="1"/>
+                                    <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                                       Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap"  />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!--User messages-->
+                <StackPanel Background="#F5F3F5" Grid.Column="1">
+                    <ItemsControl ItemsSource="{Binding UserMessages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Background="#5998B0" Visibility="{Binding Visibility}" Margin="10">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="10" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,5"
+                                       Grid.Column="1" Grid.Row="1"/>
+                                    <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,5"
+                                       Grid.Column="2" Grid.Row="1"/>
+                                    <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                                       Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap"  />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <!--Input section--> 
         <Grid Background="#1C7293" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="1">
             
             <Grid.ColumnDefinitions>

@@ -21,7 +21,7 @@ namespace P2PChatProj.ViewModels
 
         // Private backup variables
         private string activeChatInfo = "No Active Chat";
-        private MenuState activeChatState = MenuState.Listening;
+        private MenuState menuState = MenuState.Listening;
         private Visibility exitVisibility = Visibility.Collapsed;
         private Visibility acceptVisibility = Visibility.Collapsed;
         private Visibility declineVisibility = Visibility.Collapsed;
@@ -51,14 +51,15 @@ namespace P2PChatProj.ViewModels
             
             while (listening)
             {
-                RemoteUser = await RequestService.ListenForRequestAsync(localIp, localPort);
+                Request remoteRequest = await RequestService.ListenForRequestAsync(localIp, localPort);
 
-                if (RemoteUser != null)
+                if (remoteRequest != null)
                 {
-                    ActiveChatState = MenuState.Responding;
+                    RemoteUser = new User(remoteRequest.UserName, remoteRequest.RequestIp, remoteRequest.RequestPort);
+                    MenuState = MenuState.Responding;
                     listening = false;
                 }
-                else if (RemoteUser == null && ActiveChatState != MenuState.Listening)
+                else if (RemoteUser == null && MenuState != MenuState.Listening)
                 {
                     listening = false;
                 }
@@ -74,51 +75,24 @@ namespace P2PChatProj.ViewModels
 
         #region Response Listening
 
-        public async Task StartListeningForResponse()
+        public async Task StartListeningForResponse(IProgress<RequestResponse> responseReport)
         {
-            RequestResponse response = await RequestService.ListenForResponseAsync();
+            bool listening = true;
 
-            if (response != null)
+            while(listening)
             {
-                switch(response.ResponseType)
+                RequestResponse response = await RequestService.ListenForResponseAsync();
+
+                if (response != null)
                 {
-                    case ResponseType.Accept:
-                        RemoteUser = new Request(response.IpAddress, response.PortNumber, response.UserName);
-                        ActiveChatState = MenuState.Chatting;
-                        Task.Run(() => StartListeningForResponse());
-                        MessageBox.Show("User has accepted your chat request");
-                        OnlineViewModel.StartChat(RemoteUser);
-                        break;
-
-                    case ResponseType.Decline:
-                        ActiveChatState = MenuState.Listening;
-                        MessageBox.Show($"{response.UserName} declined your chat request");
-                        break;
-
-                    case ResponseType.Exit:
-                        MenuState tempState = ActiveChatState;
-                        ActiveChatState = MenuState.Listening;
-                        if (tempState == MenuState.Chatting)
-                        {
-                            MessageBox.Show($"{response.UserName} left the chat");
-                            OnlineViewModel.ExitChat();
-                        }
-                        else
-                        {
-                            MessageBox.Show($"{response.UserName} canceled their chat request");
-                        }
-                        break;
-
-                    case ResponseType.Disconnect:
-                        ActiveChatState = MenuState.Listening;
-                        MessageBox.Show($"{response.UserName} disconnected from application");
-                        break;
-
-                    default:
-                        break;
+                    Console.WriteLine("RESPONSE ÄR INTE NULL");
+                    responseReport.Report(response);
+                }
+                else if (response == null && (MenuState == MenuState.Listening || MenuState == MenuState.Connecting))
+                {
+                    listening = false;
                 }
             }
-
         }
 
         public void CancelListeningForResponse()
@@ -132,18 +106,19 @@ namespace P2PChatProj.ViewModels
 
         public async Task SendRequest()
         {
-            ActiveChatState = MenuState.Connecting;
-            bool requestSent = await RequestService.SendRequestAsync(new Request(InputIp, InputPort, User.UserName));
+            MenuState = MenuState.Connecting;
+            bool requestSent = await RequestService.SendRequestAsync(new Request(InputIp, InputPort, 
+                                                    User.UserName, IpAddress.ToString(), User.PortNumber));
 
             if (requestSent)
             {
-                ActiveChatState = MenuState.Waiting;
+                MenuState = MenuState.Waiting;
             }
             else
             {
                 MessageBox.Show(Application.Current.MainWindow, $"Could not connect to user!",
                     "Connection failed", MessageBoxButton.OK);
-                ActiveChatState = MenuState.Listening;
+                MenuState = MenuState.Listening;
             }
         }
 
@@ -156,11 +131,11 @@ namespace P2PChatProj.ViewModels
             RequestResponse exitResponse = new RequestResponse(ResponseType.Exit,
                     User.UserName, IpAddress.ToString(), User.PortNumber);
             bool responseSent = await RequestService.SendResponse(exitResponse);
-            if (ActiveChatState == MenuState.Chatting)
+            if (MenuState == MenuState.Chatting)
             {
                 OnlineViewModel.ExitChat();
             }
-            ActiveChatState = MenuState.Listening;
+            MenuState = MenuState.Listening;
         }
 
         public async Task DeclineChatRequest()
@@ -168,7 +143,7 @@ namespace P2PChatProj.ViewModels
             RequestResponse declineResponse = new RequestResponse(ResponseType.Decline,
                     User.UserName, IpAddress.ToString(), User.PortNumber);
             bool responseSent = await RequestService.SendResponse(declineResponse);
-            ActiveChatState = MenuState.Listening;
+            MenuState = MenuState.Listening;
         }
 
         public async Task AcceptChatRequest()
@@ -176,7 +151,7 @@ namespace P2PChatProj.ViewModels
             RequestResponse acceptResponse = new RequestResponse(ResponseType.Accept,
                     User.UserName, IpAddress.ToString(), User.PortNumber);
             bool responseSent = await RequestService.SendResponse(acceptResponse);
-            ActiveChatState = MenuState.Chatting;
+            MenuState = MenuState.Chatting;
         }
 
         #endregion
@@ -215,20 +190,20 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        public MenuState ActiveChatState
+        public MenuState MenuState
         {
             get
             {
-                return activeChatState;
+                return menuState;
             }
             set
             {
-                activeChatState = value;
-                UpdateActiveChatState();
+                menuState = value;
+                UpdateMenuState();
             }
         }
 
-        public Request RemoteUser { get; set; }
+        public User RemoteUser { get; set; }
         
         // Validation booleans
         public bool Connecting { get; set; } = false;
@@ -277,7 +252,7 @@ namespace P2PChatProj.ViewModels
 
         public async Task AppClosing()
         {
-            if(!(ActiveChatState == MenuState.Listening || ActiveChatState == MenuState.Connecting))
+            if(!(MenuState == MenuState.Listening || MenuState == MenuState.Connecting))
             {
                 RequestResponse disconnectResponse = new RequestResponse(ResponseType.Disconnect, 
                     User.UserName, IpAddress.ToString(), User.PortNumber);
@@ -288,11 +263,14 @@ namespace P2PChatProj.ViewModels
         }
 
 
-        private void UpdateActiveChatState()
+        private void UpdateMenuState()
         {
-            switch (ActiveChatState)
+            Progress<RequestResponse> responseReport = new Progress<RequestResponse>();
+            responseReport.ProgressChanged += ProcessResponse;
+            switch (MenuState)
             {
                 case MenuState.Listening:
+                    OnlineViewModel.ExitChat();
                     CancelListeningForResponse();
                     Task.Run(() => StartListeningForRequest(IpAddress, User.PortNumber));
                     ExitVisibility = Visibility.Collapsed;
@@ -307,24 +285,66 @@ namespace P2PChatProj.ViewModels
                     break;
 
                 case MenuState.Waiting:
-                    Task.Run(() => StartListeningForResponse());
+                    Task.Run(() => StartListeningForResponse(responseReport));
                     ExitVisibility = Visibility.Visible;
                     ActiveChatInfo = "Waiting...";
                     break;
 
                 case MenuState.Responding:
-                    Task.Run(() => StartListeningForResponse());
+                    Task.Run(() => StartListeningForResponse(responseReport));
                     AcceptVisibility = Visibility.Visible;
                     DeclineVisibility = Visibility.Visible;
                     ActiveChatInfo = RemoteUser.UserName;
                     break;
 
                 case MenuState.Chatting:
+                    Console.WriteLine("INNAN START CHAT");
                     OnlineViewModel.StartChat(RemoteUser);
+                    Console.WriteLine("EFTER START CHAT");
                     AcceptVisibility = Visibility.Collapsed;
                     DeclineVisibility = Visibility.Collapsed;
                     ExitVisibility = Visibility.Visible;
                     ActiveChatInfo = RemoteUser.UserName;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void ProcessResponse(object sender, RequestResponse response)
+        {
+            switch (response.ResponseType)
+            {
+                case ResponseType.Accept:
+                    RemoteUser = new User(response.UserName, response.IpAddress, response.PortNumber);
+                    MenuState = MenuState.Chatting;
+                    Console.WriteLine("EFTER STATE ÄR SATT");
+                    MessageBox.Show($"{response.UserName} has accepted your chat request");
+                    break;
+
+                case ResponseType.Decline:
+                    MenuState = MenuState.Listening;
+                    MessageBox.Show($"{response.UserName} declined your chat request");
+                    break;
+
+                case ResponseType.Exit:
+                    MenuState tempState = MenuState;
+                    MenuState = MenuState.Listening;
+                    if (tempState == MenuState.Chatting)
+                    {
+                        MessageBox.Show($"{response.UserName} left the chat");
+                        OnlineViewModel.ExitChat();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"{response.UserName} canceled their chat request");
+                    }
+                    break;
+
+                case ResponseType.Disconnect:
+                    MenuState = MenuState.Listening;
+                    MessageBox.Show($"{response.UserName} disconnected from application");
                     break;
 
                 default:

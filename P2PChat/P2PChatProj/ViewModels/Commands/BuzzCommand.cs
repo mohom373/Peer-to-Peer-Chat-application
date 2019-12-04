@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2PChatProj.ViewModels.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace P2PChatProj.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            return chatViewModel.ChatRunning;
+            return chatViewModel.ChatState == ChatState.Online; 
         }
 
         public void Execute(object parameter)

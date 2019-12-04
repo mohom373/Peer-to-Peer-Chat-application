@@ -9,7 +9,7 @@ namespace P2PChatProj.Models
 {
     public class ChatMessage
     {
-        public ChatMessage(string message, Visibility visibility = Visibility.Visible,  string name = "")
+        public ChatMessage(string message,/*bool received*/ Visibility visibility = Visibility.Visible,  string name = "")
         {
             Message = message;
             Visibility = visibility;
