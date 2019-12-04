@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels.Enums
 {
-    public enum Response
+    public enum ResponseType
     {
         Exit,
         Accept,

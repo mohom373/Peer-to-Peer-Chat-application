@@ -27,9 +27,31 @@
             <ItemsControl ItemsSource="{Binding RemoteMessages}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Background="#FFFFFF" Text="{Binding Message}" Height="Auto" 
-                                   Margin="10" Padding="10" TextWrapping="Wrap" Visibility="{Binding Visibility}" />
-                    </DataTemplate>
+
+                        <Grid Background="#FFFFFF" Visibility="{Binding Visibility}">
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="10" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,10"
+                                       Padding="10" Grid.Column="1" Grid.Row="1"/>
+                            <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,10"
+                                       Padding="10" Grid.Column="2" Grid.Row="1"/>
+                            <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                                       Height="Auto" Margin="10" Padding="10" TextWrapping="Wrap"  />
+                        </Grid>
+                    </DataTemplate>     
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
@@ -39,8 +61,25 @@
             <ItemsControl ItemsSource="{Binding UserMessages}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Background="#5998B0" Text="{Binding Message}" Height="Auto" 
-                                   Margin="10" Padding="10" TextWrapping="Wrap" Visibility="{Binding Visibility}" />
+                        <Grid Background="#5998B0" Visibility="{Binding Visibility}">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,10"
+                                       Grid.Column="0" Grid.Row="0"/>
+                            <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,10"
+                                       Grid.Column="1" Grid.Row="0"/>
+                            <TextBlock Text="{Binding Message}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                                       Height="Auto" Margin="10" Padding="10" TextWrapping="Wrap"  />
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

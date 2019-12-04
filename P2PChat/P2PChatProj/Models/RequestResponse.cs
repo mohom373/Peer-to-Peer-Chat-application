@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.Models
 {
-    class RequestResponse
+    public class RequestResponse : NetworkData
     {
-
-        public RequestResponse(Response res, string un = "")
+        public RequestResponse(ResponseType type, string userName, string ipAddress, int portNumber)
         {
-            ResponseValue = res;
-            UserName = un;
+            ResponseType = type;
+            UserName = userName;
+            IpAddress = ipAddress;
+            PortNumber = portNumber;
         }
 
-        public Response ResponseValue { get; set; }
-
-        public string UserName { get; set; }
+        public ResponseType ResponseType { get; set; }
     }
 }

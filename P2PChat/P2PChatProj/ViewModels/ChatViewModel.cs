@@ -23,8 +23,6 @@ namespace P2PChatProj.ViewModels
             SendTextButtonCommand = new SendTextCommand(this);
             SendPictureButtonCommand = new SendPictureCommand(this);
             BuzzButtonCommand = new BuzzCommand(this);
-
-            FillMessages();
         }
 
         #region Properties
@@ -34,6 +32,8 @@ namespace P2PChatProj.ViewModels
             get { return user; } 
             set { user = value; }
         }
+
+        public Request RemoteUser { get; set; }
 
         public string InputMessage { get; set; } = "";
 
@@ -58,9 +58,11 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("ChatView closing");
         }
 
-        public void SetupChat()
+        public void SetupChat(Request remoteUser)
         {
             ChatRunning = true;
+            RemoteUser = remoteUser;
+            FillMessages();
             Console.WriteLine("Setting up chat...");
         }
 
@@ -73,24 +75,24 @@ namespace P2PChatProj.ViewModels
         public void FillMessages()
         {
             string message = "Hejhej!";
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible));
-            UserMessages.Add(new ChatMessage(message, Visibility.Hidden));
+            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible, RemoteUser.UserName));
+            UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
 
             message = "Tjena!";
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden));
+            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
+            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
 
             message = "Fin app va?";
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden));
+            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
+            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
 
             message = "Mycket fin må jag säga";
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible));
-            UserMessages.Add(new ChatMessage(message, Visibility.Hidden));
+            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible, RemoteUser.UserName));
+            UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
 
             message = "Utomordentligt finfin skulle jag vilja påstå";
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden));
+            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
+            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
         }
     }
 }

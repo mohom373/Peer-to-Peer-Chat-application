@@ -54,9 +54,9 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        internal void StartChat()
+        internal void StartChat(Request remoteUser)
         {
-            ChatViewModel.SetupChat();
+            ChatViewModel.SetupChat(remoteUser);
         }
 
         internal void ExitChat()

@@ -28,8 +28,14 @@
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
             <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" 
                        FontSize="36" FontWeight="Bold" />
-            <TextBlock Text="{Binding IpAddress, FallbackValue='13.37.4.20'}" FontSize="16"
-                       Margin="0,5,0,20"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="IP:" FontSize="16" FontWeight="Bold" Margin="0,5,5,20"/>
+                <TextBlock Text="{Binding IpAddress, FallbackValue='13.37.4.20'}" FontSize="16"
+                       Margin="0,5,5,20"/>
+                <TextBlock Text="Port:" FontSize="16" FontWeight="Bold" Margin="10,5,5,20"/>
+                <TextBlock Text="{Binding User.PortNumber, FallbackValue='1337'}" FontSize="16"
+                       Margin="0,5,5,20"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Send chat requests panel -->
