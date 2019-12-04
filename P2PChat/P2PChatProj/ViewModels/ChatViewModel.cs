@@ -18,6 +18,7 @@ namespace P2PChatProj.ViewModels
     {
         private User user;
         private ChatState chatState = ChatState.Offline;
+        private string inputMessage = "";
 
         public ChatViewModel(OnlineViewModel onlineViewModel, User user, IPAddress localIp)
         {
@@ -45,7 +46,18 @@ namespace P2PChatProj.ViewModels
 
         public IPAddress LocalIp { get; set; }
 
-        public string InputMessage { get; set; } = "";
+        public string InputMessage
+        {
+            get
+            {
+                return inputMessage;
+            }
+            set
+            {
+                inputMessage = value;
+                RaisePropertyChanged("InputMessage");
+            }
+        }
 
         public ICommand SendTextButtonCommand { get; private set; }
 
@@ -94,40 +106,12 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("Closing chat...");
         }
 
-        public void FillMessages()
-        {
-            string message = "Hejhej!";
-            Console.WriteLine(message);
-            ChatMessage cm = new ChatMessage(message, Visibility.Visible, RemoteUser.UserName);
-            Console.WriteLine(message);
-            RemoteMessages.Add(cm);
-            Console.WriteLine(message);
-            UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
-            Console.WriteLine(message);
-
-            message = "Tjena!";
-            Console.WriteLine(message);
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
-
-            message = "Fin app va?";
-            Console.WriteLine(message);
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
-
-            message = "Mycket fin må jag säga";
-            Console.WriteLine(message);
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Visible, RemoteUser.UserName));
-            UserMessages.Add(new ChatMessage(message, Visibility.Hidden, User.UserName));
-
-            message = "Utomordentligt finfin skulle jag vilja påstå";
-            Console.WriteLine(message);
-            UserMessages.Add(new ChatMessage(message, Visibility.Visible, User.UserName));
-            RemoteMessages.Add(new ChatMessage(message, Visibility.Hidden, RemoteUser.UserName));
-        }
 
         private void UpdateChatState()
         {
+            Progress<ChatMessage> messageReporter = new Progress<ChatMessage>();
+            messageReporter.ProgressChanged += AddReceivedMessage;
+
             switch (ChatState)
             {
                 case ChatState.Offline:
@@ -141,8 +125,7 @@ namespace P2PChatProj.ViewModels
                     break;
 
                 case ChatState.Online:
-                    FillMessages();
-                    FillMessages();
+                    ChatService.ListenForMessages(messageReporter));
                     break;
 
                 case ChatState.History:
@@ -156,9 +139,6 @@ namespace P2PChatProj.ViewModels
         private async void StartChatConnection()
         {
             await Task.Run(() => ChatService.SetupSockets(LocalIp, (User.PortNumber + 1)));
-
-            Progress<ChatMessage> messageReport = new Progress<ChatMessage>();
-            messageReport.ProgressChanged += AddMessage;
 
             Task<bool> receiverConnecting = ChatService.ConnectToSender();
 
@@ -194,9 +174,20 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        private void AddMessage(object sender, ChatMessage message)
+        private void AddReceivedMessage(object sender, ChatMessage message)
         {
-            throw new NotImplementedException();
+            
+        }
+
+        public void SendMessage()
+        {
+            ChatMessage message = new ChatMessage(InputMessage, Visibility.Visible, User.UserName);
+            UserMessages.Add(message);
+            message.Visibility = Visibility.Hidden;
+            RemoteMessages.Add(message);
+
+            MessageData message = new MessageData(message.Message, message.Date, );
+
         }
     }
 }

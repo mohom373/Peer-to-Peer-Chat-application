@@ -9,11 +9,12 @@ namespace P2PChatProj.Models
 {
     public class ChatMessage
     {
-        public ChatMessage(string message,/*bool received*/ Visibility visibility = Visibility.Visible,  string name = "")
+        public ChatMessage(string message, Visibility visibility = Visibility.Visible,  string name = "")
         {
             Message = message;
             Visibility = visibility;
             Name = name;
+            Date = DateTime.Now.ToString();
         }
 
         public string Message { get; set; } = "";
@@ -22,6 +23,6 @@ namespace P2PChatProj.Models
 
         public Visibility Visibility { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }

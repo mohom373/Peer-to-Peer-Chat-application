@@ -89,7 +89,7 @@
 
                                     <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Margin="10,10,5,5"
                                        Grid.Column="1" Grid.Row="1"/>
-                                    <TextBlock Text="09:42 2019-12-04" FontSize="16" Margin="5,10,10,5"
+                                    <TextBlock Text="{Binding Date.ToString()}" FontSize="16" Margin="5,10,10,5"
                                        Grid.Column="2" Grid.Row="1"/>
                                     <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
                                        Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap"  />

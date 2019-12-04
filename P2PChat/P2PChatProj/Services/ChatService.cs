@@ -101,6 +101,35 @@ namespace P2PChatProj.Services
 
         public static async Task ListenForMessages(IProgress<ChatMessage> messageReporter)
         {
+            byte[] bytes = new byte[1024];
+            int bytesRec = 0;
+            string dataRec = "";
+            ChatMessage message = null;
+
+            bool listening = true;
+
+            while(listening)
+            {
+                bool received = await Task.Run(() =>
+                {
+                    try
+                    {
+                        bytesRec = receiver.Receive(bytes);
+                    }
+                    catch (SocketException)
+                    {
+                        return false;
+                    }
+                    return true;
+                });
+
+                if (received)
+                {
+                    dataRec = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                    message = JsonConvert.DeserializeObject<ChatMessage>(dataRec);
+                    messageReporter.Report(message);
+                }
+            }
 
         }
 
