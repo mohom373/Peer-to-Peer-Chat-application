@@ -12,12 +12,12 @@
 
     <Window.Resources>
 
-        <DataTemplate x:Name="userConnectTemplate" DataType="{x:Type viewmodels:OfflineViewModel}">
-            <views:UserConnectView DataContext="{Binding}" />
+        <DataTemplate x:Name="OfflineTemplate" DataType="{x:Type viewmodels:OfflineViewModel}">
+            <views:OfflineView DataContext="{Binding}" />
         </DataTemplate>
 
-        <DataTemplate x:Name="userOnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
-            <views:UserOnlineView DataContext="{Binding}" />
+        <DataTemplate x:Name="OnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
+            <views:OnlineView DataContext="{Binding}" />
         </DataTemplate>
 
     </Window.Resources>

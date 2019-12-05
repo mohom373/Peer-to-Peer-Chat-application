@@ -18,9 +18,9 @@ namespace P2PChatProj.Views
     /// <summary>
     /// Interaction logic for UserConnectView.xaml
     /// </summary>
-    public partial class UserConnectView : UserControl
+    public partial class OfflineView : UserControl
     {
-        public UserConnectView()
+        public OfflineView()
         {
             InitializeComponent();
         }
