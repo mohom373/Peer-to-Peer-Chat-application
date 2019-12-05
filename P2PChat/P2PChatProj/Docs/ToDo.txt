@@ -9,7 +9,7 @@ Fråga:
 
 Nästa gång:
 	
-	- Aktivera chat
+	
 	
 
 
@@ -19,15 +19,17 @@ Ordning:
 
 
 Uppgifter:
-	
-	
-	
-	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
-	- (Lab2) Panel och ObservableCollection ska användas för konversation
-	- (Lab2) Arv ska användas för att skapa meddelande-klass
+	- (Lab3) Chatter ska sparas och laddas in som en historik lista
+	- (Lab3) Historik ska lagras lokalt som json eller xml
+	- (Lab3) Historik ska vara sorterad på datum och tid
+	- (Lab3) Man ska kunna ladda in och se gamla konversationer
+	- (Lab3) Man ska kunna söka i historik-listan
+	- (Lab4) Skicka bilder som ska lagras lokalt
+	- (Lab4) Skicka buzz som ljud eller skak i fönster
+	- (Lab2/Lab4) Arv ska användas för att skapa meddelande-klass
+	- (Allmänt) Ha en egen exception som används
 	- (Allmänt) Lösa validering av input
 	- (Allmänt) Fundera på felhantering
-	- (Allmänt) Behöver vi både Request och Requestresponse (Kanske ha en modell för all nätverks data)
 
 Aktiv chat beteende:
 	- Vi ska inte ha flera invites samtidigt
@@ -45,4 +47,10 @@ Klart:
 	- Lös saker om användaren stänger av programmet
 	- Fixa accept respons
 	- (Lab1) Meddelande om anslutning har avbrutits av någon anledning
+	- Aktivera chat
+	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
+	- (Lab2) Panel och ObservableCollection ska användas för konversation
 
+Quality Of Life(Inte jätteviktigt):
+	- Knapp fokuseras så man endast kan trycka enter när man vill logga in, skicka request och skicka meddelanden
+	- Scroll viewn ska hoppa till botten när ett meddelande läggs till utanför fönstrets höjd

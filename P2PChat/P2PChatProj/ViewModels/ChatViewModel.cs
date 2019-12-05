@@ -109,7 +109,7 @@ namespace P2PChatProj.ViewModels
 
         private void UpdateChatState()
         {
-            Progress<ChatMessage> messageReporter = new Progress<ChatMessage>();
+            Progress<MessageData> messageReporter = new Progress<MessageData>();
             messageReporter.ProgressChanged += AddReceivedMessage;
 
             switch (ChatState)
@@ -125,7 +125,7 @@ namespace P2PChatProj.ViewModels
                     break;
 
                 case ChatState.Online:
-                    ChatService.ListenForMessages(messageReporter));
+                    ChatService.ListenForMessages(messageReporter);
                     break;
 
                 case ChatState.History:
@@ -174,19 +174,38 @@ namespace P2PChatProj.ViewModels
             }
         }
 
-        private void AddReceivedMessage(object sender, ChatMessage message)
+        private void AddReceivedMessage(object sender, MessageData message)
         {
-            
+            ChatMessage receivedMessage = new ChatMessage(message.Message, Visibility.Visible,
+                                                          message.UserName, message.Date);
+            ChatMessage hiddenReceivedMessage = new ChatMessage(message.Message, Visibility.Hidden, 
+                                                                message.UserName, message.Date);
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserMessages.Add(hiddenReceivedMessage);
+                RemoteMessages.Add(receivedMessage);
+            });
         }
 
-        public void SendMessage()
+        public async Task SendMessage()
         {
             ChatMessage message = new ChatMessage(InputMessage, Visibility.Visible, User.UserName);
-            UserMessages.Add(message);
-            message.Visibility = Visibility.Hidden;
-            RemoteMessages.Add(message);
+            ChatMessage hiddenMessage = new ChatMessage(InputMessage, Visibility.Hidden, User.UserName, message.Date);
 
-            MessageData message = new MessageData(message.Message, message.Date, );
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserMessages.Add(message);
+                RemoteMessages.Add(hiddenMessage);
+            });
+
+            MessageData messageData = new MessageData(message.Message, message.Date, User.UserName, LocalIp.ToString(), User.PortNumber);
+            bool sent = await ChatService.SendMessage(messageData);
+
+            if(sent)
+            {
+                Console.WriteLine("Send Successful");
+            }
 
         }
     }

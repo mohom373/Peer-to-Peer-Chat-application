@@ -99,17 +99,18 @@ namespace P2PChatProj.Services
             }
         }
 
-        public static async Task ListenForMessages(IProgress<ChatMessage> messageReporter)
+        public static async Task ListenForMessages(IProgress<MessageData> messageReporter)
         {
             byte[] bytes = new byte[1024];
             int bytesRec = 0;
             string dataRec = "";
-            ChatMessage message = null;
+            MessageData message = null;
 
             bool listening = true;
 
             while(listening)
             {
+                Console.WriteLine("Listening for messages");
                 bool received = await Task.Run(() =>
                 {
                     try
@@ -125,17 +126,36 @@ namespace P2PChatProj.Services
 
                 if (received)
                 {
+                    Console.WriteLine("Received message:");
                     dataRec = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                    message = JsonConvert.DeserializeObject<ChatMessage>(dataRec);
+                    Console.WriteLine(dataRec);
+                    message = JsonConvert.DeserializeObject<MessageData>(dataRec);
                     messageReporter.Report(message);
                 }
             }
 
         }
 
-        public static async Task<bool> SendMessage(ChatMessage message)
+        public static async Task<bool> SendMessage(MessageData message)
         {
-            return true;
+            string jsonMessageData = JsonConvert.SerializeObject(message);
+
+            bool sendSuccess = await Task.Run(() =>
+            {
+                Console.WriteLine("TRYING TO SEND MESSAGE");
+                Console.WriteLine(jsonMessageData);
+                try
+                {
+                    sender.Send(Encoding.UTF8.GetBytes(jsonMessageData));
+                }
+                catch (SocketException)
+                {
+                    return false;
+                }
+                return true;
+            });
+
+            return sendSuccess;
         }
         
     }

@@ -8,7 +8,7 @@ namespace P2PChatProj.Models
 {
     public class MessageData : NetworkData
     {
-        public MessageData(string message, DateTime date, string userName, string ipAddress, int portNumber)
+        public MessageData(string message, string date, string userName, string ipAddress, int portNumber)
         {
             Message = message;
             Date = date;
@@ -19,6 +19,6 @@ namespace P2PChatProj.Models
 
         public string Message { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }

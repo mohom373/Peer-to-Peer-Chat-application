@@ -28,9 +28,9 @@ namespace P2PChatProj.ViewModels.Commands
             return chatViewModel.ChatState == ChatState.Online;
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            Console.WriteLine("SENDING TEXT...");
+            await chatViewModel.SendMessage();
         }
     }
 }
