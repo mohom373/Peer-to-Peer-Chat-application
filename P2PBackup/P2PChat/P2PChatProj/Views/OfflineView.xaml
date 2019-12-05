@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="P2PChatProj.Views.UserConnectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:P2PChatProj.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1100">
+
+
+    <Grid Background="#1C7293">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+
+            <TextBlock FontSize="40" FontWeight="Bold" Text="P2P Chat" HorizontalAlignment="Center" />
+
+            <Label Content="Username" FontSize="16" Margin="0 10 0 0" />
+            <TextBox x:Name="UserNameInput" Width="300" Margin="5,0,5,0" Padding="10"
+                 Text="{Binding Path= User.UserName, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+
+            <Label Content="Port number" FontSize="16" Margin="0 10 0 0" />
+            <TextBox x:Name="PortNumberInput" Width="300" Margin="5,0,5,0" Padding="10"
+                 Text="{Binding Path= User.PortNumber, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+            <Button x:Name="submitButton" Content="Go Online" FontSize="20"
+                    FontWeight="DemiBold" Height="50" Margin="50 20 50 0" 
+                    Command="{Binding GoOnlineButtonCommand}"/>
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>
