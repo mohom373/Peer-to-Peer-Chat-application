@@ -4,14 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
-namespace P2PChatProj.ViewModels
+namespace P2PChatProj.Models
 {
     /// <summary>
-    /// Abstract viewmodel implementing INotifyPropertyChanged
+    /// Abstract model implementing INotifyPropertyChanged
     /// </summary>
-    public abstract class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

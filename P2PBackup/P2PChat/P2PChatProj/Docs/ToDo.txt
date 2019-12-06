@@ -15,7 +15,7 @@ Nästa gång:
 
 Ordning:
 	- Kolla på exception best practices
-	- Skriv debug meddelanden tydligare (STATUS:, ERROR:)
+	- Skriv debug meddelanden tydligare (STATUS:, ERROR:, EXCEPTION:)
 	- Skriva om strukturen
 
 

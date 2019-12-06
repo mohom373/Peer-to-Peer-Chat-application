@@ -24,7 +24,6 @@ namespace P2PChatProj.Views
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(this);
         }
     }
 }

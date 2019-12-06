@@ -18,9 +18,9 @@ namespace P2PChatProj.Views
     /// <summary>
     /// Interaction logic for UserOnlineView.xaml
     /// </summary>
-    public partial class UserOnlineView : UserControl
+    public partial class OnlineView : UserControl
     {
-        public UserOnlineView()
+        public OnlineView()
         {
             InitializeComponent();
         }

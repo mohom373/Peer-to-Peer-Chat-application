@@ -7,15 +7,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1100">
 
-
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding GoOnlineCommand}" />
+    </UserControl.InputBindings>
+    
     <Grid Background="#1C7293">
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -24,21 +27,24 @@
 
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
 
-            <TextBlock FontSize="40" FontWeight="Bold" Text="P2P Chat" HorizontalAlignment="Center" />
+            <TextBlock FontSize="36" FontWeight="Bold" Text="P2P Chat" HorizontalAlignment="Center"/>
 
-            <Label Content="Username" FontSize="16" Margin="0 10 0 0" />
-            <TextBox x:Name="UserNameInput" Width="300" Margin="5,0,5,0" Padding="10"
-                 Text="{Binding Path= User.UserName, Mode=TwoWay, 
-                        UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            <TextBlock Text="Username" Margin="0 10 0 5" />
+            <TextBox x:Name="UserNameInput" Width="220" Padding="5"
+                 Text="{Binding InputUserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="{Binding UserNameError.ErrorMessage, FallbackValue='Errortext'}" 
+                       Visibility="{Binding UserNameError.HasError}" 
+                       FontSize="12" FontWeight="DemiBold" Foreground="#FF9494" HorizontalAlignment="Right"/>
 
-            <Label Content="Port number" FontSize="16" Margin="0 10 0 0" />
-            <TextBox x:Name="PortNumberInput" Width="300" Margin="5,0,5,0" Padding="10"
-                 Text="{Binding Path= User.PortNumber, Mode=TwoWay, 
-                        UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBlock Text="Port Number" Margin="0 10 0 5" />
+            <TextBox Width="220" Padding="5" Text="{Binding InputPortNumber, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="{Binding PortNumberError.ErrorMessage, FallbackValue='Errortext'}" 
+                       Visibility="{Binding PortNumberError.HasError}" 
+                       FontSize="12" FontWeight="DemiBold" Foreground="#FF9494" HorizontalAlignment="Right"/>
 
-            <Button x:Name="submitButton" Content="Go Online" FontSize="20"
-                    FontWeight="DemiBold" Height="50" Margin="50 20 50 0" 
-                    Command="{Binding GoOnlineButtonCommand}"/>
+            <Button Content="Go Online" FontWeight="DemiBold" 
+                    Margin="0,20,0,0" Padding="10" HorizontalAlignment="Center" 
+                    Command="{Binding GoOnlineCommand}"/>
 
         </StackPanel>
 

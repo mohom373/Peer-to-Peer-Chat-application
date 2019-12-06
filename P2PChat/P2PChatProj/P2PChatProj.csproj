@@ -58,30 +58,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\ChatMessage.cs" />
-    <Compile Include="Models\MessageData.cs" />
-    <Compile Include="Models\Request.cs" />
-    <Compile Include="Models\NetworkData.cs" />
-    <Compile Include="Models\RequestResponse.cs" />
-    <Compile Include="Services\RequestService.cs" />
-    <Compile Include="Services\ChatService.cs" />
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\ValidationError.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\ChatViewModel.cs" />
-    <Compile Include="ViewModels\Commands\AcceptChatCommand.cs" />
-    <Compile Include="ViewModels\Commands\BuzzCommand.cs" />
-    <Compile Include="ViewModels\Commands\DeclineChatCommand.cs" />
-    <Compile Include="ViewModels\Commands\ExitActiveChatCommand.cs" />
-    <Compile Include="ViewModels\Commands\SendPictureCommand.cs" />
-    <Compile Include="ViewModels\Commands\SendRequestCommand.cs" />
-    <Compile Include="ViewModels\Commands\GoOnlineCommand.cs" />
-    <Compile Include="ViewModels\Commands\SendTextCommand.cs" />
+    <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
     <Compile Include="ViewModels\Enums\ChatState.cs" />
     <Compile Include="ViewModels\Enums\MenuState.cs" />
     <Compile Include="ViewModels\Enums\ResponseType.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\OfflineViewModel.cs" />
-    <Compile Include="ViewModels\OnlineViewModel.cs" />
     <Compile Include="Views\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
@@ -153,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Docs\ToDo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

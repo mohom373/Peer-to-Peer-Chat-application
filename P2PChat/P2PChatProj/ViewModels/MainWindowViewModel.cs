@@ -8,25 +8,40 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels
 {
+    /// <summary>
+    /// viewmodel on the top of the hierarchy. Handles switching between
+    /// the offline and online state of the app.
+    /// </summary>
     public class MainWindowViewModel
     {
+        #region Properties
+        public MainWindow MainWindow { get; set; }
+        public OfflineViewModel OfflineViewModel { get; set; }
+        //public OnlineViewModel OnlineViewModel { get; set; }
+        #endregion
+
+        /// <summary>
+        /// MainWindowViewModel constructor. Binds the MainWindow's closing event
+        /// </summary>
+        /// <param name="mainWindow">MainWindow of the app</param>
         public MainWindowViewModel(MainWindow mainWindow)
         {
             MainWindow = mainWindow;
             OfflineViewModel = new OfflineViewModel(this);
-            MainWindow.Closing += OfflineViewModel.AppClosing;
+            MainWindow.Closing += OfflineViewModel.ClosingApp;
             MainWindow.DataContext = OfflineViewModel;
         }
 
-        public MainWindow MainWindow { get; set; }
-        public OfflineViewModel OfflineViewModel { get; set; }
-        public OnlineViewModel OnlineViewModel { get; set; }
-
-        public void ChangeToOnlineView(User user)
+        /// <summary>
+        /// Switches app state to the online view
+        /// </summary>
+        /// <param name="user">User object containing information chosen by the user</param>
+        public async void ChangeToOnlineView(User user)
         {
-            OnlineViewModel = new OnlineViewModel(user, this);
-            MainWindow.Closing += OnlineViewModel.AppClosing;
-            MainWindow.DataContext = OnlineViewModel;
+            Console.WriteLine("STATUS: Going online");
+            //OnlineViewModel = new OnlineViewModel(user, this);
+            //MainWindow.Closing += OnlineViewModel.AppClosing;
+            //MainWindow.DataContext = OnlineViewModel;
         }
     }
 }

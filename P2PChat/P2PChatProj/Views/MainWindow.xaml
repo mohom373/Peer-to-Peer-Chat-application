@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:P2PChatProj.Views"
         xmlns:viewmodels="clr-namespace:P2PChatProj.ViewModels"
         mc:Ignorable="d"
-        Title="P2P Chat" Height="700" Width="1100" FontSize="18"
+        Title="P2P Chat" Height="700" Width="1100" FontSize="16"
         WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
@@ -16,9 +16,9 @@
             <views:OfflineView DataContext="{Binding}" />
         </DataTemplate>
 
-        <DataTemplate x:Name="OnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
+        <!--<DataTemplate x:Name="OnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
             <views:OnlineView DataContext="{Binding}" />
-        </DataTemplate>
+        </DataTemplate>-->
 
     </Window.Resources>
 
