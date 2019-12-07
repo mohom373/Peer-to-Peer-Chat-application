@@ -37,7 +37,7 @@
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
                 
                 <!-- Username -->
-                <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" 
+                <TextBlock Text="{Binding User.UserName, FallbackValue='Username'}" 
                            FontSize="36" FontWeight="Bold" />
                 
                 <StackPanel Orientation="Horizontal" Margin="5,5,0,10">
@@ -45,7 +45,7 @@
                     <!-- IP-address -->
                     <TextBlock Text="IP:" FontSize="12" FontWeight="Bold" />
                     
-                    <TextBlock Text="{Binding IpAddress, FallbackValue='13.37.4.20'}"
+                    <TextBlock Text="{Binding User.IpAddress, FallbackValue='13.37.4.20'}"
                                FontSize="12" Margin="3,0,0,0"/>
                     
                     <!-- Port number -->
@@ -125,8 +125,10 @@
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
                 
                 <TextBlock Text="History" FontSize="20" Margin="0,20,0,10"/>
-                
-                <TextBox Text="{Binding SearchInput}" Width="220" Padding="5"/>
+
+                <TextBox Text="{Binding InputSearchHistory, Mode=OneWayToSource, 
+                         UpdateSourceTrigger=PropertyChanged}" 
+                         Width="220" Padding="5"/>
 
                 <ItemsControl ItemsSource="{Binding ChatHistoryList}">
                     <ItemsControl.ItemTemplate>

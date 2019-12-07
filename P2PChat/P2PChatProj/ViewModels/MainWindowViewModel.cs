@@ -45,6 +45,8 @@ namespace P2PChatProj.ViewModels
         {
             Console.WriteLine("STATUS: Going online");
             OnlineViewModel = new OnlineViewModel(this, user);
+            MainWindow.Closing += OnlineViewModel.MenuViewModel.ClosingApp;
+            MainWindow.Closing += OnlineViewModel.ChatViewModel.ClosingApp;
             MainWindow.Closing += OnlineViewModel.ClosingApp;
             MainWindow.DataContext = OnlineViewModel;
         }

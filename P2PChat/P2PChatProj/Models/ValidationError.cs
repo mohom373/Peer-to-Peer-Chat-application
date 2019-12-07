@@ -14,6 +14,6 @@ namespace P2PChatProj.Models
     {
         public string ErrorMessage { get; set; } = "";
 
-        public Visibility HasError { get; set; } = Visibility.Hidden;
+        public Visibility HasError { get; set; } = Visibility.Collapsed;
     }
 }

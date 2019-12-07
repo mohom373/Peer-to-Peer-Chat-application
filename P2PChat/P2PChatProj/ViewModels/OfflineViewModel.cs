@@ -20,7 +20,7 @@ namespace P2PChatProj.ViewModels
     /// </summary>
     public class OfflineViewModel : BaseViewModel
     {
-        // Private variables
+        // Private backing fields
         private ValidationError userNameError = new ValidationError();
         private ValidationError portNumberError = new ValidationError();
 

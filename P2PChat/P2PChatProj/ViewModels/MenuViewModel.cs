@@ -3,6 +3,8 @@ using P2PChatProj.ViewModels.Commands;
 using P2PChatProj.ViewModels.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace P2PChatProj.ViewModels
 {
     public class MenuViewModel : BaseViewModel
     {
-        // Private variables
+        // Private backing fields
         private MenuState menuState = MenuState.Listening;
         private string chatStatusInfo = "No active chat";
         private Visibility exitButtonVisibility = Visibility.Collapsed;
@@ -94,6 +96,8 @@ namespace P2PChatProj.ViewModels
 
         public string InputPortNumber { get; set; } = "";
 
+        public string InputSearchHistory { get; set; } = "";
+
         // Validation errors
         public ValidationError IpAddressError
         {
@@ -121,6 +125,9 @@ namespace P2PChatProj.ViewModels
             }
         }
 
+        // History list
+        public ObservableCollection<ChatData> ChatHistoryList { get; set; }
+
         #endregion
 
         /// <summary>
@@ -132,12 +139,22 @@ namespace P2PChatProj.ViewModels
         {
             User = user;
             OnlineViewModel = onlineViewModel;
+
+            ChatHistoryList = new ObservableCollection<ChatData>();
+
+            // Create new command objects!!!!!
         }
 
         private void UpdateMenuState()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("STATUS: Updating menu state");
         }
+
+        internal void ClosingApp(object sender, CancelEventArgs e)
+        {
+            Console.WriteLine("STATUS: MenuViewModel closing");
+        }
+
 
     }
 }

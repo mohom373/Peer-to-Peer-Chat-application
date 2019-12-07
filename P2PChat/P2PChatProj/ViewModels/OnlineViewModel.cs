@@ -34,7 +34,7 @@ namespace P2PChatProj.ViewModels
             User = user;
             MainWindowViewModel = mainWindowViewModel;
             MenuViewModel = new MenuViewModel(this, User);
-            //ChatViewModel = new ChatViewModel(this, User);
+            ChatViewModel = new ChatViewModel(this, User);
         }
 
         /// <summary>
