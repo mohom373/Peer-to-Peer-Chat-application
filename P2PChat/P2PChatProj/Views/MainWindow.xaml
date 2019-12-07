@@ -12,17 +12,19 @@
 
     <Window.Resources>
 
-        <DataTemplate x:Name="OfflineTemplate" DataType="{x:Type viewmodels:OfflineViewModel}">
+        <DataTemplate DataType="{x:Type viewmodels:OfflineViewModel}">
             <views:OfflineView DataContext="{Binding}" />
         </DataTemplate>
 
-        <!--<DataTemplate x:Name="OnlineTemplate" DataType="{x:Type viewmodels:OnlineViewModel}">
+        <DataTemplate DataType="{x:Type viewmodels:OnlineViewModel}">
             <views:OnlineView DataContext="{Binding}" />
-        </DataTemplate>-->
+        </DataTemplate>
 
     </Window.Resources>
 
     <Grid>
+        
         <ContentControl Content="{Binding}"></ContentControl>
+        
     </Grid>
 </Window>

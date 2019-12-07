@@ -6,7 +6,15 @@
              xmlns:local="clr-namespace:P2PChatProj.Views"
              mc:Ignorable="d">
 
+    <UserControl.InputBindings>
+
+        <KeyBinding Key="Enter" Command="{Binding SendRequestCommand}" />
+
+    </UserControl.InputBindings>
+    
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        
         <Grid Background="#15536B">
 
             <Grid.ColumnDefinitions>
@@ -25,56 +33,100 @@
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
 
-            <!-- Show Username -->
+            <!-- User info -->
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+                
+                <!-- Username -->
                 <TextBlock Text="{Binding Path=User.UserName, FallbackValue='Username'}" 
-                       FontSize="36" FontWeight="Bold" />
+                           FontSize="36" FontWeight="Bold" />
+                
                 <StackPanel Orientation="Horizontal" Margin="5,5,0,10">
+                    
+                    <!-- IP-address -->
                     <TextBlock Text="IP:" FontSize="12" FontWeight="Bold" />
+                    
                     <TextBlock Text="{Binding IpAddress, FallbackValue='13.37.4.20'}"
                                FontSize="12" Margin="3,0,0,0"/>
+                    
+                    <!-- Port number -->
                     <TextBlock Text="Port:" FontSize="12" FontWeight="Bold" Margin="10,0,0,0" />
+                    
                     <TextBlock Text="{Binding User.PortNumber, FallbackValue='1337'}"
                                FontSize="12" Margin="3,0,0,0" />
+                    
                 </StackPanel>
             </StackPanel>
 
             <!-- Send chat requests panel -->
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">
+                
                 <TextBlock Text="Request" FontSize="20" Margin="0,10,0,0" />
 
+                <!-- IP address input -->
                 <TextBlock Text="IP Address" Margin="0,10,0,5" />
-                <TextBox Text="{Binding InputIp, UpdateSourceTrigger=PropertyChanged}" Width="220" Padding="5" />
 
+                <TextBox Text="{Binding InputIpAddress, Mode=OneWayToSource,
+                         UpdateSourceTrigger=PropertyChanged}" 
+                         Width="220" Padding="5" />
+
+                <TextBlock Text="{Binding IpAddressError.ErrorMessage}" 
+                       Visibility="{Binding IpAddressError.HasError}" 
+                       FontSize="12" FontWeight="DemiBold" Foreground="#FF9494" 
+                       HorizontalAlignment="Right" />
+
+                <!-- Port number input -->
                 <TextBlock Text="Port Number" Margin="0,10,0,5" />
-                <TextBox Text="{Binding InputPort, UpdateSourceTrigger=PropertyChanged}" Width="220" Padding="5" />
+                
+                <TextBox Text="{Binding InputPortNumber, Mode=OneWayToSource, 
+                         UpdateSourceTrigger=PropertyChanged}" 
+                         Width="220" Padding="5" />
 
-                <Button Content="Send Request" Width="220" Margin="0,20,0,10" Padding="10"
-                    Command="{Binding RequestButtonCommand}" />
+                <TextBlock Text="{Binding PortNumberError.ErrorMessage}" 
+                       Visibility="{Binding PortNumberError.HasError}" 
+                       FontSize="12" FontWeight="DemiBold" Foreground="#FF9494" 
+                       HorizontalAlignment="Right" />
+
+                <!-- Send request button-->
+                <Button Content="Send Request" Command="{Binding SendRequestCommand}" 
+                        Width="220" Margin="0,20,0,10" Padding="10" />
 
             </StackPanel>
 
-            <!--Active chats panel-->
+            <!-- Chat info -->
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="3">
 
                 <TextBlock Text="Chat" FontSize="20" Margin="0,10,0,10" />
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Background="#5998B0" Padding="10" Text="{Binding ActiveChatInfo, FallbackValue=No Active Chat}" />
-                    <Button Content="Exit" Visibility="{Binding ExitVisibility}" 
-                        Command="{Binding ExitButtonCommand}" Margin="10,0,0,0" Padding="10" />
-                    <Button Content="Accept" Visibility="{Binding AcceptVisibility}"
-                        Command="{Binding AcceptButtonCommand}" Margin="10,0,0,0" Padding="10" />
-                    <Button Content="Decline" Visibility="{Binding DeclineVisibility}"
-                        Command="{Binding DeclineButtonCommand}" Margin="10,0,0,0" Padding="10" />
+
+                    <!-- Chat status info -->
+                    <TextBlock Text="{Binding ChatStatusInfo}" Background="#5998B0" Padding="10" />
+                    
+                    <!-- Exit button -->
+                    <Button Content="Exit" Command="{Binding ExitButtonCommand}" 
+                            Visibility="{Binding ExitButtonVisibility}" 
+                            Margin="10,0,0,0" Padding="10" />
+                    
+                    <!-- Accept button -->
+                    <Button Content="Accept" Command="{Binding AcceptButtonCommand}"
+                            Visibility="{Binding AcceptDeclineButtonVisibility}" 
+                            Margin="10,0,0,0" Padding="10" />
+                    
+                    <!-- Decline button -->
+                    <Button Content="Decline" Command="{Binding DeclineButtonCommand}" 
+                            Visibility="{Binding AcceptDeclineButtonVisibility}"
+                            Margin="10,0,0,0" Padding="10" />
+                    
                 </StackPanel>
 
             </StackPanel>
 
             <!-- Chat history panel-->
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
+                
                 <TextBlock Text="History" FontSize="20" Margin="0,20,0,10"/>
-                <TextBox Text="Search for something..." Width="220" Padding="5"/>
+                
+                <TextBox Text="{Binding SearchInput}" Width="220" Padding="5"/>
 
                 <ItemsControl ItemsSource="{Binding ChatHistoryList}">
                     <ItemsControl.ItemTemplate>

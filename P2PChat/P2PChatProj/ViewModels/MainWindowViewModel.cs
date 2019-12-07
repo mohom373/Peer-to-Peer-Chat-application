@@ -15,9 +15,14 @@ namespace P2PChatProj.ViewModels
     public class MainWindowViewModel
     {
         #region Properties
+        
         public MainWindow MainWindow { get; set; }
+        
+        // Child viewmodels
         public OfflineViewModel OfflineViewModel { get; set; }
-        //public OnlineViewModel OnlineViewModel { get; set; }
+        
+        public OnlineViewModel OnlineViewModel { get; set; }
+        
         #endregion
 
         /// <summary>
@@ -36,12 +41,12 @@ namespace P2PChatProj.ViewModels
         /// Switches app state to the online view
         /// </summary>
         /// <param name="user">User object containing information chosen by the user</param>
-        public async void ChangeToOnlineView(User user)
+        public void ChangeToOnlineView(User user)
         {
             Console.WriteLine("STATUS: Going online");
-            //OnlineViewModel = new OnlineViewModel(user, this);
-            //MainWindow.Closing += OnlineViewModel.AppClosing;
-            //MainWindow.DataContext = OnlineViewModel;
+            OnlineViewModel = new OnlineViewModel(this, user);
+            MainWindow.Closing += OnlineViewModel.ClosingApp;
+            MainWindow.DataContext = OnlineViewModel;
         }
     }
 }

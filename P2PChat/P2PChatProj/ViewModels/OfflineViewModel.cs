@@ -26,11 +26,11 @@ namespace P2PChatProj.ViewModels
 
         #region Properties
 
-        // Commands
-        public DelegateCommand GoOnlineCommand { get; private set; }
-
         // Parent viewmodel
         public MainWindowViewModel MainWindowViewModel { get; set; }
+
+        // Commands
+        public DelegateCommand GoOnlineCommand { get; private set; }
 
         // User input
         public string InputUserName { get; set; } = "";

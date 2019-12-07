@@ -23,6 +23,8 @@
     </Window.Resources>
 
     <Grid>
+        
         <ContentControl Content="{Binding}"></ContentControl>
+        
     </Grid>
 </Window>
