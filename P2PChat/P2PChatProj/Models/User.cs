@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.Models
 {
+    /// <summary>
+    /// Holds information about the user
+    /// </summary>
     public class User : BaseModel
     {
         // Private variables

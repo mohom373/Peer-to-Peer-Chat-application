@@ -15,8 +15,6 @@ namespace P2PChatProj.ViewModels
     public class MenuViewModel : BaseViewModel
     {
         // Private backing fields
-        private MenuState menuState = MenuState.Listening;
-        private string chatStatusInfo = "No active chat";
         private Visibility exitButtonVisibility = Visibility.Collapsed;
         private Visibility acceptDeclineButtonVisibility = Visibility.Collapsed;
         private ValidationError ipAddressError = new ValidationError();
@@ -25,6 +23,8 @@ namespace P2PChatProj.ViewModels
         #region Properties
 
         public User User { get; private set; }
+
+        public Connection Connection { get; private set; }
 
         // Parent viewmodel
         public OnlineViewModel OnlineViewModel { get; private set; }
@@ -39,32 +39,6 @@ namespace P2PChatProj.ViewModels
         public DelegateCommand DeclineButtonCommand { get; private set; }
 
         // Menu and chat state information
-        public MenuState MenuState
-        {
-            get
-            {
-                return menuState;
-            }
-            set
-            {
-                menuState = value;
-                UpdateMenuState();
-            }
-        }
-
-        public string ChatStatusInfo 
-        {
-            get 
-            {
-                return chatStatusInfo;
-            }
-            set 
-            {
-                chatStatusInfo = value;
-                RaisePropertyChanged("ChatStatusInfo");
-            } 
-        }
-
         public Visibility ExitButtonVisibility 
         {
             get
@@ -135,9 +109,10 @@ namespace P2PChatProj.ViewModels
         /// </summary>
         /// <param name="onlineViewModel">Parent viewmodel</param>
         /// <param name="user">User information</param>
-        public MenuViewModel(OnlineViewModel onlineViewModel, User user)
+        public MenuViewModel(OnlineViewModel onlineViewModel, User user, Connection connection)
         {
             User = user;
+            Connection = connection;
             OnlineViewModel = onlineViewModel;
 
             ChatHistoryList = new ObservableCollection<ChatData>();

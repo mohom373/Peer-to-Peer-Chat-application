@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels.Enums
 {
-    public enum MenuState
+    public enum NetworkDataType
     {
-        Listening,
-        Connecting,
-        Waiting,
-        Responding,
-        Chatting,
+        Request,
+        Response,
+        Message
     }
 }

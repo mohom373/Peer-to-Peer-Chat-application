@@ -8,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace P2PChatProj.ViewModels
 {
+    /// <summary>
+    /// Controls the menu and chat views and handles communication between them
+    /// </summary>
     public class OnlineViewModel
     {
         #region Properties
 
         public User User { get; private set; }
+
+        public Connection Connection { get; private set; }
 
         // Parent viewmodel
         public MainWindowViewModel MainWindowViewModel { get; private set; }
@@ -33,7 +38,10 @@ namespace P2PChatProj.ViewModels
         {
             User = user;
             MainWindowViewModel = mainWindowViewModel;
-            MenuViewModel = new MenuViewModel(this, User);
+
+            Connection = new Connection(User);
+
+            MenuViewModel = new MenuViewModel(this, User, Connection);
             ChatViewModel = new ChatViewModel(this, User);
         }
 

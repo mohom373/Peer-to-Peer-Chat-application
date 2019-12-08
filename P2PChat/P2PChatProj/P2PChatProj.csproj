@@ -60,12 +60,17 @@
     </ApplicationDefinition>
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\ChatData.cs" />
+    <Compile Include="Models\Connection.cs" />
+    <Compile Include="Models\NetworkData.cs" />
     <Compile Include="Models\ValidationError.cs" />
+    <Compile Include="Services\NetworkService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
+    <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\Enums\ChatState.cs" />
-    <Compile Include="ViewModels\Enums\MenuState.cs" />
+    <Compile Include="ViewModels\Enums\ConnectionState.cs" />
+    <Compile Include="ViewModels\Enums\NetworkDataType.cs" />
     <Compile Include="ViewModels\Enums\ResponseType.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
@@ -73,6 +78,9 @@
     <Compile Include="ViewModels\OnlineViewModel.cs" />
     <Compile Include="Views\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
@@ -83,6 +91,10 @@
     <Compile Include="Views\OnlineView.xaml.cs">
       <DependentUpon>OnlineView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,8 +155,6 @@
   <ItemGroup>
     <Resource Include="Docs\ToDo.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
