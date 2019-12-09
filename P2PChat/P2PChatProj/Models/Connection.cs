@@ -78,6 +78,10 @@ namespace P2PChatProj.Models
         // Delegates
         public Action UpdateMenuButtons { get; set; }
 
+        public Action<NetworkData, bool> AddRemoteMessage { get; set; }
+
+        public Action ExitChat { get; set; }
+
         #endregion
 
         public Connection(User user)
@@ -235,7 +239,7 @@ namespace P2PChatProj.Models
         public async Task SendNetworkData(NetworkData networkData)
         {
             Console.WriteLine("STATUS: Trying to send network data");
-            if (Sender.Connected)
+            if (Sender != null && Sender.Connected)
             {
                 Console.WriteLine($"STATUS: Sending network data of type {networkData.DataType} to remote user");
                 bool sent = await NetworkService.SendDataAsync(Sender, networkData);
@@ -265,7 +269,7 @@ namespace P2PChatProj.Models
             Listener.Listen(100);
         }
 
-        private void CloseConnection()
+        public void CloseConnection()
         {
             Console.WriteLine("STATUS: Closing listener socket");
             Listener.Close();
@@ -313,6 +317,10 @@ namespace P2PChatProj.Models
                     State = ConnectionState.Listening;
                     if (tempState == ConnectionState.Chatting)
                     {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ExitChat();
+                        });
                         InfoDisplay.Show($"{RemoteUser.UserName} left the chat");
                     }
                     else
@@ -346,6 +354,10 @@ namespace P2PChatProj.Models
         {
             Console.WriteLine("STATUS: Processing message");
             Console.WriteLine($"RESULT: Received message > {networkData.Message}");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                AddRemoteMessage(networkData, true);
+            });
         }
 
         private void UpdateConnectionState()
@@ -368,14 +380,14 @@ namespace P2PChatProj.Models
                     break;
 
                 case ConnectionState.Waiting:
-                    StateInfo = "Waiting...";
                     Task.Run(() => ReceiveNetworkData());
+                    StateInfo = "Waiting...";
                     UpdateMenuButtons();
                     break;
 
                 case ConnectionState.Responding:
-                    StateInfo = RemoteUser.UserName;
                     Task.Run(() => ReceiveNetworkData());
+                    StateInfo = RemoteUser.UserName;
                     UpdateMenuButtons();
                     break;
 

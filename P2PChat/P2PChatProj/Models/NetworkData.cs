@@ -43,6 +43,10 @@ namespace P2PChatProj.Models
             {
                 Date = DateTime.Now.ToString();
             }
+            else
+            {
+                Date = date;
+            }
         }
     }
 }

@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\ChatData.cs" />
+    <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\NetworkData.cs" />
     <Compile Include="Models\ValidationError.cs" />

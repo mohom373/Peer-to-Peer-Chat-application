@@ -40,9 +40,15 @@ namespace P2PChatProj.ViewModels
             MainWindowViewModel = mainWindowViewModel;
 
             Connection = new Connection(User);
+            Connection.ExitChat = ExitChat;
 
             MenuViewModel = new MenuViewModel(this, User, Connection);
-            ChatViewModel = new ChatViewModel(this, User);
+            ChatViewModel = new ChatViewModel(this, User, Connection);
+        }
+
+        public void ExitChat()
+        {
+            ChatViewModel.CloseChat();
         }
 
         /// <summary>

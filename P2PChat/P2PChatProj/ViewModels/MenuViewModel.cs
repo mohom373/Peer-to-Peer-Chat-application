@@ -151,6 +151,13 @@ namespace P2PChatProj.ViewModels
         {
             Console.WriteLine("STATUS: Handling exit");
             await Connection.SendNetworkData(new NetworkData(User, NetworkDataType.Response, "", ResponseType.Exit));
+            if (Connection.State == ConnectionState.Chatting)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    OnlineViewModel.ExitChat();
+                });
+            }
             Connection.State = ConnectionState.Listening;
         }
 
@@ -193,6 +200,7 @@ namespace P2PChatProj.ViewModels
         {
             Console.WriteLine("STATUS: MenuViewModel closing");
             await Connection.SendNetworkData(new NetworkData(User, NetworkDataType.Response, "", ResponseType.Disconnect));
+            Connection.CloseConnection();
         }
 
         private bool ValidateInput()
