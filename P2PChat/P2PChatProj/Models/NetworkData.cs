@@ -19,6 +19,8 @@ namespace P2PChatProj.Models
 
         public string Message { get; private set; }
 
+        public ResponseType ResponseType { get; private set; }
+
         public string Date { get; private set; }
         #endregion
 
@@ -29,11 +31,13 @@ namespace P2PChatProj.Models
         /// <param name="dataType">Type of network data</param>
         /// <param name="message">A message containing data</param>
         /// <param name="date">A date in string form</param>
-        public NetworkData(User user, NetworkDataType dataType, string message = "", string date = "")
+        public NetworkData(User user, NetworkDataType dataType, string message = "", 
+            ResponseType responseType = ResponseType.None, string date = "")
         {
             User = user;
             DataType = dataType;
             Message = message;
+            ResponseType = responseType;
             
             if (date == "")
             {

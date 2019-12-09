@@ -60,7 +60,7 @@
 
             <!-- Go online button -->
             <Button Content="Go Online" Command="{Binding GoOnlineCommand}" 
-                    FontWeight="DemiBold" HorizontalAlignment="Center"
+                    HorizontalAlignment="Center"
                     Margin="0,20,0,0" Padding="10" />
 
         </StackPanel>

@@ -78,9 +78,10 @@ namespace P2PChatProj.Services
                 {
                     bytesReceived = receiver.Receive(bytes);
                 }
-                catch (SocketException)
+                catch (SocketException ex)
                 {
                     Console.WriteLine("ERROR: Receiver failed to receive data");
+                    Console.WriteLine($"EXCEPTION: {ex.ToString()}");
                     return null;
                 }
                 dataReceived = Encoding.UTF8.GetString(bytes, 0, bytesReceived);

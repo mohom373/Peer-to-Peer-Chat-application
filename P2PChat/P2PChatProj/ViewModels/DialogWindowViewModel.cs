@@ -16,10 +16,22 @@ namespace P2PChatProj.ViewModels
     {
         // Private window view
         private DialogWindow window;
+        private string infoMessage = "";
 
         #region Properties
 
-        public string InfoMessage { get; set; }
+        public string InfoMessage
+        {
+            get
+            {
+                return infoMessage;
+            }
+            set
+            {
+                infoMessage = value;
+                RaisePropertyChanged("InfoMessage");
+            }
+        }
 
         public DelegateCommand OkCommand { get; set; }
 
@@ -29,21 +41,25 @@ namespace P2PChatProj.ViewModels
         /// DialogWindowViewModel constructor
         /// </summary>
         /// <param name="infoMessage">Message to be displayed</param>
-        public DialogWindowViewModel(string infoMessage)
+        public DialogWindowViewModel()
         {
-            window = new DialogWindow();
-            window.Owner = Application.Current.MainWindow;
-            InfoMessage = infoMessage;
             OkCommand = new DelegateCommand(CloseWindow);
-            window.DataContext = this;
-
         }
 
         /// <summary>
         /// Shows the dialog window  
         /// </summary>
-        public void Show()
+        public void Show(string infoMessage)
         {
+            if (window != null && window.IsActive)
+            {
+                window.Close();
+            }
+
+            window = new DialogWindow();
+            window.Owner = Application.Current.MainWindow;
+            window.DataContext = this;
+            InfoMessage = infoMessage;
             window.Show();
         }
 

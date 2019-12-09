@@ -8,6 +8,7 @@ namespace P2PChatProj.ViewModels.Enums
 {
     public enum ResponseType
     {
+        None,
         Exit,
         Accept,
         Decline,

@@ -97,27 +97,30 @@
 
                 <TextBlock Text="Chat" FontSize="20" Margin="0,10,0,10" />
 
-                <StackPanel Orientation="Horizontal">
+                <!-- Chat status info -->
+                <TextBlock Text="{Binding Connection.StateInfo}" Background="#5998B0" Padding="10" />
 
-                    <!-- Chat status info -->
-                    <TextBlock Text="{Binding Connection.StateInfo}" Background="#5998B0" Padding="10" />
-                    
-                    <!-- Exit button -->
-                    <Button Content="Exit" Command="{Binding ExitButtonCommand}" 
-                            Visibility="{Binding ExitButtonVisibility}" 
-                            Margin="10,0,0,0" Padding="10" />
+                <!-- Exit button -->
+                <Button Content="Exit" Command="{Binding ExitButtonCommand}" 
+                        Visibility="{Binding ExitButtonVisibility, Mode=OneWay}" 
+                        Margin="0,20,0,0" Padding="10" />
+
+                <Grid Visibility="{Binding AcceptDeclineButtonVisibility, Mode=OneWay}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     
                     <!-- Accept button -->
-                    <Button Content="Accept" Command="{Binding AcceptButtonCommand}"
-                            Visibility="{Binding AcceptDeclineButtonVisibility}" 
-                            Margin="10,0,0,0" Padding="10" />
-                    
+                    <Button Content="Accept" Command="{Binding AcceptButtonCommand}" 
+                            Grid.Column="0" Margin="0,20,10,0" Padding="10" />
+
                     <!-- Decline button -->
                     <Button Content="Decline" Command="{Binding DeclineButtonCommand}" 
-                            Visibility="{Binding AcceptDeclineButtonVisibility}"
-                            Margin="10,0,0,0" Padding="10" />
-                    
-                </StackPanel>
+                            Grid.Column="1" Margin="10,20,0,0" Padding="10" />
+
+                </Grid>
 
             </StackPanel>
 

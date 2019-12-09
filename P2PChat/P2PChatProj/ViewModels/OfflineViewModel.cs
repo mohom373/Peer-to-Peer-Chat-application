@@ -91,7 +91,7 @@ namespace P2PChatProj.ViewModels
         public void GoOnline()
         {
             // Input validation
-            Console.WriteLine("STATUS: Validating input");
+            Console.WriteLine("STATUS: Validating user input");
             bool hasInputError = ValidateInput();
             
             if (!hasInputError)
@@ -130,8 +130,8 @@ namespace P2PChatProj.ViewModels
                 Console.WriteLine("ERROR: Empty username input");
                 hasError = true;
             }
-            // Checking length of username
-            else if (InputUserName.Length > 10)
+            // Checking length of username (14 W's will distort the UI)
+            else if (InputUserName.Length > 13)
             {
                 UserNameError = new ValidationError()
                 {
