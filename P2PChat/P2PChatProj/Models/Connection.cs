@@ -340,7 +340,15 @@ namespace P2PChatProj.Models
                     break;
 
                 case ResponseType.Disconnect:
+                    ConnectionState prevState = State;
                     State = ConnectionState.Listening;
+                    if (prevState == ConnectionState.Chatting)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ExitChat();
+                        });
+                    }
                     InfoDisplay.Show($"{RemoteUser.UserName} disconnected from application");
                     break;
 

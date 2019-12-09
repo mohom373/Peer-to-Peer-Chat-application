@@ -125,7 +125,8 @@
             </Grid.RowDefinitions>
 
             <TextBox Text="{Binding InputMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                     Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10" Padding="10" Height="110" />
+                     TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
+                     Margin="10" Padding="10" Height="110" />
             <Button Content="Send Text"
                     Command="{Binding SendTextCommand}"
                     Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Padding="10" />

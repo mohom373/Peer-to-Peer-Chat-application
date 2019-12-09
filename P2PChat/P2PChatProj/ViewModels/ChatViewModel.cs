@@ -95,7 +95,6 @@ namespace P2PChatProj.ViewModels
             });
             Console.WriteLine($"STATUS: Sending a message > {message.Message}");
             await Connection.SendNetworkData(message);
-            
         }
 
         private void SendPicture()
@@ -115,12 +114,26 @@ namespace P2PChatProj.ViewModels
 
         internal void CloseChat()
         {
+            SaveToChatHistory();
+            Console.WriteLine("STATUS: Closing active chat");
             UserMessages.Clear();
             RemoteMessages.Clear();
         }
 
+        private void SaveToChatHistory()
+        {
+            Console.WriteLine("STATUS: Saving chat to history");
+            ChatData chatData = new ChatData(Connection.LocalUser, Connection.RemoteUser, UserMessages, 
+                                             RemoteMessages, DateTime.Now.ToString());
+            OnlineViewModel.AddToHistory(chatData);
+        }
+
         internal void ClosingApp(object sender, CancelEventArgs e)
         {
+            if (Connection.State == ConnectionState.Chatting)
+            {
+                CloseChat();
+            }
             Console.WriteLine("STATUS: ChatViewModel closing");
         }
     }

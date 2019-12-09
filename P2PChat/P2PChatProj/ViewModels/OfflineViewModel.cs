@@ -130,8 +130,8 @@ namespace P2PChatProj.ViewModels
                 Console.WriteLine("ERROR: Empty username input");
                 hasError = true;
             }
-            // Checking length of username (14 W's will distort the UI)
-            else if (InputUserName.Length > 13)
+            // Checking length of username (10 W's will distort the UI)
+            else if (InputUserName.Length > 9)
             {
                 UserNameError = new ValidationError()
                 {

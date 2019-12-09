@@ -175,6 +175,11 @@ namespace P2PChatProj.ViewModels
             Connection.State = ConnectionState.Chatting;
         }
 
+        internal void AddChatToHistory(ChatData chatData)
+        {
+            ChatHistoryList.Add(chatData);
+        }
+
         private void UpdateButtons()
         {
             Console.WriteLine("STATUS: Updating menu buttons");
