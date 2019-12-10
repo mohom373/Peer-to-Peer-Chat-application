@@ -4,31 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace P2PChatProj.Models
 {
-    public class ChatMessage
+    public abstract class ChatMessage
     {
-        public string Message { get; set; } = "";
+        public string TextMessage { get; set; } = "";
 
-        public string Name { get; set; } = "";
+        public BitmapImage PictureSource { get; set; } = new BitmapImage();
+
+        public string Name { get; set; }
 
         public string Date { get; set; }
 
         public Visibility Visibility { get; set; }
 
-        public ChatMessage(string message, string name, string date, Visibility visibility = Visibility.Visible)
-        {
-            Message = message;
-            Name = name;
-            Date = date;
-            Visibility = visibility;
-        }
+        public Visibility TextVisibility { get; set; }
 
-        
-
-        
-
-        
+        public Visibility PictureVisibility { get; set; }
     }
 }

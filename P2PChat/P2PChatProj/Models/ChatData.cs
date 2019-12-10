@@ -22,14 +22,16 @@ namespace P2PChatProj.Models
 
         public User RemoteUser { get; set; }
 
-        public ObservableCollection<ChatMessage> UserMessages { get; set; }
+        public List<ChatMessage> UserMessages { get; set; }
 
-        public ObservableCollection<ChatMessage> RemoteMessages { get; set; }
+        public List<ChatMessage> RemoteMessages { get; set; }
 
         public string Date { get; set; }
 
-        public ChatData(User localUser, User remoteUser, ObservableCollection<ChatMessage> userMessages, 
-                        ObservableCollection<ChatMessage> remoteMessages, string date)
+        #endregion
+
+        public ChatData(User localUser, User remoteUser, List<ChatMessage> userMessages, 
+                        List<ChatMessage> remoteMessages, string date)
         {
             LocalUser = localUser;
             RemoteUser = remoteUser;
@@ -37,9 +39,6 @@ namespace P2PChatProj.Models
             RemoteMessages = remoteMessages;
             Date = date;
         }
-        #endregion
-
-
-
+        
     }
 }

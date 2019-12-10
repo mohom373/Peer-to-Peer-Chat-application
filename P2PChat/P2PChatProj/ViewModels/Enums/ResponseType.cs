@@ -12,6 +12,7 @@ namespace P2PChatProj.ViewModels.Enums
         Exit,
         Accept,
         Decline,
+        Buzz,
         Disconnect
     }
 }

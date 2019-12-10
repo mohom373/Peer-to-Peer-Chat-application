@@ -10,6 +10,7 @@ namespace P2PChatProj.ViewModels.Enums
     {
         Request,
         Response,
-        Message
+        Message,
+        Picture
     }
 }

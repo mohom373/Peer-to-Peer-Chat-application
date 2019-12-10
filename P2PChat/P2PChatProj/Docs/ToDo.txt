@@ -4,35 +4,28 @@
 
 Fråga:
 
-	- Hur får man till messageboxes i mitten av fönster istället för 
-
 
 Nästa gång:
 	
-	
+	- Fundera över bitmap, source och path
 	
 
 
 Ordning:
-	- Kolla på exception best practices
-	- Skriv debug meddelanden tydligare (STATUS:, ERROR:, EXCEPTION:, RESULT:)
-	- Skriva om strukturen
+	
 
 
 
 
 Uppgifter:
-	- (Lab3) Chatter ska sparas och laddas in som en historik lista
-	- (Lab3) Historik ska lagras lokalt som json eller xml
-	- (Lab3) Historik ska vara sorterad på datum och tid
-	- (Lab3) Man ska kunna ladda in och se gamla konversationer
-	- (Lab3) Man ska kunna söka i historik-listan
+
+	
 	- (Lab4) Skicka bilder som ska lagras lokalt
-	- (Lab4) Skicka buzz som ljud eller skak i fönster
+	
 	- (Lab2/Lab4) Arv ska användas för att skapa meddelande-klass
 	- (Allmänt) Ha en egen exception som används
-	- (Allmänt) Lösa validering av input
-	- (Allmänt) Fundera på felhantering
+	
+	
 
 Aktiv chat beteende:
 	- Vi ska inte ha flera invites samtidigt
@@ -53,7 +46,19 @@ Klart:
 	- Aktivera chat
 	- (Lab2) Ska kunna öppna en chat och skicka meddelanden mellan 2 användare
 	- (Lab2) Panel och ObservableCollection ska användas för konversation
+	- (Lab3) Chatter ska sparas och laddas in som en historik lista
+	- Knapp fokuseras så man endast kan trycka enter när man vill logga in, skicka request och skicka meddelanden
+	- (Lab3) Historik ska lagras lokalt som json eller xml
+	- (Lab3) Historik ska vara sorterad på datum och tid
+	- (Lab3) Man ska kunna ladda in och se gamla konversationer
+	- Kolla på exception best practices
+	- Skriv debug meddelanden tydligare (STATUS:, ERROR:, EXCEPTION:, RESULT:)
+	- Skriva om strukturen
+	- (Lab3) Man ska kunna söka i historik-listan
+	- (Allmänt) Lösa validering av input
+	- (Allmänt) Fundera på felhantering
+	- (Lab4) Skicka buzz som ljud eller skak i fönster
 
 Quality Of Life(Inte jätteviktigt):
-	- Knapp fokuseras så man endast kan trycka enter när man vill logga in, skicka request och skicka meddelanden
+
 	- Scroll viewn ska hoppa till botten när ett meddelande läggs till utanför fönstrets höjd

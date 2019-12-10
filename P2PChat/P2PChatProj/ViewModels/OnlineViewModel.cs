@@ -65,5 +65,10 @@ namespace P2PChatProj.ViewModels
         {
             MenuViewModel.AddChatToHistory(chatData);
         }
+
+        internal void LoadChatAsHistory(ChatData chatData)
+        {
+            ChatViewModel.LoadChatFromHistory(chatData);
+        }
     }
 }

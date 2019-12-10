@@ -62,8 +62,13 @@
                                        Grid.Column="1" Grid.Row="1"/>
                                     <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
                                        Grid.Column="2" Grid.Row="1"/>
-                                    <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                       Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap"  />
+                                    
+                                    <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                                               Visibility="{Binding TextVisibility}" Height="Auto" Margin="10,5,10,10" 
+                                               TextWrapping="Wrap"  />
+
+                                    <Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -94,10 +99,16 @@
 
                                     <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="10,10,5,5"
                                        Grid.Column="1" Grid.Row="1"/>
+                                    
                                     <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
                                        Grid.Column="2" Grid.Row="1"/>
-                                    <TextBlock Text="{Binding Message}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                       Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap"  />
+                                    
+                                    <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                                               Visibility="{Binding TextVisibility}" Height="Auto" Margin="10,5,10,10" 
+                                               TextWrapping="Wrap"  />
+
+                                    <Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

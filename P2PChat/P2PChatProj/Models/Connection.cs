@@ -80,6 +80,8 @@ namespace P2PChatProj.Models
 
         public Action<NetworkData, bool> AddRemoteMessage { get; set; }
 
+        public Action PrepareChat { get; set; }
+
         public Action ExitChat { get; set; }
 
         #endregion
@@ -339,6 +341,13 @@ namespace P2PChatProj.Models
                     InfoDisplay.Show($"{RemoteUser.UserName} declined your chat request");
                     break;
 
+                case ResponseType.Buzz:
+                    if (State == ConnectionState.Chatting)
+                    {
+                        System.Media.SystemSounds.Beep.Play();
+                    }
+                    break;
+
                 case ResponseType.Disconnect:
                     ConnectionState prevState = State;
                     State = ConnectionState.Listening;
@@ -361,7 +370,7 @@ namespace P2PChatProj.Models
         private void ProcessMessage(NetworkData networkData)
         {
             Console.WriteLine("STATUS: Processing message");
-            Console.WriteLine($"RESULT: Received message > {networkData.Message}");
+            Console.WriteLine($"RESULT: Received message > {networkData.Data}");
             Application.Current.Dispatcher.Invoke(() =>
             {
                 AddRemoteMessage(networkData, true);
@@ -388,12 +397,20 @@ namespace P2PChatProj.Models
                     break;
 
                 case ConnectionState.Waiting:
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        PrepareChat();
+                    });
                     Task.Run(() => ReceiveNetworkData());
                     StateInfo = "Waiting...";
                     UpdateMenuButtons();
                     break;
 
                 case ConnectionState.Responding:
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        PrepareChat();
+                    });
                     Task.Run(() => ReceiveNetworkData());
                     StateInfo = RemoteUser.UserName;
                     UpdateMenuButtons();

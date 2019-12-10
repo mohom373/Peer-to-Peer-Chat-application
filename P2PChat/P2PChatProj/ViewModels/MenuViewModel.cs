@@ -1,4 +1,5 @@
 ﻿using P2PChatProj.Models;
+using P2PChatProj.Services;
 using P2PChatProj.ViewModels.Commands;
 using P2PChatProj.ViewModels.Enums;
 using System;
@@ -16,6 +17,7 @@ namespace P2PChatProj.ViewModels
     public class MenuViewModel : BaseViewModel
     {
         // Private backing fields
+        private string inputSearchHistory = "";
         private Visibility exitButtonVisibility = Visibility.Collapsed;
         private Visibility acceptDeclineButtonVisibility = Visibility.Collapsed;
         private ValidationError ipAddressError = new ValidationError();
@@ -38,6 +40,8 @@ namespace P2PChatProj.ViewModels
         public DelegateCommand AcceptButtonCommand { get; private set; }
 
         public DelegateCommand DeclineButtonCommand { get; private set; }
+
+        public ParameterCommand ViewChatCommand { get; private set; }
 
         // Menu and chat state information
         public Visibility ExitButtonVisibility 
@@ -71,7 +75,18 @@ namespace P2PChatProj.ViewModels
 
         public string InputPortNumber { get; set; } = "";
 
-        public string InputSearchHistory { get; set; } = "";
+        public string InputSearchHistory 
+        { 
+            get
+            {
+                return inputSearchHistory;
+            } 
+            set
+            {
+                inputSearchHistory = value;
+                UpdateSearch();
+            }
+        }
 
         // Validation errors
         public ValidationError IpAddressError
@@ -103,6 +118,8 @@ namespace P2PChatProj.ViewModels
         // History list
         public ObservableCollection<ChatData> ChatHistoryList { get; set; }
 
+        public ObservableCollection<ChatData> FilteredHistoryList { get; set; }
+
         #endregion
 
         /// <summary>
@@ -118,17 +135,27 @@ namespace P2PChatProj.ViewModels
             OnlineViewModel = onlineViewModel;
 
             ChatHistoryList = new ObservableCollection<ChatData>();
+            FilteredHistoryList = new ObservableCollection<ChatData>();
+            Task.Run(() => LoadHistory());
 
-            // Create new command objects!!!!!
-            SendRequestCommand = new DelegateCommand(SendRequest, CanSendRequest);
+            // Create new command objects
+            SendRequestCommand = new DelegateCommand(SendRequest, IsDisconnected);
             ExitButtonCommand = new DelegateCommand(HandleExit);
             AcceptButtonCommand = new DelegateCommand(AcceptRequest);
             DeclineButtonCommand = new DelegateCommand(DeclineRequest);
+            ViewChatCommand = new ParameterCommand(ViewChatFromHistory, IsDisconnected);
         }
 
-        private bool CanSendRequest()
+        private bool IsDisconnected()
         {
             return Connection.State == ConnectionState.Listening;
+        }
+
+        private void ViewChatFromHistory(object match)
+        {
+            Console.WriteLine("STATUS: Getting chat from history");
+            ChatData chatData = ChatHistoryList.Single(chat => chat.SearchString == (string)match);
+            OnlineViewModel.LoadChatAsHistory(chatData);
         }
 
         private async void SendRequest()
@@ -177,7 +204,57 @@ namespace P2PChatProj.ViewModels
 
         internal void AddChatToHistory(ChatData chatData)
         {
-            ChatHistoryList.Add(chatData);
+            ChatHistoryList.Insert(0, chatData);
+            UpdateSearch();
+        }
+
+        private async Task LoadHistory()
+        {
+            Console.WriteLine("STATUS: Loading history");
+            List<ChatData> historyList = await FileService.LoadHistoryAsync();
+            
+            if (historyList != null)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (ChatData chatData in historyList)
+                    {
+                        ChatHistoryList.Add(chatData);
+                    }
+                    UpdateSearch();
+                });
+                Console.WriteLine("RESULT: Chat history successfully loaded");
+            }
+            else
+            {
+                Console.WriteLine("RESULT: Chat history failed to load");
+            }
+        }
+
+        private void UpdateSearch()
+        {
+            FilteredHistoryList.Clear();
+            Console.WriteLine("STATUS: Updating search");
+            if (!String.IsNullOrEmpty(InputSearchHistory))
+            {
+                IEnumerable<ChatData> filter = from chat in ChatHistoryList
+                                               where (chat.SearchString.ToLower().Contains(inputSearchHistory.ToLower()))
+                                               select chat;
+
+                foreach(ChatData chatData in filter)
+                {
+                    Console.WriteLine(chatData.LocalUser.UserName);
+                    FilteredHistoryList.Add(chatData);
+                }
+            }
+            else
+            {
+                foreach (ChatData chatData in ChatHistoryList)
+                {
+                    Console.WriteLine(chatData.LocalUser.UserName);
+                    FilteredHistoryList.Add(chatData);
+                }
+            }
         }
 
         private void UpdateButtons()
@@ -206,6 +283,7 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: MenuViewModel closing");
             await Connection.SendNetworkData(new NetworkData(User, NetworkDataType.Response, "", ResponseType.Disconnect));
             Connection.CloseConnection();
+            await FileService.WriteHistoryAsync(ChatHistoryList.ToList());
         }
 
         private bool ValidateInput()
