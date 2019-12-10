@@ -34,6 +34,11 @@ namespace P2PChatProj.Services
                     Console.WriteLine("ERROR: Listener failed to accept connection");
                     return null;
                 }
+                catch (ObjectDisposedException)
+                {
+                    Console.WriteLine("ERROR: Listener failed to accept connection");
+                    return null;
+                }
             });
         }
 
