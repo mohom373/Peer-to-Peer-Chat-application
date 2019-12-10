@@ -64,11 +64,11 @@
                                        Grid.Column="2" Grid.Row="1"/>
                                     
                                     <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                               Visibility="{Binding TextVisibility}" Height="Auto" Margin="10,5,10,10" 
+                                               Height="Auto" Margin="10,5,10,10" 
                                                TextWrapping="Wrap"  />
 
-                                    <Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
-                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />
+                                    <!--<Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />-->
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -104,11 +104,11 @@
                                        Grid.Column="2" Grid.Row="1"/>
                                     
                                     <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                               Visibility="{Binding TextVisibility}" Height="Auto" Margin="10,5,10,10" 
+                                               Height="Auto" Margin="10,5,10,10" 
                                                TextWrapping="Wrap"  />
 
-                                    <Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
-                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />
+                                    <!--<Image Source="{Binding PictureSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
+                                           Visibility="{Binding PictureVisibility}" Stretch="Uniform" />-->
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

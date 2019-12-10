@@ -22,16 +22,16 @@ namespace P2PChatProj.Models
 
         public User RemoteUser { get; set; }
 
-        public List<ChatMessage> UserMessages { get; set; }
+        public List<ChatTextMessage> UserMessages { get; set; }
 
-        public List<ChatMessage> RemoteMessages { get; set; }
+        public List<ChatTextMessage> RemoteMessages { get; set; }
 
         public string Date { get; set; }
 
         #endregion
 
-        public ChatData(User localUser, User remoteUser, List<ChatMessage> userMessages, 
-                        List<ChatMessage> remoteMessages, string date)
+        public ChatData(User localUser, User remoteUser, List<ChatTextMessage> userMessages, 
+                        List<ChatTextMessage> remoteMessages, string date)
         {
             LocalUser = localUser;
             RemoteUser = remoteUser;

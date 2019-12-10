@@ -15,8 +15,8 @@ namespace P2PChatProj.Models
             Name = name;
             Date = date;
             Visibility = visibility;
-            TextVisibility = Visibility.Visible;
-            PictureVisibility = Visibility.Collapsed;
+            //TextVisibility = Visibility.Visible;
+            //PictureVisibility = Visibility.Collapsed;
         }
     }
 }

@@ -50,9 +50,9 @@ namespace P2PChatProj.ViewModels
         public DelegateCommand BuzzButtonCommand { get; private set; }
 
         // Lists of messages
-        public ObservableCollection<ChatMessage> RemoteMessages { get; set; }
+        public ObservableCollection<ChatTextMessage> RemoteMessages { get; set; }
 
-        public ObservableCollection<ChatMessage> UserMessages { get; set; }
+        public ObservableCollection<ChatTextMessage> UserMessages { get; set; }
 
         #endregion
 
@@ -64,8 +64,8 @@ namespace P2PChatProj.ViewModels
             Connection.PrepareChat = CloseHistoryMode;
             OnlineViewModel = onlineViewModel;
 
-            UserMessages = new ObservableCollection<ChatMessage>();
-            RemoteMessages = new ObservableCollection<ChatMessage>();
+            UserMessages = new ObservableCollection<ChatTextMessage>();
+            RemoteMessages = new ObservableCollection<ChatTextMessage>();
 
             SendTextCommand = new DelegateCommand(SendMessage, CanUseChatButtons);
             SendPictureButtonCommand = new DelegateCommand(SendPicture, CanUseChatButtons);
@@ -101,30 +101,30 @@ namespace P2PChatProj.ViewModels
                     RemoteMessages.Add(hiddenMessage);
                 }
             }
-            else if (message.DataType == NetworkDataType.Picture)
-            {
-                ChatPictureMessage visibleMessage = new ChatPictureMessage(message.Picture, message.User.UserName,
-                                                                           message.Date);
-                ChatPictureMessage hiddenMessage = new ChatPictureMessage(message.Picture, message.User.UserName,
-                                                                           message.Date, Visibility.Hidden);
+            //else if (message.DataType == NetworkDataType.Picture)
+            //{
+            //    ChatPictureMessage visibleMessage = new ChatPictureMessage(message.Picture, message.User.UserName,
+            //                                                               message.Date);
+            //    ChatPictureMessage hiddenMessage = new ChatPictureMessage(message.Picture, message.User.UserName,
+            //                                                               message.Date, Visibility.Hidden);
 
-                if (remote)
-                {
-                    Console.WriteLine($"STATUS: Adding a remote message");
-                    RemoteMessages.Add(visibleMessage);
-                    UserMessages.Add(hiddenMessage);
-                }
-                else
-                {
-                    Console.WriteLine($"STATUS: Adding a user message");
-                    UserMessages.Add(visibleMessage);
-                    RemoteMessages.Add(hiddenMessage);
-                }
-            }
-            else
-            {
-                Console.WriteLine("ERROR: Cannot add other data than picture and text messages");
-            }
+            //    if (remote)
+            //    {
+            //        Console.WriteLine($"STATUS: Adding a remote message");
+            //        RemoteMessages.Add(visibleMessage);
+            //        UserMessages.Add(hiddenMessage);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine($"STATUS: Adding a user message");
+            //        UserMessages.Add(visibleMessage);
+            //        RemoteMessages.Add(hiddenMessage);
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("ERROR: Cannot add other data than picture and text messages");
+            //}
         }
 
         private async void SendMessage()
@@ -144,30 +144,30 @@ namespace P2PChatProj.ViewModels
         {
             Console.WriteLine("STATUS: Sending a picture");
             
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "Pictures";
-            openFileDialog.Filter = "Image files (*.jpg)|*.jpg|All Files (*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //openFileDialog.InitialDirectory = "Pictures";
+            //openFileDialog.Filter = "Image files (*.jpg)|*.jpg|All Files (*.*)|*.*";
+            //openFileDialog.RestoreDirectory = true;
 
-            string fileName = "";
-            BitmapImage bitmap = new BitmapImage();
+            //string fileName = "";
+            //BitmapImage bitmap = new BitmapImage();
 
-            await Task.Run(() =>
-            {
-                openFileDialog.ShowDialog(Application.Current.MainWindow);
-                fileName = openFileDialog.FileName;
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(fileName);
-                bitmap.EndInit();
-            });
+            //await Task.Run(() =>
+            //{
+            //    openFileDialog.ShowDialog(Application.Current.MainWindow);
+            //    fileName = openFileDialog.FileName;
+            //    bitmap.BeginInit();
+            //    bitmap.UriSource = new Uri(fileName);
+            //    bitmap.EndInit();
+            //});
 
-            NetworkData picture = new NetworkData(User, NetworkDataType.Picture, "", 
-                ResponseType.None, DateTime.Now.ToString(), bitmap);
+            //NetworkData picture = new NetworkData(User, NetworkDataType.Picture, "", 
+            //    ResponseType.None, DateTime.Now.ToString(), bitmap);
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                AddMessage(picture);
-            });
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
+            //    AddMessage(picture);
+            //});
         }
 
         private async void SendBuzz()

@@ -13,7 +13,7 @@ namespace P2PChatProj.Models
     {
         public string TextMessage { get; set; } = "";
 
-        public BitmapImage PictureSource { get; set; } = new BitmapImage();
+        //public BitmapImage PictureSource { get; set; } = new BitmapImage();
 
         public string Name { get; set; }
 
@@ -21,8 +21,8 @@ namespace P2PChatProj.Models
 
         public Visibility Visibility { get; set; }
 
-        public Visibility TextVisibility { get; set; }
+        //public Visibility TextVisibility { get; set; }
 
-        public Visibility PictureVisibility { get; set; }
+        //public Visibility PictureVisibility { get; set; }
     }
 }
