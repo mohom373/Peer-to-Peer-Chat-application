@@ -1,8 +1,0 @@
-﻿<Application x:Class="P2PChatProj.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:P2PChatProj">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
