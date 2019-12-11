@@ -37,7 +37,7 @@ namespace P2PChatProj
 
         private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show($"Unhandled Error: {e.Exception.Message}\n", "Unhandled Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Unhandled Error: {e.Exception.Message}\n", "Unhandled Error", MessageBoxButton.OK, MessageBoxImage.Error);
             Console.WriteLine("EXCEPTION: " + e.Exception.ToString());
             this.Shutdown();
         }

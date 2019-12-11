@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Exceptions\HistoryNotFoundException.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\HistoryHandler.cs" />
     <Compile Include="Models\SavedChatData.cs" />

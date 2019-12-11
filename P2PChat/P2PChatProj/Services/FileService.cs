@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using P2PChatProj.Exceptions;
 using P2PChatProj.Models;
 using System;
 using System.Collections.Generic;
@@ -47,18 +48,12 @@ namespace P2PChatProj.Services
 
             if (jsonData != "")
             {
-                try
-                {
-                    return JsonConvert.DeserializeObject<List<SavedChatData>>(jsonData);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
-                
+                 return JsonConvert.DeserializeObject<List<SavedChatData>>(jsonData);
             }
-            return null;
+            else
+            {
+                throw new HistoryNotFoundException("History file could not be found");
+            }
         }
     }
 }

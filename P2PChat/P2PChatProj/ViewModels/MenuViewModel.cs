@@ -1,4 +1,5 @@
-﻿using P2PChatProj.Models;
+﻿using P2PChatProj.Exceptions;
+using P2PChatProj.Models;
 using P2PChatProj.Services;
 using P2PChatProj.ViewModels.Commands;
 using P2PChatProj.ViewModels.Enums;
@@ -211,7 +212,18 @@ namespace P2PChatProj.ViewModels
         private async Task LoadHistory()
         {
             Console.WriteLine("STATUS: Loading history");
-            List<SavedChatData> historyList = await FileService.LoadHistoryAsync();
+
+            List<SavedChatData> historyList = null;
+
+            try
+            {
+                historyList = await FileService.LoadHistoryAsync();
+            }
+            catch (HistoryNotFoundException ex)
+            {
+                Console.WriteLine($"ERROR: {ex.Message}");
+            }
+            
             
             if (historyList != null)
             {

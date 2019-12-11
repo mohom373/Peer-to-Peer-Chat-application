@@ -7,7 +7,6 @@ Fråga:
 
 Nästa gång:
 	
-	- Fundera över bitmap, source och path
 	
 
 
@@ -20,10 +19,7 @@ Ordning:
 Uppgifter:
 
 	
-	- (Lab4) Skicka bilder som ska lagras lokalt
 	
-	- (Lab2/Lab4) Arv ska användas för att skapa meddelande-klass
-	- (Allmänt) Ha en egen exception som används
 	
 	
 
@@ -58,6 +54,9 @@ Klart:
 	- (Allmänt) Lösa validering av input
 	- (Allmänt) Fundera på felhantering
 	- (Lab4) Skicka buzz som ljud eller skak i fönster
+	- (Lab4) Skicka bilder som ska lagras lokalt
+	- (Lab2/Lab4) Arv ska användas för att skapa meddelande-klass
+	- (Allmänt) Ha en egen exception som används
 
 Quality Of Life(Inte jätteviktigt):
 
