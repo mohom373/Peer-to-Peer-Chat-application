@@ -1,13 +1,15 @@
-﻿using System;
+﻿using P2PChatProj.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace P2PChatProj.Models
 {
-    public class ChatData
+    public class SavedChatData
     {
         #region Properties
         public string SearchString
@@ -22,23 +24,23 @@ namespace P2PChatProj.Models
 
         public User RemoteUser { get; set; }
 
-        public List<ChatTextMessage> UserMessages { get; set; }
+        public List<SavedChatMessage> UserMessages { get; set; }
 
-        public List<ChatTextMessage> RemoteMessages { get; set; }
+        public List<SavedChatMessage> RemoteMessages { get; set; }
 
         public string Date { get; set; }
 
         #endregion
 
-        public ChatData(User localUser, User remoteUser, List<ChatTextMessage> userMessages, 
-                        List<ChatTextMessage> remoteMessages, string date)
+        public SavedChatData(User localUser, User remoteUser, List<SavedChatMessage> userMessages,
+                        List<SavedChatMessage> remoteMessages, string date)
         {
             LocalUser = localUser;
             RemoteUser = remoteUser;
+            Date = date;
+
             UserMessages = userMessages;
             RemoteMessages = remoteMessages;
-            Date = date;
         }
-        
     }
 }

@@ -116,9 +116,9 @@ namespace P2PChatProj.ViewModels
         }
 
         // History list
-        public ObservableCollection<ChatData> ChatHistoryList { get; set; }
+        public ObservableCollection<SavedChatData> ChatHistoryList { get; set; }
 
-        public ObservableCollection<ChatData> FilteredHistoryList { get; set; }
+        public ObservableCollection<SavedChatData> FilteredHistoryList { get; set; }
 
         #endregion
 
@@ -134,8 +134,8 @@ namespace P2PChatProj.ViewModels
             Connection.UpdateMenuButtons = UpdateButtons;
             OnlineViewModel = onlineViewModel;
 
-            ChatHistoryList = new ObservableCollection<ChatData>();
-            FilteredHistoryList = new ObservableCollection<ChatData>();
+            ChatHistoryList = new ObservableCollection<SavedChatData>();
+            FilteredHistoryList = new ObservableCollection<SavedChatData>();
             Task.Run(() => LoadHistory());
 
             // Create new command objects
@@ -154,7 +154,7 @@ namespace P2PChatProj.ViewModels
         private void ViewChatFromHistory(object match)
         {
             Console.WriteLine("STATUS: Getting chat from history");
-            ChatData chatData = ChatHistoryList.Single(chat => chat.SearchString == (string)match);
+            SavedChatData chatData = ChatHistoryList.Single(chat => chat.SearchString == (string)match);
             OnlineViewModel.LoadChatAsHistory(chatData);
         }
 
@@ -202,7 +202,7 @@ namespace P2PChatProj.ViewModels
             Connection.State = ConnectionState.Chatting;
         }
 
-        internal void AddChatToHistory(ChatData chatData)
+        internal void AddChatToHistory(SavedChatData chatData)
         {
             ChatHistoryList.Insert(0, chatData);
             UpdateSearch();
@@ -211,13 +211,13 @@ namespace P2PChatProj.ViewModels
         private async Task LoadHistory()
         {
             Console.WriteLine("STATUS: Loading history");
-            List<ChatData> historyList = await FileService.LoadHistoryAsync();
+            List<SavedChatData> historyList = await FileService.LoadHistoryAsync();
             
             if (historyList != null)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    foreach (ChatData chatData in historyList)
+                    foreach (SavedChatData chatData in historyList)
                     {
                         ChatHistoryList.Add(chatData);
                     }
@@ -237,21 +237,19 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: Updating search");
             if (!String.IsNullOrEmpty(InputSearchHistory))
             {
-                IEnumerable<ChatData> filter = from chat in ChatHistoryList
+                IEnumerable<SavedChatData> filter = from chat in ChatHistoryList
                                                where (chat.SearchString.ToLower().Contains(inputSearchHistory.ToLower()))
                                                select chat;
 
-                foreach(ChatData chatData in filter)
+                foreach(SavedChatData chatData in filter)
                 {
-                    Console.WriteLine(chatData.LocalUser.UserName);
                     FilteredHistoryList.Add(chatData);
                 }
             }
             else
             {
-                foreach (ChatData chatData in ChatHistoryList)
+                foreach (SavedChatData chatData in ChatHistoryList)
                 {
-                    Console.WriteLine(chatData.LocalUser.UserName);
                     FilteredHistoryList.Add(chatData);
                 }
             }

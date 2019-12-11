@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,14 +60,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\ChatData.cs" />
+    <Compile Include="Models\HistoryHandler.cs" />
+    <Compile Include="Models\SavedChatData.cs" />
     <Compile Include="Models\ChatMessage.cs" />
-    <Compile Include="Models\ChatPictureMessage.cs" />
-    <Compile Include="Models\ChatTextMessage.cs" />
+    <Compile Include="Models\ImageChatMessage.cs" />
+    <Compile Include="Models\SavedChatMessage.cs" />
+    <Compile Include="Models\TextChatMessage.cs" />
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\NetworkData.cs" />
     <Compile Include="Models\ValidationError.cs" />
     <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\NetworkService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />

@@ -61,12 +61,12 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: OnlineViewModel closing");
         }
 
-        internal void AddToHistory(ChatData chatData)
+        internal void AddToHistory(SavedChatData chatData)
         {
             MenuViewModel.AddChatToHistory(chatData);
         }
 
-        internal void LoadChatAsHistory(ChatData chatData)
+        internal void LoadChatAsHistory(SavedChatData chatData)
         {
             ChatViewModel.LoadChatFromHistory(chatData);
         }

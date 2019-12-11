@@ -146,6 +146,7 @@ namespace P2PChatProj.Models
                 else
                 {
                     Console.WriteLine("STATUS: Listening for connection canceled");
+                    listening = false;
                 }
             }
         }
@@ -211,7 +212,8 @@ namespace P2PChatProj.Models
                         ProcessResponse(networkData);
                     });
                 }
-                else if (networkData != null && networkData.DataType == NetworkDataType.Message)
+                else if (networkData != null && (networkData.DataType == NetworkDataType.Message ||
+                                                 networkData.DataType == NetworkDataType.Image))
                 {
                     Console.WriteLine($"RESULT: Received message data from {networkData.User.UserName}");
                     Application.Current.Dispatcher.Invoke(() =>
@@ -363,14 +365,14 @@ namespace P2PChatProj.Models
 
                 case ResponseType.None:
                     Console.WriteLine("ERROR: Network data is not a response");
+                    // KANSKE BRA STÄLLE FÖR EGEN EXCEPTION
                     break;
             }
         }
 
         private void ProcessMessage(NetworkData networkData)
         {
-            Console.WriteLine("STATUS: Processing message");
-            Console.WriteLine($"RESULT: Received message > {networkData.Data}");
+            Console.WriteLine($"STATUS: Processing message of type {networkData.DataType}");
             Application.Current.Dispatcher.Invoke(() =>
             {
                 AddRemoteMessage(networkData, true);

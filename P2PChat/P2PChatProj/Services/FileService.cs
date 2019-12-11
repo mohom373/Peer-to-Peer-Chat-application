@@ -13,7 +13,7 @@ namespace P2PChatProj.Services
     {
         private const string PATH = "history.json";
 
-        public static async Task WriteHistoryAsync(List<ChatData> history)
+        public static async Task WriteHistoryAsync(List<SavedChatData> history)
         {
             string jsonData = JsonConvert.SerializeObject(history);
 
@@ -30,7 +30,7 @@ namespace P2PChatProj.Services
             });
         }
 
-        public static async Task<List<ChatData>> LoadHistoryAsync()
+        public static async Task<List<SavedChatData>> LoadHistoryAsync()
         {
             string jsonData = await Task.Run(() =>
             {
@@ -47,7 +47,16 @@ namespace P2PChatProj.Services
 
             if (jsonData != "")
             {
-                return JsonConvert.DeserializeObject<List<ChatData>>(jsonData);
+                try
+                {
+                    return JsonConvert.DeserializeObject<List<SavedChatData>>(jsonData);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return null;
+                }
+                
             }
             return null;
         }

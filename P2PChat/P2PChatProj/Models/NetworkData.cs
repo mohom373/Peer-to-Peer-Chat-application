@@ -24,7 +24,6 @@ namespace P2PChatProj.Models
 
         public string Date { get; private set; }
 
-        //public BitmapImage Picture { get; set; }
         #endregion
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace P2PChatProj.Models
         /// <param name="data">A message containing data</param>
         /// <param name="date">A date in string form</param>
         public NetworkData(User user, NetworkDataType dataType, string data = "", 
-            ResponseType responseType = ResponseType.None, string date = ""/*, BitmapImage picture = null*/)
+            ResponseType responseType = ResponseType.None, string date = "")
         {
             User = user;
             DataType = dataType;
@@ -50,16 +49,6 @@ namespace P2PChatProj.Models
             {
                 Date = date;
             }
-
-            //if (picture == null)
-            //{
-            //    Picture = new BitmapImage();
-            //}
-            //else
-            //{
-            //    Picture = picture;
-            //}
-
         }
     }
 }

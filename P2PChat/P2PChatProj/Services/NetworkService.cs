@@ -81,7 +81,16 @@ namespace P2PChatProj.Services
             {
                 try
                 {
-                    bytesReceived = receiver.Receive(bytes);
+                    bool receiving = true;
+                    while (receiving)
+                    {
+                        bytesReceived = receiver.Receive(bytes);
+                        dataReceived += Encoding.UTF8.GetString(bytes, 0, bytesReceived);
+                        if (dataReceived.IndexOf("<EOF>") > -1)
+                        {
+                            receiving = false;
+                        }
+                    }
                 }
                 catch (SocketException ex)
                 {
@@ -89,7 +98,8 @@ namespace P2PChatProj.Services
                     Console.WriteLine($"EXCEPTION: {ex.ToString()}");
                     return null;
                 }
-                dataReceived = Encoding.UTF8.GetString(bytes, 0, bytesReceived);
+                dataReceived.TrimEnd();
+                dataReceived = dataReceived.Replace("<EOF>", "");
                 return JsonConvert.DeserializeObject<NetworkData>(dataReceived);
             });
         }
@@ -108,7 +118,7 @@ namespace P2PChatProj.Services
             {
                 try
                 {
-                    sender.Send(Encoding.UTF8.GetBytes(sendData));
+                    sender.Send(Encoding.UTF8.GetBytes(sendData + "<EOF>"));
                 }
                 catch (SocketException)
                 {

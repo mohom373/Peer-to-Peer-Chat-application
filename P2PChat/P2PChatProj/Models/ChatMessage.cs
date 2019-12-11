@@ -11,18 +11,18 @@ namespace P2PChatProj.Models
 {
     public abstract class ChatMessage
     {
-        public string TextMessage { get; set; } = "";
-
-        //public BitmapImage PictureSource { get; set; } = new BitmapImage();
-
         public string Name { get; set; }
 
         public string Date { get; set; }
 
         public Visibility Visibility { get; set; }
 
-        //public Visibility TextVisibility { get; set; }
+        public string TextMessage { get; set; }
 
-        //public Visibility PictureVisibility { get; set; }
+        public BitmapImage ImageSource { get; set; }
+
+        public Visibility TextVisibility { get; set; }
+
+        public Visibility ImageVisibility { get; set; }
     }
 }
