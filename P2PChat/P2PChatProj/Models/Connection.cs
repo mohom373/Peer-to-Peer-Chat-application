@@ -365,7 +365,6 @@ namespace P2PChatProj.Models
 
                 case ResponseType.None:
                     Console.WriteLine("ERROR: Network data is not a response");
-                    // KANSKE BRA STÄLLE FÖR EGEN EXCEPTION
                     break;
             }
         }

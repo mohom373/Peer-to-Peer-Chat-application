@@ -250,7 +250,7 @@ namespace P2PChatProj.ViewModels
             if (!String.IsNullOrEmpty(InputSearchHistory))
             {
                 IEnumerable<SavedChatData> filter = from chat in ChatHistoryList
-                                               where (chat.SearchString.ToLower().Contains(inputSearchHistory.ToLower()))
+                                               where (chat.SearchString.ToLower().Contains(InputSearchHistory.ToLower()))
                                                select chat;
 
                 foreach(SavedChatData chatData in filter)

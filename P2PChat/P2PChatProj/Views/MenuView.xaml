@@ -125,7 +125,6 @@
             </StackPanel>
 
             <!-- Chat history panel -->
-            <!-- KVAR ATT KOMMENTERA -->
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4">
                 
                 <TextBlock Text="History" FontSize="20" Margin="0,20,0,10"/>

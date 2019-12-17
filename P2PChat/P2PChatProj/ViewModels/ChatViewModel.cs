@@ -178,11 +178,6 @@ namespace P2PChatProj.ViewModels
 
                 await Connection.SendNetworkData(image);
             }
-            else
-            {
-                // KANSKE EGEN EXCEPTION
-            }
-
         }
 
         private async void SendBuzz()
