@@ -1,4 +1,5 @@
 ﻿using P2PChatProj.Models;
+using P2PChatProj.Services;
 using P2PChatProj.Views;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace P2PChatProj.ViewModels
         /// <param name="mainWindow">MainWindow of the app</param>
         public MainWindowViewModel(MainWindow mainWindow)
         {
+            Task.Run(() => FileService.DirectorySetupCheck());
             MainWindow = mainWindow;
             OfflineViewModel = new OfflineViewModel(this);
             MainWindow.Closing += OfflineViewModel.ClosingApp;

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -148,7 +149,7 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: Sending a picture");
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "Pictures";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             openFileDialog.Filter = "Image files (*.jpg;*.jpeg)|*.jpg;*.jpeg;";
             openFileDialog.RestoreDirectory = true;
 
@@ -156,28 +157,31 @@ namespace P2PChatProj.ViewModels
             BitmapImage bitmapImage = new BitmapImage();
 
             openFileDialog.ShowDialog();
-            string fileName = openFileDialog.FileName;
-
-            if (!String.IsNullOrEmpty(fileName))
+            string filePath = openFileDialog.FileName;
+            Console.WriteLine($"ORIGINAL FILE PATH: {filePath}");
+         
+            if (!String.IsNullOrEmpty(filePath))
             {
-                bitmapImage.BeginInit();
-                bitmapImage.UriSource = new Uri(fileName);
-                bitmapImage.EndInit();
+                Bitmap bitmap = new Bitmap(filePath);
+                string fileName = Path.GetFileName(filePath);
+                Console.WriteLine($"FILE NAME: {fileName}");
+                string imagePath = await FileService.SaveImage(bitmap, fileName);
+                Console.WriteLine($"NEW IMAGE PATH: {imagePath}");
 
-                bitmapString = ImageService.BitmapImageToString(bitmapImage);
+                //bitmapString = ImageService.BitmapImageToString(bitmapImage);
             }
 
-            if (!String.IsNullOrEmpty(bitmapString))
-            {
-                NetworkData image = new NetworkData(User, NetworkDataType.Image, bitmapString);
+            //if (!String.IsNullOrEmpty(bitmapString))
+            //{
+            //    NetworkData image = new NetworkData(User, NetworkDataType.Image, bitmapString);
 
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    AddMessage(image);
-                });
+            //    Application.Current.Dispatcher.Invoke(() =>
+            //    {
+            //        AddMessage(image);
+            //    });
 
-                await Connection.SendNetworkData(image);
-            }
+            //    await Connection.SendNetworkData(image);
+            //}
         }
 
         private async void SendBuzz()
