@@ -17,12 +17,5 @@ namespace P2PChatProj.Models
 
         public Visibility Visibility { get; set; }
 
-        public string TextMessage { get; set; }
-
-        public BitmapImage ImageSource { get; set; }
-
-        public Visibility TextVisibility { get; set; }
-
-        public Visibility ImageVisibility { get; set; }
     }
 }

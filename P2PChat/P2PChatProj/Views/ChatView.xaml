@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:P2PChatProj.Views"
+             xmlns:models="clr-namespace:P2PChatProj.Models"
              mc:Ignorable="d" >
 
     <UserControl.InputBindings>
@@ -11,6 +12,68 @@
         <KeyBinding Key="Enter" Command="{Binding SendTextCommand}" />
 
     </UserControl.InputBindings>
+
+    <UserControl.Resources>
+
+        <DataTemplate DataType="{x:Type models:TextChatMessage}">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="10" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="10,10,5,5"
+                                       Grid.Column="1" Grid.Row="1"/>
+
+                <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
+                                       Grid.Column="2" Grid.Row="1"/>
+
+                <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                           Height="Auto" Margin="10,5,10,10" TextWrapping="Wrap" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type models:ImageChatMessage}">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="10" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="10,10,5,5"
+                                       Grid.Column="1" Grid.Row="1"/>
+
+                <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
+                                       Grid.Column="2" Grid.Row="1"/>
+
+                <Image Source="{Binding ImageSource}" Grid.Column="1" Grid.Row="2" 
+                       Grid.ColumnSpan="2" Stretch="Uniform" Margin="10,10,10,10" />
+            </Grid>
+        </DataTemplate>
+
+    </UserControl.Resources>
     
     <Grid Background="#F5F3F5">
 
@@ -41,36 +104,9 @@
                     <ItemsControl ItemsSource="{Binding RemoteMessages}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-
-                                <Grid Background="#FFFFFF" Visibility="{Binding Visibility}" Margin="10">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="10" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="10" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="10,10,5,5"
-                                       Grid.Column="1" Grid.Row="1"/>
-                                    
-                                    <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
-                                       Grid.Column="2" Grid.Row="1"/>
-                                    
-                                    <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                               Height="Auto" Margin="10,5,10,10" Visibility="{Binding TextVisibility}"
-                                               TextWrapping="Wrap"  />
-
-                                    <Image Source="{Binding ImageSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
-                                           Visibility="{Binding ImageVisibility}" Stretch="Uniform" Margin="10,5,10,10" />
-                                </Grid>
+                                <DockPanel Background="#FFFFFF" Visibility="{Binding Visibility}" Margin="10">
+                                    <ContentControl Content="{Binding}"></ContentControl>
+                                </DockPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -81,36 +117,9 @@
                     <ItemsControl ItemsSource="{Binding UserMessages}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-
-                                <Grid Background="#5998B0" Visibility="{Binding Visibility}" Margin="10">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="10" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="10" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="10,10,5,5"
-                                       Grid.Column="1" Grid.Row="1"/>
-                                    
-                                    <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
-                                       Grid.Column="2" Grid.Row="1"/>
-                                    
-                                    <TextBlock Text="{Binding TextMessage}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
-                                               Height="Auto" Margin="10,5,10,10" Visibility="{Binding TextVisibility}"
-                                               TextWrapping="Wrap"  />
-
-                                    <Image Source="{Binding ImageSource}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
-                                           Visibility="{Binding ImageVisibility}" Stretch="Uniform" Margin="10,5,10,10"/>
-                                </Grid>
+                                <DockPanel Background="#5998B0" Visibility="{Binding Visibility}" Margin="10">
+                                    <ContentControl Content="{Binding}"></ContentControl>
+                                </DockPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

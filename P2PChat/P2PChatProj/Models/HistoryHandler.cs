@@ -19,7 +19,7 @@ namespace P2PChatProj.Models
             {
                 if (chatMessage.GetType() == typeof(ImageChatMessage))
                 {
-                    string imageDataString = ImageService.BitmapImageToString(chatMessage.ImageSource);
+                    string imageDataString = ImageService.BitmapImageToString(((ImageChatMessage)chatMessage).ImageSource);
                     SavedChatMessage savedChatMessage = new SavedChatMessage(chatMessage.Name, chatMessage.Date,
                                                                              chatMessage.Visibility, "", true,
                                                                              imageDataString);
@@ -29,7 +29,7 @@ namespace P2PChatProj.Models
                 {
                     SavedChatMessage savedChatMessage = new SavedChatMessage(chatMessage.Name, chatMessage.Date,
                                                                              chatMessage.Visibility,
-                                                                             chatMessage.TextMessage);
+                                                                             ((TextChatMessage)chatMessage).TextMessage);
                     historyList.Add(savedChatMessage);
                 }
             }

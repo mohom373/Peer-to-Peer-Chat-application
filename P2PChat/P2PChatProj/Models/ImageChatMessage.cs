@@ -10,15 +10,14 @@ namespace P2PChatProj.Models
 {
     public class ImageChatMessage : ChatMessage
     {
+        public BitmapImage ImageSource { get; set; }
+
         public ImageChatMessage(string name, string date, BitmapImage imageSource, Visibility visibility = Visibility.Visible)
         {
             Name = name;
             Date = date;
             ImageSource = imageSource;
             Visibility = visibility;
-            TextMessage = "";
-            TextVisibility = Visibility.Collapsed;
-            ImageVisibility = Visibility.Visible;
         }
     }
 }
