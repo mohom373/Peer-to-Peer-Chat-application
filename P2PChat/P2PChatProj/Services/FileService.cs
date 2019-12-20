@@ -16,20 +16,21 @@ namespace P2PChatProj.Services
     {
         private static string historyFilePath;
         private static string imageSentDirectoryPath;
+        private static string imageReceivedDirectoryPath;
 
         public static void DirectorySetupCheck()
         {
             string executingDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
 
-            string imagegDirectoryPath = Path.Combine(executingDirectoryPath, "images");
+            string imageDirectoryPath = Path.Combine(executingDirectoryPath, "images");
 
-            if(!Directory.Exists(imagegDirectoryPath))
+            if(!Directory.Exists(imageDirectoryPath))
             {
-                Directory.CreateDirectory(imagegDirectoryPath);
+                Directory.CreateDirectory(imageDirectoryPath);
             }
 
-            string imageReceivedDirectoryPath = Path.Combine(imagegDirectoryPath, "received");
-            imageSentDirectoryPath = Path.Combine(imagegDirectoryPath, "sent");
+            imageReceivedDirectoryPath = Path.Combine(imageDirectoryPath, "received");
+            imageSentDirectoryPath = Path.Combine(imageDirectoryPath, "sent");
 
             if (!Directory.Exists(imageReceivedDirectoryPath))
             {
@@ -51,14 +52,31 @@ namespace P2PChatProj.Services
             historyFilePath = Path.Combine(histDirPath, "history.json");
         }
 
-        public static async Task<string> SaveImage(Bitmap image, string name)
+        public static async Task<string> SaveImage(Bitmap image, string name, bool sent = true)
         {
-            string newImagePath = Path.Combine(imageSentDirectoryPath, name);
+            string newImagePath;
+
+            if (sent)
+            {
+                newImagePath = Path.Combine(imageSentDirectoryPath, name);
+            }
+            else
+            {
+                newImagePath = Path.Combine(imageReceivedDirectoryPath, name);
+            }
+
+            while (File.Exists(newImagePath))
+            {
+                newImagePath = newImagePath.Split('.')[0] + 
+                               new Random().Next(0, 999).ToString() +
+                               "." + newImagePath.Split('.')[1];
+            }
+
             await Task.Run(() => image.Save(newImagePath, ImageFormat.Jpeg));
             return newImagePath;
         }
 
-        public static async Task WriteHistoryAsync(List<SavedChatData> history)
+        public static async Task WriteHistoryAsync(List<ChatData> history)
         {
             string jsonData = JsonConvert.SerializeObject(history);
 
@@ -75,7 +93,7 @@ namespace P2PChatProj.Services
             });
         }
 
-        public static async Task<List<SavedChatData>> LoadHistoryAsync()
+        public static async Task<List<ChatData>> LoadHistoryAsync()
         {
             string jsonData = await Task.Run(() =>
             {
@@ -92,7 +110,7 @@ namespace P2PChatProj.Services
 
             if (jsonData != "")
             {
-                 return JsonConvert.DeserializeObject<List<SavedChatData>>(jsonData);
+                 return JsonConvert.DeserializeObject<List<ChatData>>(jsonData);
             }
             else
             {

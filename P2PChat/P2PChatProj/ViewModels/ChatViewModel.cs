@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -62,15 +63,15 @@ namespace P2PChatProj.ViewModels
         {
             User = user;
             Connection = connection;
-            Connection.AddRemoteMessage = AddMessage;
+            Connection.AddRemoteMessage = AddReceivedMessage;
             Connection.PrepareChat = CloseHistoryMode;
             OnlineViewModel = onlineViewModel;
 
             UserMessages = new ObservableCollection<ChatMessage>();
             RemoteMessages = new ObservableCollection<ChatMessage>();
 
-            SendTextCommand = new DelegateCommand(SendMessage, CanUseChatButtons);
-            SendImageButtonCommand = new DelegateCommand(SendPicture, CanUseChatButtons);
+            SendTextCommand = new DelegateCommand(SendTextMessage, CanUseChatButtons);
+            SendImageButtonCommand = new DelegateCommand(SendImageMessage, CanUseChatButtons);
             BuzzButtonCommand = new DelegateCommand(SendBuzz, CanUseChatButtons);
         }
 
@@ -81,70 +82,41 @@ namespace P2PChatProj.ViewModels
             RemoteMessages.Clear();
         }
 
-        public void AddMessage(NetworkData networkData, bool remote = false)
+        public void AddMessage(ChatMessage visibleMessage, ChatMessage hiddenMessage, bool remote = false)
         {
-            if (networkData.DataType == NetworkDataType.Message)
+            if (remote)
             {
-                TextChatMessage visibleMessage = new TextChatMessage(networkData.User.UserName, networkData.Date,
-                                                                     networkData.Data);
-                TextChatMessage hiddenMessage = new TextChatMessage(networkData.User.UserName, networkData.Date,
-                                                                    networkData.Data, Visibility.Hidden);
-
-                if (remote)
-                {
-                    Console.WriteLine($"STATUS: Adding a remote text message");
-                    RemoteMessages.Add(visibleMessage);
-                    UserMessages.Add(hiddenMessage);
-                }
-                else
-                {
-                    Console.WriteLine($"STATUS: Adding a user text message");
-                    UserMessages.Add(visibleMessage);
-                    RemoteMessages.Add(hiddenMessage);
-                }
-            }
-            else if (networkData.DataType == NetworkDataType.Image)
-            {
-                BitmapImage imageSource = ImageService.StringToBitmapImage(networkData.Data);
-
-                ImageChatMessage visibleMessage = new ImageChatMessage(networkData.User.UserName, networkData.Date,
-                                                                       imageSource);
-                ImageChatMessage hiddenMessage = new ImageChatMessage(networkData.User.UserName, networkData.Date,
-                                                                      imageSource, Visibility.Hidden);
-
-                if (remote)
-                {
-                    Console.WriteLine($"STATUS: Adding a remote image");
-                    RemoteMessages.Add(visibleMessage);
-                    UserMessages.Add(hiddenMessage);
-                }
-                else
-                {
-                    Console.WriteLine($"STATUS: Adding a user image");
-                    UserMessages.Add(visibleMessage);
-                    RemoteMessages.Add(hiddenMessage);
-                }
+                Console.WriteLine($"STATUS: Adding a remote text message");
+                RemoteMessages.Add(visibleMessage);
+                UserMessages.Add(hiddenMessage);
             }
             else
             {
-                Console.WriteLine("ERROR: Cannot add other data than picture and text messages");
+                Console.WriteLine($"STATUS: Adding a user text message");
+                UserMessages.Add(visibleMessage);
+                RemoteMessages.Add(hiddenMessage);
             }
         }
 
-        private async void SendMessage()
+        private async void SendTextMessage()
         {
-            NetworkData message = new NetworkData(User, NetworkDataType.Message, InputMessage);
+            NetworkData networkMessage = new NetworkData(User, NetworkDataType.Message, InputMessage);
             InputMessage = "";
+            TextChatMessage visibleMessage = new TextChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                     networkMessage.Data);
+            TextChatMessage hiddenMessage = new TextChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                networkMessage.Data, Visibility.Hidden);
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                AddMessage(message);
+                AddMessage(visibleMessage, hiddenMessage);
             });
-            Console.WriteLine($"STATUS: Sending a message > {message.Data}");
-            await Connection.SendNetworkData(message);
+
+            Console.WriteLine($"STATUS: Sending a message > {networkMessage.Data}");
+            await Connection.SendNetworkData(networkMessage);
         }
 
-        private async void SendPicture()
+        private async void SendImageMessage()
         {
             Console.WriteLine("STATUS: Sending a picture");
 
@@ -153,35 +125,28 @@ namespace P2PChatProj.ViewModels
             openFileDialog.Filter = "Image files (*.jpg;*.jpeg)|*.jpg;*.jpeg;";
             openFileDialog.RestoreDirectory = true;
 
-            string bitmapString = "";
-            BitmapImage bitmapImage = new BitmapImage();
-
             openFileDialog.ShowDialog();
             string filePath = openFileDialog.FileName;
-            Console.WriteLine($"ORIGINAL FILE PATH: {filePath}");
          
             if (!String.IsNullOrEmpty(filePath))
             {
                 Bitmap bitmap = new Bitmap(filePath);
                 string fileName = Path.GetFileName(filePath);
-                Console.WriteLine($"FILE NAME: {fileName}");
                 string imagePath = await FileService.SaveImage(bitmap, fileName);
-                Console.WriteLine($"NEW IMAGE PATH: {imagePath}");
 
-                //bitmapString = ImageService.BitmapImageToString(bitmapImage);
+                string bitmapString = ImageService.BitmapToString(bitmap);
+                NetworkData networkImage = new NetworkData(User, NetworkDataType.Image, fileName + " " + bitmapString);
+                ImageChatMessage visibleImage = new ImageChatMessage(networkImage.User.UserName, networkImage.Date,
+                                                                       imagePath);
+                ImageChatMessage hiddenImage = new ImageChatMessage(networkImage.User.UserName, networkImage.Date,
+                                                                      imagePath, Visibility.Hidden);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    AddMessage(visibleImage, hiddenImage);
+                });
+
+                await Connection.SendNetworkData(networkImage);
             }
-
-            //if (!String.IsNullOrEmpty(bitmapString))
-            //{
-            //    NetworkData image = new NetworkData(User, NetworkDataType.Image, bitmapString);
-
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        AddMessage(image);
-            //    });
-
-            //    await Connection.SendNetworkData(image);
-            //}
         }
 
         private async void SendBuzz()
@@ -189,6 +154,41 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: Sending a buzz");
             NetworkData buzz = new NetworkData(User, NetworkDataType.Response, "", ResponseType.Buzz);
             await Connection.SendNetworkData(buzz);
+        }
+
+        private async void AddReceivedMessage(NetworkData networkMessage)
+        {
+            if (networkMessage.DataType == NetworkDataType.Message)
+            {
+                TextChatMessage visibleMessage = new TextChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                    networkMessage.Data);
+                TextChatMessage hiddenMessage = new TextChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                    networkMessage.Data, Visibility.Hidden);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    AddMessage(visibleMessage, hiddenMessage, true);
+                });
+            }
+            else if (networkMessage.DataType == NetworkDataType.Image)
+            {
+                string fileName = networkMessage.Data.Split(new char[] { ' ' }, 2)[0];
+                string imageData = networkMessage.Data.Split(new char[] { ' ' }, 2)[1];
+                Console.WriteLine(fileName);
+                Console.WriteLine(imageData);
+                Bitmap receivedBitmap = ImageService.StringToBitmap(imageData);
+
+                string imagePath = await FileService.SaveImage(receivedBitmap, fileName, false);
+
+                ImageChatMessage visibleImage = new ImageChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                     imagePath);
+                ImageChatMessage hiddenImage = new ImageChatMessage(networkMessage.User.UserName, networkMessage.Date,
+                                                                    imagePath, Visibility.Hidden);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    AddMessage(visibleImage, hiddenImage, true);
+                });
+            }
         }
 
         private bool CanUseChatButtons()
@@ -204,7 +204,7 @@ namespace P2PChatProj.ViewModels
             RemoteMessages.Clear();
         }
 
-        public void LoadChatFromHistory(SavedChatData chatData)
+        public void LoadChatFromHistory(ChatData chatData)
         {
             if (HistoryMode)
             {
@@ -214,18 +214,17 @@ namespace P2PChatProj.ViewModels
             Console.WriteLine("STATUS: Loading chat from history");
             HistoryMode = true;
 
-            UserMessages = HistoryHandler.HistoryListToObservable(chatData.UserMessages);
+            UserMessages = new ObservableCollection<ChatMessage>(chatData.UserMessages);
             RaisePropertyChanged("UserMessages");
-            RemoteMessages = HistoryHandler.HistoryListToObservable(chatData.RemoteMessages);
+            RemoteMessages = new ObservableCollection<ChatMessage>(chatData.RemoteMessages);
             RaisePropertyChanged("RemoteMessages");
         }
 
         private void SaveToChatHistory()
         {
             Console.WriteLine("STATUS: Saving chat to history");
-            SavedChatData chatData = new SavedChatData(Connection.LocalUser, Connection.RemoteUser, 
-                                                       HistoryHandler.ObservableToHistoryList(UserMessages),
-                                                       HistoryHandler.ObservableToHistoryList(RemoteMessages), 
+            ChatData chatData = new ChatData(Connection.LocalUser, Connection.RemoteUser, 
+                                                       UserMessages.ToList(), RemoteMessages.ToList(),
                                                        DateTime.Now.ToString());
             OnlineViewModel.AddToHistory(chatData);
         }

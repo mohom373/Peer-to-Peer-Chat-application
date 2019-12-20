@@ -78,7 +78,7 @@ namespace P2PChatProj.Models
         // Delegates
         public Action UpdateMenuButtons { get; set; }
 
-        public Action<NetworkData, bool> AddRemoteMessage { get; set; }
+        public Action<NetworkData> AddRemoteMessage { get; set; }
 
         public Action PrepareChat { get; set; }
 
@@ -290,6 +290,11 @@ namespace P2PChatProj.Models
                     Console.WriteLine("STATUS: Closing sender socket");
                     Sender.Close();
                 }
+                catch (ObjectDisposedException)
+                {
+                    Console.WriteLine("STATUS: Sender socket already closed");
+                    Sender.Close();
+                }
             }
 
             if (Receiver != null)
@@ -302,6 +307,11 @@ namespace P2PChatProj.Models
                 catch (SocketException)
                 {
                     Console.WriteLine("STATUS: Closing receiver socket");
+                    Receiver.Close();
+                }
+                catch (ObjectDisposedException)
+                {
+                    Console.WriteLine("STATUS: Receiver socket already closed");
                     Receiver.Close();
                 }
             }
@@ -374,7 +384,7 @@ namespace P2PChatProj.Models
             Console.WriteLine($"STATUS: Processing message of type {networkData.DataType}");
             Application.Current.Dispatcher.Invoke(() =>
             {
-                AddRemoteMessage(networkData, true);
+                AddRemoteMessage(networkData);
             });
         }
 

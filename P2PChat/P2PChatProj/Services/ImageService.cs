@@ -14,54 +14,17 @@ namespace P2PChatProj.Services
     {
         private static ImageConverter converter = new ImageConverter();
 
-        public static string BitmapImageToString(BitmapImage bitmapImage)
+        public static string BitmapToString(Bitmap bitmap)
         {
-            Bitmap bitmap = BitmapImageToBitmap(bitmapImage);
-
             byte[] bitmapBytes = (byte[])converter.ConvertTo(bitmap, typeof(byte[]));
-
             return Convert.ToBase64String(bitmapBytes);
         }
 
-        public static BitmapImage StringToBitmapImage(string dataString)
+        public static Bitmap StringToBitmap(string imageString)
         {
-            byte[] bitmapBytes = Convert.FromBase64String(dataString);
-
-            Bitmap bitmap = (Bitmap)converter.ConvertFrom(bitmapBytes);
-
-            return BitmapToBitmapImage(bitmap);
+            byte[] bitmapBytes = Convert.FromBase64String(imageString);
+            return (Bitmap)converter.ConvertFrom(bitmapBytes);
         }
 
-        private static Bitmap BitmapImageToBitmap(BitmapImage bitmapImage)
-        {
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                BitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-                encoder.Save(outStream);
-                Bitmap bitmap = new Bitmap(outStream);
-
-                return new Bitmap(bitmap);
-            }
-        }
-
-        private static BitmapImage BitmapToBitmapImage(Bitmap bitmap)
-        {
-            using (var memory = new MemoryStream())
-            {
-                bitmap.Save(memory, ImageFormat.Jpeg);
-                memory.Position = 0;
-
-                BitmapImage bitmapImage = new BitmapImage();
-
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-
-                return bitmapImage;
-            }
-        }
     }
 }

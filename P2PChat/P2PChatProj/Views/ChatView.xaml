@@ -68,8 +68,12 @@
                 <TextBlock Text="{Binding Date}" Margin="5,10,10,5"
                                        Grid.Column="2" Grid.Row="1"/>
 
-                <Image Source="{Binding ImageSource}" Grid.Column="1" Grid.Row="2" 
-                       Grid.ColumnSpan="2" Stretch="Uniform" Margin="10,10,10,10" />
+                <Image Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" 
+                       Stretch="Uniform" Margin="10,10,10,10">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding ImagePath}" />
+                    </Image.Source>
+                </Image>
             </Grid>
         </DataTemplate>
 

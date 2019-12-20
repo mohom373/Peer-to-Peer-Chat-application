@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace P2PChatProj.Models
 {
-    public class SavedChatData
+    public class ChatData
     {
         #region Properties
         public string SearchString
@@ -24,16 +24,16 @@ namespace P2PChatProj.Models
 
         public User RemoteUser { get; set; }
 
-        public List<SavedChatMessage> UserMessages { get; set; }
+        public List<ChatMessage> UserMessages { get; set; }
 
-        public List<SavedChatMessage> RemoteMessages { get; set; }
+        public List<ChatMessage> RemoteMessages { get; set; }
 
         public string Date { get; set; }
 
         #endregion
 
-        public SavedChatData(User localUser, User remoteUser, List<SavedChatMessage> userMessages,
-                        List<SavedChatMessage> remoteMessages, string date)
+        public ChatData(User localUser, User remoteUser, List<ChatMessage> userMessages,
+                        List<ChatMessage> remoteMessages, string date)
         {
             LocalUser = localUser;
             RemoteUser = remoteUser;
