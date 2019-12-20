@@ -63,7 +63,9 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\ChatData.cs" />
     <Compile Include="Models\ChatMessage.cs" />
+    <Compile Include="Models\HistoryConverter.cs" />
     <Compile Include="Models\ImageChatMessage.cs" />
+    <Compile Include="Models\SavedChatMessage.cs" />
     <Compile Include="Models\TextChatMessage.cs" />
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\NetworkData.cs" />
